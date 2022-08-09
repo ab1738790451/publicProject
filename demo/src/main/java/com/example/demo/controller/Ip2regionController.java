@@ -4,6 +4,7 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.read.builder.ExcelReaderBuilder;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.common.DemoTestListener;
+import com.example.demo.common.Ip2regionLoader;
 import com.example.demo.entity.IpTest;
 import com.example.demo.responseResult.ResponseResult;
 import org.apache.commons.lang3.StringUtils;
@@ -35,9 +36,7 @@ public class Ip2regionController {
 
     @RequestMapping("parsingIp")
     public ResponseResult parsingIp(String ip) throws Exception {
-        byte[] bytes = Searcher.loadContentFromFile("D:\\vsProjects\\ip2region\\data\\xdb-master\\ip2region.xdb");
-        Searcher searcher = Searcher.newWithBuffer(bytes);
-        //Searcher searcher = Searcher.newWithFileOnly("D:\\vsProjects\\ip2region\\data\\ip2region.xdb");
+        Searcher searcher = Ip2regionLoader.getInstance();
         String search = searcher.search(ip);
         String[] split = search.split("\\|");
         return new ResponseResult(Arrays.toString(split));

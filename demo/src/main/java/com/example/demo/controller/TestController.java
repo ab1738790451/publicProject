@@ -130,9 +130,9 @@ public class TestController {
 
     @RequestMapping("toEdit")
     @ResponseBody
-    public ModelAndView toEdit(HttpServletRequest request,HttpServletResponse response,Integer layId,Integer id){
+    public ModelAndView toEdit(HttpServletRequest request,HttpServletResponse response,Integer lastLayId,Integer id){
          ModelAndView modelAndView = new ModelAndView("/testFour");
-         modelAndView.addObject("layId",layId);
+         modelAndView.addObject("lastLayId",lastLayId);
          modelAndView.addObject("id",id);
          return  modelAndView;
     }
