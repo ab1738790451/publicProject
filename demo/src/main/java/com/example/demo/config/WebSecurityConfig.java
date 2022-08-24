@@ -1,10 +1,10 @@
 package com.example.demo.config;
 
-import org.springframework.context.annotation.Configuration;
+/*import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;*/
 
 /**
  * @Author: liuhaibo
@@ -13,7 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  * @Version: 1.0.0
  * @Description: 描述
  */
-@Configuration
+/*@Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -28,4 +28,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
        http.authorizeRequests().anyRequest().permitAll().and().logout().permitAll();
        http.headers().frameOptions().disable();
     }
-}
+}*/

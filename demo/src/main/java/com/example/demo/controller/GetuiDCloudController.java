@@ -105,8 +105,6 @@ public class GetuiDCloudController {
         }else{
             return new ResponseResult(500,"失败");
         }
-        /*ResponseEntity<String> exchange = restTemplate.exchange("https://restapi.getui.com/v2/8IywH0Z6Xm7UceGhm5LpM4/auth/" + getui_token, HttpMethod.DELETE, null, String.class);
-        return new ResponseResult(200,"成功");*/
     }
 
 
@@ -123,10 +121,6 @@ public class GetuiDCloudController {
         PushDTO pushDTO = new PushDTO();
         pushDTO.setRequestId(UUID.randomUUID().toString());
         pushDTO.setGroupName("测试");
-      /*  Audience audience = new Audience();
-        audience.setAll("all");
-        pushDTO.setAudience(audience);*/
-
         PushMessage pushMessage = new PushMessage();
         GTNotification gtNotification = new GTNotification();
         gtNotification.setTitle("群体通知");
@@ -136,34 +130,6 @@ public class GetuiDCloudController {
         pushDTO.setPushMessage(pushMessage);
         ApiResult<TaskIdDTO> msg = api.createMsg(pushDTO);
         int code = msg.getCode();
-        /*Map<String,Object> params = new HashMap<>();
-        params.put("request_id", UUID.randomUUID());
-
-        params.put("group_name","测试");
-
-        params.put("audience","all");
-
-        JSONObject message = new JSONObject();
-        JSONObject notification = new JSONObject();
-        message.put("notification",notification);
-        notification.put("title","通知");
-        notification.put("body",mes);
-        notification.put("click_type","none");
-        params.put("push_message",message);
-
-        //推送条件设置 {"ttl":30*30,"strategy":}
-        //params.put("settings","");
-
-        String url = "https://restapi.getui.com/v2/8IywH0Z6Xm7UceGhm5LpM4/push/list/message";
-        HttpHeaders headers = new HttpHeaders();
-        String token = getTokenStr();
-        headers.add("token",token);
-        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
-        HttpEntity<String> header = new HttpEntity<>(JSONObject.toJSONString(params),headers);
-        String s = restTemplate.postForObject(url, header, String.class);
-        Map map = JSONObject.parseObject(s, Map.class);
-        String code = (String)map.get("code");*/
-
         if(code == 0) {
             TaskIdDTO data = msg.getData();
             String taskId = data.getTaskId();
@@ -206,11 +172,6 @@ public class GetuiDCloudController {
         params.put("settings",settings);
 
         String url = "https://restapi.getui.com/v2/8IywH0Z6Xm7UceGhm5LpM4/push/all";
-      /*  HttpHeaders headers = new HttpHeaders();
-        String token = getTokenStr();
-        headers.add("token",token);
-        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
-        HttpEntity<String> header = new HttpEntity<>(JSONObject.toJSONString(params),headers);*/
         String s = restTemplate.postForObject(url, params, String.class);
 
         return new ResponseResult(200,"成功");
@@ -226,29 +187,6 @@ public class GetuiDCloudController {
     @RequestMapping("getuiByCids")
     @ResponseBody
     public ResponseResult getuiByCids(String[] cids,String mes){
-
-
-       /* Map<String,Object> params = new HashMap<>();
-        params.put("request_id", UUID.randomUUID());
-
-        //同步异步
-        params.put("is_async",false);
-
-        JSONObject audience = new JSONObject();
-        audience.put("cid",cids);
-        params.put("audience",audience);
-
-        //消息id
-        params.put("taskid",LocalCahceUtil.get("taskid"));
-
-        String url = "https://restapi.getui.com/v2/8IywH0Z6Xm7UceGhm5LpM4/push/list/cid";
-        HttpHeaders headers = new HttpHeaders();
-        String token = getTokenStr();
-        headers.add("token",token);
-        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
-        HttpEntity<String> header = new HttpEntity<>(JSONObject.toJSONString(params),headers);
-        String s = restTemplate.postForObject(url, header, String.class);*/
-
         PushApi api = getApi(PushApi.class);
         AudienceDTO audienceDTO = new AudienceDTO();
         audienceDTO.setAsync(false);

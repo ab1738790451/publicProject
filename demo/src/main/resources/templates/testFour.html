@@ -15,7 +15,7 @@
     </style>
 </head>
 <body class="main-body">
-<form class="layui-form" action="/test/two" id="dataForm" >
+<form class="layui-form" action="/test/dosave" id="dataForm" >
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">ID</label>
@@ -38,7 +38,7 @@
     </div>
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
-            <button id="search" class="layui-btn layuiadmin-btn-list" lay-submit="save" >保存</button>
+            <button id="save" class="layui-btn layuiadmin-btn-list" lay-submit  lay-filter="save">保存</button>
         </div>
     </div>
 
@@ -47,6 +47,7 @@
 <script type="text/javascript">
     layui.use(['form','laydate'],function () {
           var laydate = layui.laydate;
+          var form = layui.form;
           laydate.render(
               {
                   elem:'#startTime',
@@ -58,9 +59,9 @@
                 type:'date'
             })
 
-        let lastLayId = '[[lastLayId]]';
-        ajaxUtil.submitSave("/test/three","save",lastLayId);
-    })
+       renderEdit('save','[[${lastLayId}]]');
+    });
+
 
 </script>
 </html>

@@ -1,6 +1,25 @@
 var currTable;
 var tabFilter = top.tabFilter;
 var moduleName;
+var currTabLayId = top.currTabLayId;
+
+
+function renderEdit(submitFilter,lastLayId){
+    layui.use(['form'],function () {
+        var form = layui.form;
+        form.on('submit('+submitFilter+')',function (data) {
+            if (typeof beforeSubmit == 'funtion') {
+                if (!beforeSubmit(data)) {
+                    return false;
+                }
+            }
+            ajaxUtil.submitSave(data.form.action,data.field,lastLayId);
+            return false;
+        });
+
+    });
+}
+
 
 function renderList(title,module,table) {
     currTable = table;
@@ -42,7 +61,7 @@ function defalutTableToolBarEvent(table,obj) {
     var data = table.checkStatus(obj.config.id).data;
     switch (obj.event) {
         case "add":
-            top.tabChange(tabFilter,moduleName + "-0",'新增',"/"+moduleName+"/toEdit");
+            top.tabChange(tabFilter,moduleName + "-0",'新增',"/"+moduleName+"/toEdit?lastLayId="+currTabLayId);
             break;
         case "dels":
             break;
@@ -66,7 +85,7 @@ function defalutTableToolEvent(table,obj) {
     var data = obj.data;
     switch (obj.event) {
         case "edit":
-            top.tabChange(tabFilter,moduleName + data.id,'修改',"/"+moduleName+"/toEdit");
+            top.tabChange(tabFilter,moduleName + data.id,'修改',"/"+moduleName+"/toEdit?lastLayId="+currTabLayId);
             break;
         case "del":
             break;

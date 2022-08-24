@@ -18,10 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
@@ -125,6 +122,13 @@ public class TestController {
     @ResponseBody
     public ResponseResult loadMenu(HttpServletRequest request,HttpServletResponse response){
         return new ResponseResult(new TreeNodeUtil(menuServiceImpl.selectAll()).getTreeDatas());
+    }
+
+    @ApiOperation(value = "保存提交",tags = "保存提交",httpMethod = "POST")
+    @PostMapping("dosave")
+    @ResponseBody
+    public ResponseResult dosave(HttpServletRequest request,HttpServletResponse response){
+        return new ResponseResult(200,"成功");
     }
 
 
