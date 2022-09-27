@@ -79,13 +79,15 @@ public class PushService {
      * @param logUrl
      * @param form
      */
-    private void checkParams(String logUrl, PushForm form, PushType pushType){
+    private void checkParams(String logUrl, PushForm form, PushType pushType,Boolean isAsync){
         notNull(form,"PARAM_ERROR","参数不能为空");
         notNull(form.getAppId(), "PARAM_ERROR", "授权参数错误");
         notEmpty(form.getAppSecret(), "PARAM_ERROR", "授权参数错误");
         if(pushType.equals(PushType.MESSAGE) || pushType.equals(PushType.LIST)){
             notEmpty(form.getCids(),"PARAM_ERROR","推送的群体客户cids不能为空");
-            isFalse(form.getCids().size() > 1000,"PARAM_ERROR","单次推送客户不能大于1000");
+            if(isAsync != null && !isAsync) {
+                isFalse(form.getCids().size() > 1000,"PARAM_ERROR","单次推送客户不能大于1000");
+            }
         }else if(pushType.equals(PushType.SINGLE)){
             notEmpty(form.getCid(),"PARAM_ERROR","推送的单个客户cid不能为空");
         }
@@ -98,6 +100,10 @@ public class PushService {
             notEmpty(form.getClickContent(),"PARAM_ERROR","android链接地址长度不能为空");
             isFalse(form.getClickContent().length() > 1024,"PARAM_ERROR","android链接地址长度不能大于1024");
             notEmpty(form.getIosClickContent(),"PARAM_ERROR","IOS链接地址长度不能为空");
+        }
+        if(form.getClickType() != null && (form.getClickType().equals(PushClickType.payload) || form.getClickType().equals(PushClickType.payload_custom))){
+            notEmpty(form.getPayload(),"PARAM_ERROR","payload不能为空");
+            isFalse(form.getPayload().length() > 3072,"PARAM_ERROR","payload的长度不能大于3072");
         }
         if(StringUtils.isNotBlank(logUrl)){
             isFalse(logUrl.length() > 256,"PARAM_ERROR","通知栏图标的地址长度不能大于256");
@@ -125,7 +131,7 @@ public class PushService {
         String logUrl = getuiPushApiInstance.getLogUrl();
         String xmChannelId = getuiPushApiInstance.getXmChannelId();
         String oppoChannelId = getuiPushApiInstance.getOppoChannelId();
-        checkParams(logUrl,form,PushType.SINGLE);
+        checkParams(logUrl,form,PushType.SINGLE,null);
         PushDTO<Audience> pushDTO = getPushDTO(form,logUrl,PushType.SINGLE,xmChannelId,oppoChannelId);
         //设置推送用户
         Audience audience = new Audience();
@@ -173,7 +179,7 @@ public class PushService {
         String logUrl = getuiPushApiInstance.getLogUrl();
         String xmChannelId = getuiPushApiInstance.getXmChannelId();
         String oppoChannelId = getuiPushApiInstance.getOppoChannelId();
-        checkParams(logUrl,form,PushType.LIST);
+        checkParams(logUrl,form,PushType.LIST,false);
         Map<String,String> msgMap = createMessage(pushApi, form, logUrl,xmChannelId,oppoChannelId);
         String taskId = msgMap.get("taskId");
         if(StringUtils.isBlank(taskId)){
@@ -204,7 +210,7 @@ public class PushService {
         String logUrl = getuiPushApiInstance.getLogUrl();
         String xmChannelId = getuiPushApiInstance.getXmChannelId();
         String oppoChannelId = getuiPushApiInstance.getOppoChannelId();
-        checkParams(logUrl,form,PushType.LIST);
+        checkParams(logUrl,form,PushType.LIST,true);
         Map<String,String> msgMap = createMessage(pushApi, form, logUrl,xmChannelId,oppoChannelId);
         String taskId = msgMap.get("taskId");
         if(StringUtils.isBlank(taskId)){
@@ -239,7 +245,7 @@ public class PushService {
         String logUrl = getuiPushApiInstance.getLogUrl();
         String xmChannelId = getuiPushApiInstance.getXmChannelId();
         String oppoChannelId = getuiPushApiInstance.getOppoChannelId();
-        checkParams(logUrl,form,PushType.ALL);
+        checkParams(logUrl,form,PushType.ALL,null);
         PushDTO pushDTO = getPushDTO(form, logUrl, PushType.ALL, xmChannelId, oppoChannelId);
         pushDTO.setAudience("All");
 
@@ -372,6 +378,14 @@ public class PushService {
             hw.put("/message/android/notification/importance","NORMAL");//设置消息类型为服务与通讯
          }
          options.put("HW",hw);
+        //荣耀角标的设置
+        Map<String,Object> ho = new HashMap<>();
+        ho.put("/android/notification/badge/badgeClass","io.dcloud.PandoraEntry"); //应用入口Activity路径名称
+        ho.put("/android/notification/badge/addNum",1);//应用角标累加数字，并非应用角标实际显示数字必须是大于0小于100的整数
+        if(PushType.SINGLE.equals(pushType)){
+            ho.put("/android/notification/importance","NORMAL");//设置消息类型为服务与通讯
+        }
+        options.put("HO",ho);
          //当消息推送为单人时设置私有消息，减少公有消息的次数消耗
          if(PushType.SINGLE.equals(pushType)){
              //小米重要消息设置

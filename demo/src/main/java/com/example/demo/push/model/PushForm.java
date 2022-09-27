@@ -73,4 +73,9 @@ public class PushForm {
      * 当clickType 为 intent 和 url 时必填（ios）
      */
     private String iosClickContent;
+
+    /**
+     * click_type为payload/payload_custom时必填
+     */
+    private String payload;
 }
