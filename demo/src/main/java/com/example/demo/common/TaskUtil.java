@@ -12,14 +12,14 @@ import java.util.concurrent.*;
 public class TaskUtil {
     private static   ExecutorService executorService;
     private static ScheduledExecutorService scheduledExecutorService;
-
+    private static ExecutorService highConcurrencyExecutorService;
 
     private TaskUtil(){}
 
     static {
-        //ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(10,10,0L,TimeUnit.SECONDS,new LinkedBlockingQueue<>());
-        executorService = Executors.newFixedThreadPool(10);
+         executorService = Executors.newFixedThreadPool(10);
          scheduledExecutorService = Executors.newScheduledThreadPool(10);
+         highConcurrencyExecutorService = new ThreadPoolExecutor(1,100,0,TimeUnit.NANOSECONDS,new LinkedBlockingQueue<>(),new ThreadFactoryBuilder(),new ThreadPoolExecutor.AbortPolicy());
     }
 
     /**
@@ -60,5 +60,13 @@ public class TaskUtil {
      */
     public static void scheduleWithFixedDelayExec(Runnable task, long initialDelay, long delay,TimeUnit timeUnit){
         scheduledExecutorService.scheduleWithFixedDelay(task,initialDelay,delay,timeUnit);
+    }
+
+    /**
+     * 执行一次任务（并发数较高的情况下使用）
+     * @param task
+     */
+    public static void  HighConcurrencyExec(Runnable task){
+        highConcurrencyExecutorService.execute(task);
     }
 }
