@@ -1,6 +1,6 @@
 package com.example.demo.demo;
 
-import com.example.demo.common.LocalCahceUtil;
+import com.example.demo.utils.LocalCahceUtil;
 
 /**
  * @Author: liuhaibo

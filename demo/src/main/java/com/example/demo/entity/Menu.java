@@ -1,8 +1,7 @@
 package com.example.demo.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.example.demo.common.TreeNode;
+import com.example.demo.utils.TreeNode;
 import lombok.Data;
 
 import java.time.LocalDateTime;

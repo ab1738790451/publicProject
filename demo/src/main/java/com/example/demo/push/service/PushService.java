@@ -1,6 +1,6 @@
 package com.example.demo.push.service;
 
-import com.example.demo.common.TaskUtil;
+import com.example.demo.utils.TaskUtil;
 import com.example.demo.push.constants.PushClickType;
 import com.example.demo.push.constants.PushType;
 import com.example.demo.push.factory.GetuiPushApiFactory;
@@ -268,9 +268,9 @@ public class PushService {
         Settings settings = new Settings();
         settings.setTtl(3*24*3600);
         //ios只从厂商通道下发
-        Strategy strategy = new Strategy();
-        strategy.setIos(2);
-        settings.setStrategy(strategy);
+        /*Strategy strategy = new Strategy();
+        strategy.setIos(1);
+        settings.setStrategy(strategy);*/
         pushDTO.setSettings(settings);
 
         //设置唯一请求标识
@@ -409,7 +409,6 @@ public class PushService {
          }
          ups.setOptions(options);
 
-
          androidDTO.setUps(ups);
          return androidDTO;
     }
@@ -425,11 +424,14 @@ public class PushService {
         IosDTO iosDTO = new IosDTO();
         //设置角标
         iosDTO.setAutoBadge("+1");
+
         Aps aps = new Aps();
         Alert alert = new Alert();
         alert.setTitle(title);
         alert.setBody(content);
         aps.setAlert(alert);
+        iosDTO.setAps(aps);
+
         iosDTO.setPayload(payload);
         return iosDTO;
     }

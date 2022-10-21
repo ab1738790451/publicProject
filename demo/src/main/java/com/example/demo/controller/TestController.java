@@ -1,14 +1,11 @@
 package com.example.demo.controller;
 
 
-import com.alibaba.fastjson.JSONObject;
-import com.example.demo.common.LocalCahceUtil;
-import com.example.demo.common.TreeNodeUtil;
+import com.example.demo.utils.TreeNodeUtil;
 import com.example.demo.entity.TencentIpModel;
 import com.example.demo.responseResult.ResponseResult;
 import com.example.demo.server.MenuService;
 import com.example.demo.server.TestService;
-import com.example.demo.utils.ByteUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +14,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;

@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.example.demo.common.LocalCahceUtil;
+import com.example.demo.utils.LocalCahceUtil;
 import com.example.demo.responseResult.ResponseResult;
 import com.example.demo.utils.ByteUtil;
 import com.getui.push.v2.sdk.ApiHelper;
@@ -12,7 +11,6 @@ import com.getui.push.v2.sdk.common.ApiResult;
 import com.getui.push.v2.sdk.dto.req.Audience;
 import com.getui.push.v2.sdk.dto.req.AudienceDTO;
 import com.getui.push.v2.sdk.dto.req.AuthDTO;
-import com.getui.push.v2.sdk.dto.req.Settings;
 import com.getui.push.v2.sdk.dto.req.message.PushChannel;
 import com.getui.push.v2.sdk.dto.req.message.PushDTO;
 import com.getui.push.v2.sdk.dto.req.message.PushMessage;
@@ -24,12 +22,10 @@ import com.getui.push.v2.sdk.dto.res.TaskIdDTO;
 import com.getui.push.v2.sdk.dto.res.TokenDTO;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;

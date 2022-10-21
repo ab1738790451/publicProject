@@ -1,6 +1,6 @@
 package com.example.demo.entity;
 
-import com.example.demo.common.ObjectUtils;
+import com.example.demo.utils.ObjectUtils;
 
 /**
  * @Author: liuhaibo

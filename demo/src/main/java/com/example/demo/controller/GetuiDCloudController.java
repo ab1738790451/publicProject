@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.demo.common.LocalCahceUtil;
+import com.example.demo.utils.LocalCahceUtil;
 import com.example.demo.responseResult.ResponseResult;
 import com.getui.push.v2.sdk.ApiHelper;
 import com.getui.push.v2.sdk.GtApiConfiguration;
@@ -10,13 +10,9 @@ import com.getui.push.v2.sdk.api.PushApi;
 import com.getui.push.v2.sdk.common.ApiResult;
 import com.getui.push.v2.sdk.dto.req.Audience;
 import com.getui.push.v2.sdk.dto.req.AudienceDTO;
-import com.getui.push.v2.sdk.dto.req.message.PushChannel;
 import com.getui.push.v2.sdk.dto.req.message.PushDTO;
 import com.getui.push.v2.sdk.dto.req.message.PushMessage;
-import com.getui.push.v2.sdk.dto.req.message.android.AndroidDTO;
 import com.getui.push.v2.sdk.dto.req.message.android.GTNotification;
-import com.getui.push.v2.sdk.dto.req.message.android.ThirdNotification;
-import com.getui.push.v2.sdk.dto.req.message.android.Ups;
 import com.getui.push.v2.sdk.dto.res.TaskIdDTO;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

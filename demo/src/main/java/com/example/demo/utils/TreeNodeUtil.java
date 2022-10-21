@@ -1,4 +1,4 @@
-package com.example.demo.common;
+package com.example.demo.utils;
 
 import java.util.*;
 
@@ -7,7 +7,7 @@ import java.util.*;
  * @Company: 优积谷
  * @Date: 2022/6/21 11:41
  * @Version: 1.0.0
- * @Description: 描述
+ * @Description: 树形结构工具类
  */
 public class TreeNodeUtil<T extends TreeNode> {
 
