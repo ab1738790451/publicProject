@@ -119,7 +119,8 @@
                  dataType:"json",
                  success:function (res) {
                    if(res.code == 200){
-                       $(".login-img").attr("src","data:image/jpg;base64,"+res.data);
+                       $("input[name=sessionId]").val(res.data.sessionId);
+                       $(".login-img").attr("src","data:image/jpg;base64,"+res.data.code);
                    }
                  },
                  error:function (res) {

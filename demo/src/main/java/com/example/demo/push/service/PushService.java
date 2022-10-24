@@ -300,6 +300,7 @@ public class PushService {
             gtNotification.setClickType(PushClickType.none.name());
         }else{
             gtNotification.setClickType(clickType.name());
+            //当个推的点击动作设置为intent时，ios通知收不到在线消息
             if(clickType.equals(PushClickType.intent)){
                 gtNotification.setIntent(form.getClickContent());
                 intent = form.getClickContent();
