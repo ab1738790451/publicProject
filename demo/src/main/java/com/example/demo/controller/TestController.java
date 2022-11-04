@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.utils.IpUtil;
 import com.example.demo.utils.TreeNodeUtil;
 import com.example.demo.entity.TencentIpModel;
 import com.example.demo.responseResult.ResponseResult;
@@ -49,6 +50,8 @@ public class TestController {
     @ApiOperation(value = "方法一",tags = "方法一",httpMethod = "GET")
     @RequestMapping(value = "/one",method = RequestMethod.GET)
     public String test(HttpServletRequest request, HttpServletResponse response){
+        String ipAddr = IpUtil.getIpAddr(request);
+        System.err.println(ipAddr);
         return "test";
     }
 
