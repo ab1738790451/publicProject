@@ -50,6 +50,7 @@ public class TestController {
     @ApiOperation(value = "方法一",tags = "方法一",httpMethod = "GET")
     @RequestMapping(value = "/one",method = RequestMethod.GET)
     public String test(HttpServletRequest request, HttpServletResponse response){
+        Enumeration<String> headerNames = request.getHeaderNames();
         String ipAddr = IpUtil.getIpAddr(request);
         System.err.println(ipAddr);
         return "test";
@@ -132,7 +133,6 @@ public class TestController {
 
 
     @RequestMapping("toEdit")
-    @ResponseBody
     public ModelAndView toEdit(HttpServletRequest request,HttpServletResponse response,Integer lastLayId,Integer id){
          ModelAndView modelAndView = new ModelAndView("/testFour");
          modelAndView.addObject("lastLayId",lastLayId);
@@ -140,4 +140,11 @@ public class TestController {
          return  modelAndView;
     }
 
+
+    @RequestMapping("addMenu")
+    @ResponseBody
+    public ResponseResult addMenu(){
+        menuServiceImpl.insert();
+        return  new ResponseResult(200,"SUCCESS");
+    }
 }

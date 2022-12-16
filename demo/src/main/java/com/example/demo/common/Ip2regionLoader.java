@@ -1,9 +1,11 @@
 package com.example.demo.common;
 
 import org.lionsoul.ip2region.xdb.Searcher;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -22,6 +24,9 @@ public class Ip2regionLoader implements ApplicationRunner {
     private static Searcher searcher;
 
     private static final String dbPath = "/static/other/ip2region.xdb";
+
+    @Autowired
+    private ResourceLoader resourceLoader;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {

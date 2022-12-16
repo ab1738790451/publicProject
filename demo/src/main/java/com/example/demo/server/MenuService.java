@@ -13,4 +13,6 @@ import java.util.List;
  */
 public interface MenuService {
     List<Menu> selectAll();
+
+    void insert();
 }

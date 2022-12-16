@@ -318,7 +318,7 @@ public class PushService {
         //厂商通道设置
         PushChannel pushChannel = new PushChannel();
         //ios设置
-        pushChannel.setIos(iodConfig(form.getTitle(),form.getContent(),payload));
+        pushChannel.setIos(iosConfig(form.getTitle(),form.getContent(),payload));
 
         //安卓设置
         AndroidConfigModel androidConfigModel = new AndroidConfigModel();
@@ -421,7 +421,7 @@ public class PushService {
      * @param payload 点击后续动作
      * @return
      */
-    public IosDTO iodConfig(String title, String content, String payload){
+    public IosDTO iosConfig(String title, String content, String payload){
         IosDTO iosDTO = new IosDTO();
         //设置角标
         iosDTO.setAutoBadge("+1");
