@@ -1,8 +1,9 @@
 package com.example.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.demo.redis.constants.DefaultRedisKeyNs;
 import com.example.demo.responseResult.ResponseResult;
-import com.example.demo.utils.RedisUtil;
+import com.example.demo.redis.utils.RedisUtil;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.dao.DataAccessException;
@@ -61,13 +62,13 @@ public class RedisController {
         Map<String,Object> map = new HashMap<>();
         map.put("1","a");
         map.put("2","b");
-        RedisUtil.set(key,JSONObject.toJSONString(map));
-        return new ResponseResult("200");
+        Integer append = RedisUtil.stringExecutor().append(DefaultRedisKeyNs.DEFAULT_LOCK_KEY, key, JSONObject.toJSONString(map));
+        return new ResponseResult(append);
     }
 
     @RequestMapping("get")
     public ResponseResult get(String key){
-        return new ResponseResult( RedisUtil.get(key));
+        return new ResponseResult( RedisUtil.stringExecutor().get(DefaultRedisKeyNs.DEFAULT_LOCK_KEY,key));
     }
 
 

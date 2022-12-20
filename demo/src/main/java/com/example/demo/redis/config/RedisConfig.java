@@ -1,10 +1,5 @@
-package com.example.demo.config;
+package com.example.demo.redis.config;
 
-import org.apache.commons.lang3.StringUtils;
-import org.redisson.Redisson;
-import org.redisson.api.RedissonClient;
-import org.redisson.config.Config;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -20,16 +15,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * @Description: 描述
  */
 @Configuration
-public class RedissonConfig {
-
-    @Value("${spring.redis.host}")
-    private String host;
-
-    @Value("${spring.redis.port}")
-    private Integer port;
-
-    @Value("${spring.redis.password}")
-    private String password;
+public class RedisConfig {
 
 /*    @Bean
     public RedissonClient redissonClient() {

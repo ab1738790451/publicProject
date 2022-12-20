@@ -1,5 +1,7 @@
-package com.example.demo.utils;
+package com.example.demo.redis.utils;
 
+import com.example.demo.config.SpringUtils;
+import com.example.demo.utils.BaseConfigUtils;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
@@ -7,18 +9,17 @@ import org.redisson.spring.data.connection.RedissonConnectionFactory;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.stereotype.Component;
+
 import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: liuhaibo
  * @Company: 优积谷
- * @Date: 2022/12/16 16:01
+ * @Date: 2022/12/19 15:36
  * @Version: 1.0.0
  * @Description: 描述
  */
-@Component
-public class RedisUtil {
+public class RedisDefaultUtil {
 
     private static RedisTemplate<String,String> redisTemplate;
 
@@ -40,13 +41,14 @@ public class RedisUtil {
         redisTemplate.afterPropertiesSet();
     }
 
-    private RedisUtil(){}
+    private RedisDefaultUtil(){}
 
     public static void set(String key,String vlaue){
         redisTemplate.opsForValue().set(key,vlaue,10, TimeUnit.SECONDS);
     }
 
     public static String get(String key){
-     return  redisTemplate.opsForValue().get(key);
+        return  redisTemplate.opsForValue().get(key);
     }
+
 }
