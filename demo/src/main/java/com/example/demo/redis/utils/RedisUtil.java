@@ -6,6 +6,7 @@ import com.example.demo.redis.constants.RedisKeyType;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.*;
+import org.springframework.util.CollectionUtils;
 import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -29,6 +30,8 @@ public class RedisUtil {
 
     private static HashExecutor hashExecutor = new HashExecutor();
 
+    private static ZSetExecutor zSetExecutor = new ZSetExecutor();
+
     private RedisUtil(){}
 
     public static StringExecutor stringExecutor(){
@@ -45,6 +48,10 @@ public class RedisUtil {
 
     public static HashExecutor hashExecutor(){
         return hashExecutor;
+    }
+
+    public static ZSetExecutor zSetExecutor(){
+        return zSetExecutor;
     }
 
     private static  String getKeyStr(RedisKeyNs key, Serializable id, RedisKeyType redisKeyType){
@@ -286,26 +293,86 @@ public class RedisUtil {
         @Override
         public Long remove(RedisKeyNs key, Serializable id, Object... values) {
             String keyStr =  getKeyStr(key,id,RedisKeyType.SET);
-            return redisTemplate.opsForSet().remove(keyStr,values);
+            long expire = key.getExpire();
+            if (expire <= 0) {
+                return redisTemplate.opsForSet().remove(keyStr, values);
+            } else {
+                Long[] size = new Long[1];
+                SetOperations<String, String> operations = redisTemplate.opsForSet();
+                redisTemplate.executePipelined(new RedisCallback<Object>() {
+                    @Override
+                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
+                        size[0] = operations.remove(keyStr, values);
+                        operations.getOperations().expire(keyStr, expire, TimeUnit.SECONDS);
+                        return null;
+                    }
+                });
+                return size[0];
+            }
         }
 
         @Override
         public String pop(RedisKeyNs key, Serializable id) {
             String keyStr =  getKeyStr(key,id,RedisKeyType.SET);
-            return redisTemplate.opsForSet().pop(keyStr);
+            long expire = key.getExpire();
+            if (expire <= 0) {
+                return redisTemplate.opsForSet().pop(keyStr);
+            } else {
+                String[] results = new String[1];
+                SetOperations<String, String> operations = redisTemplate.opsForSet();
+                redisTemplate.executePipelined(new RedisCallback<Object>() {
+                    @Override
+                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
+                        results[0] = operations.pop(keyStr);
+                        operations.getOperations().expire(keyStr, expire, TimeUnit.SECONDS);
+                        return null;
+                    }
+                });
+                return results[0];
+            }
         }
 
         @Override
         public Set<String> pop(RedisKeyNs key, Serializable id, long count) {
             String keyStr =  getKeyStr(key,id,RedisKeyType.SET);
-            return new HashSet<>(redisTemplate.opsForSet().pop(keyStr,count));
+            long expire = key.getExpire();
+            if (expire <= 0) {
+                return new HashSet<>(redisTemplate.opsForSet().pop(keyStr,count));
+            } else {
+                List[] results = new List[1];
+                SetOperations<String, String> operations = redisTemplate.opsForSet();
+                redisTemplate.executePipelined(new RedisCallback<Object>() {
+                    @Override
+                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
+                        results[0] =redisTemplate.opsForSet().pop(keyStr,count);
+                        operations.getOperations().expire(keyStr, expire, TimeUnit.SECONDS);
+                        return null;
+                    }
+                });
+                return new HashSet<>(results[0]);
+            }
         }
 
         @Override
         public  Boolean move(RedisKeyNs key, Serializable id, String value, RedisKeyNs destKey, Serializable destId) {
             String keyStr =  getKeyStr(key,id,RedisKeyType.SET);
             String destKeyStr =  getKeyStr(destKey,destId,RedisKeyType.SET);
-            return redisTemplate.opsForSet().move(keyStr,value,destKeyStr);
+            long expire = key.getExpire();
+            if (expire <= 0) {
+                return redisTemplate.opsForSet().move(keyStr,value,destKeyStr);
+            } else {
+                Boolean[] results = new Boolean[1];
+                SetOperations<String, String> operations = redisTemplate.opsForSet();
+                redisTemplate.executePipelined(new RedisCallback<Object>() {
+                    @Override
+                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
+                        results[0] = redisTemplate.opsForSet().move(keyStr,value,destKeyStr);
+                        operations.getOperations().expire(keyStr, expire, TimeUnit.SECONDS);
+                        return null;
+                    }
+                });
+                return results[0];
+            }
         }
 
         @Override
@@ -498,28 +565,71 @@ public class RedisUtil {
         @Override
         public Long remove(RedisKeyNs key, Serializable id, long count, String value) {
             String keyStr =  getKeyStr(key,id,RedisKeyType.LIST);
-            return  redisTemplate.opsForList().remove(keyStr, count,value);
+            long expire = key.getExpire();
+            if (expire <= 0) {
+                return  getListOperations().remove(keyStr, count,value);
+            } else {
+                Long[] size = new Long[1];
+                redisTemplate.executePipelined(new RedisCallback<Object>() {
+                    @Override
+                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
+                        size[0] = getListOperations().remove(keyStr, count,value);
+                        getListOperations().getOperations().expire(keyStr, expire, TimeUnit.SECONDS);
+                        return null;
+                    }
+                });
+                return size[0];
+            }
         }
 
         @Override
         public String index(RedisKeyNs key, Serializable id, long index) {
             String keyStr =  getKeyStr(key,id,RedisKeyType.LIST);
-            return redisTemplate.opsForList().index(keyStr,index);
+            return  getListOperations().index(keyStr,index);
         }
 
 
         @Override
         public String lPop(RedisKeyNs key, Serializable id) {
             String keyStr =  getKeyStr(key,id,RedisKeyType.LIST);
-            return redisTemplate.opsForList().leftPop(keyStr);
+            long expire = key.getExpire();
+            if (expire <= 0) {
+                return  getListOperations().leftPop(keyStr);
+            } else {
+                String[] results = new String[1];
+                redisTemplate.executePipelined(new RedisCallback<Object>() {
+                    @Override
+                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
+                        results[0] = getListOperations().leftPop(keyStr);
+                        getListOperations().getOperations().expire(keyStr, expire, TimeUnit.SECONDS);
+                        return null;
+                    }
+                });
+                return results[0];
+            }
         }
 
         @Override
         public String rPop(RedisKeyNs key, Serializable id) {
             String keyStr =  getKeyStr(key,id,RedisKeyType.LIST);
-            return redisTemplate.opsForList().rightPop(keyStr);
+            long expire = key.getExpire();
+            if (expire <= 0) {
+                return  getListOperations().rightPop(keyStr);
+            } else {
+                String[] results = new String[1];
+                redisTemplate.executePipelined(new RedisCallback<Object>() {
+                    @Override
+                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
+                        results[0] = getListOperations().rightPop(keyStr);
+                        getListOperations().getOperations().expire(keyStr, expire, TimeUnit.SECONDS);
+                        return null;
+                    }
+                });
+                return results[0];
+            }
         }
     }
+
 
     public static class HashExecutor implements RedisHashOperations{
 
@@ -530,7 +640,21 @@ public class RedisUtil {
         @Override
         public Long delete(RedisKeyNs key, Serializable id, String... hashKeys) {
             String keyStr =  getKeyStr(key,id,RedisKeyType.HASH);
-            return getOperations().delete(keyStr,hashKeys);
+            long expire = key.getExpire();
+            if(expire <= 0){
+                return getOperations().delete(keyStr,hashKeys);
+            }else{
+                Long[] sum = new Long[1];
+                redisTemplate.executePipelined(new RedisCallback<Object>() {
+                    @Override
+                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
+                        sum[0] = getOperations().delete(keyStr,hashKeys);
+                        getOperations().getOperations().expire(keyStr,expire,TimeUnit.SECONDS);
+                        return null;
+                    }
+                });
+                return sum[0];
+            }
         }
 
         @Override
@@ -676,6 +800,277 @@ public class RedisUtil {
         public Map<String, String> entries(RedisKeyNs key, Serializable id) {
             String keyStr =  getKeyStr(key,id,RedisKeyType.HASH);
             return getOperations().entries(keyStr);
+        }
+    }
+
+
+    public static class ZSetExecutor implements RedisZSetOperations{
+
+        private  ZSetOperations<String, String> getOperations(){
+            return redisTemplate.opsForZSet();
+        }
+
+        @Override
+        public Boolean add(RedisKeyNs key, Serializable id, String value, double score) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            long expire = key.getExpire();
+            if(expire <= 0){
+                return getOperations().add(keyStr,value,score);
+            }else{
+                Boolean[] results = new Boolean[1];
+                 redisTemplate.executePipelined(new RedisCallback<Object>() {
+                     @Override
+                     public Object doInRedis(RedisConnection connection) throws DataAccessException {
+                         results[0] = getOperations().add(keyStr, value, score);
+                         getOperations().getOperations().expire(keyStr,expire,TimeUnit.SECONDS);
+                         return null;
+                     }
+                 });
+                 return results[0];
+            }
+        }
+
+        @Override
+        public Long add(RedisKeyNs key, Serializable id, Set<ZSetDataModel> datas) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            if(CollectionUtils.isEmpty(datas)){
+                throw new RuntimeException("datas is not be null");
+            }
+            Set<ZSetOperations.TypedTuple<String>>  typedTuples = new HashSet<>();
+            datas.stream().forEach( t -> typedTuples.add(new DefaultTypedTuple<>(t.getValue(),t.getCore())));
+            long expire = key.getExpire();
+            if(expire <= 0){
+                return getOperations().add(keyStr,typedTuples);
+            }else{
+                Long[] results = new Long[1];
+                redisTemplate.executePipelined(new RedisCallback<Object>() {
+                    @Override
+                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
+                        results[0] = getOperations().add(keyStr,typedTuples);
+                        getOperations().getOperations().expire(keyStr,expire,TimeUnit.SECONDS);
+                        return null;
+                    }
+                });
+                return results[0];
+            }
+        }
+
+        @Override
+        public Long remove(RedisKeyNs key, Serializable id, String... values) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            long expire = key.getExpire();
+            if(expire <= 0){
+                return getOperations().remove(keyStr,values);
+            }else{
+                Long[] results = new Long[1];
+                redisTemplate.executePipelined(new RedisCallback<Object>() {
+                    @Override
+                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
+                        results[0] = getOperations().remove(keyStr, values);
+                        getOperations().getOperations().expire(keyStr,expire,TimeUnit.SECONDS);
+                        return null;
+                    }
+                });
+                return results[0];
+            }
+        }
+
+        @Override
+        public Double incrementScore(RedisKeyNs key, Serializable id, String value, double delta) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            long expire = key.getExpire();
+            if(expire <= 0){
+                return getOperations().incrementScore(keyStr,value,delta);
+            }else{
+                Double[] results = new Double[1];
+                redisTemplate.executePipelined(new RedisCallback<Object>() {
+                    @Override
+                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
+                        results[0] = getOperations().incrementScore(keyStr,value,delta);
+                        getOperations().getOperations().expire(keyStr,expire,TimeUnit.SECONDS);
+                        return null;
+                    }
+                });
+                return results[0];
+            }
+        }
+
+        @Override
+        public Long rank(RedisKeyNs key, Serializable id, String value) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            return getOperations().rank(keyStr,value);
+        }
+
+        @Override
+        public Long reverseRank(RedisKeyNs key, Serializable id, String value) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            return getOperations().reverseRank(keyStr,value);
+        }
+
+        @Override
+        public Set<String> range(RedisKeyNs key, Serializable id, long start, long end) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            return getOperations().range(keyStr,start,end);
+        }
+
+        @Override
+        public Set<ZSetDataModel> rangeWithScores(RedisKeyNs key, Serializable id, long start, long end) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            Set<ZSetOperations.TypedTuple<String>> typedTuples = getOperations().rangeWithScores(keyStr, start, end);
+            Set<ZSetDataModel> setDataModels = new HashSet<>();
+            typedTuples.stream().forEach( t  -> setDataModels.add(new ZSetDataModel(t.getValue(),t.getScore())));
+            return setDataModels;
+        }
+
+        @Override
+        public Set<String> rangeByScore(RedisKeyNs key, Serializable id, double min, double max) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            return getOperations().rangeByScore(keyStr,min,max);
+        }
+
+        @Override
+        public Set<ZSetDataModel> rangeByScoreWithScores(RedisKeyNs key, Serializable id, double min, double max) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            Set<ZSetOperations.TypedTuple<String>> typedTuples = getOperations().rangeByScoreWithScores(keyStr, min, max);
+            Set<ZSetDataModel> setDataModels = new HashSet<>();
+            typedTuples.stream().forEach( t  -> setDataModels.add(new ZSetDataModel(t.getValue(),t.getScore())));
+            return setDataModels;
+        }
+
+        @Override
+        public Set<String> rangeByScore(RedisKeyNs key, Serializable id, double min, double max, long offset, long count) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            return getOperations().rangeByScore(keyStr,min,max,offset,count);
+        }
+
+        @Override
+        public Set<ZSetDataModel> rangeByScoreWithScores(RedisKeyNs key, Serializable id, double min, double max, long offset, long count) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            Set<ZSetOperations.TypedTuple<String>> typedTuples = getOperations().rangeByScoreWithScores(keyStr, min, max, offset, count);
+            Set<ZSetDataModel> setDataModels = new HashSet<>();
+            typedTuples.stream().forEach( t  -> setDataModels.add(new ZSetDataModel(t.getValue(),t.getScore())));
+            return setDataModels;
+        }
+
+        @Override
+        public Set<String> reverseRange(RedisKeyNs key, Serializable id, long start, long end) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            return getOperations().reverseRange(keyStr,start,end);
+        }
+
+        @Override
+        public Set<ZSetDataModel> reverseRangeWithScores(RedisKeyNs key, Serializable id, long start, long end) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            Set<ZSetOperations.TypedTuple<String>> typedTuples = getOperations().reverseRangeWithScores(keyStr, start, end);
+            Set<ZSetDataModel> setDataModels = new HashSet<>();
+            typedTuples.stream().forEach( t  -> setDataModels.add(new ZSetDataModel(t.getValue(),t.getScore())));
+            return setDataModels;
+        }
+
+        @Override
+        public Set<String> reverseRangeByScore(RedisKeyNs key, Serializable id, double min, double max) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            return getOperations().reverseRangeByScore(keyStr,min,max);
+        }
+
+        @Override
+        public Set<ZSetDataModel> reverseRangeByScoreWithScores(RedisKeyNs key, Serializable id, double min, double max) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            Set<ZSetOperations.TypedTuple<String>> typedTuples = getOperations().reverseRangeByScoreWithScores(keyStr, min, max);
+            Set<ZSetDataModel> setDataModels = new HashSet<>();
+            typedTuples.stream().forEach( t  -> setDataModels.add(new ZSetDataModel(t.getValue(),t.getScore())));
+            return setDataModels;
+        }
+
+        @Override
+        public Set<String> reverseRangeByScore(RedisKeyNs key, Serializable id, double min, double max, long offset, long count) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            return getOperations().reverseRangeByScore(keyStr,min,max,offset,count);
+        }
+
+        @Override
+        public Set<ZSetDataModel> reverseRangeByScoreWithScores(RedisKeyNs key, Serializable id, double min, double max, long offset, long count) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            Set<ZSetOperations.TypedTuple<String>> typedTuples = getOperations().reverseRangeByScoreWithScores(keyStr, min, max, offset, count);
+            Set<ZSetDataModel> setDataModels = new HashSet<>();
+            typedTuples.stream().forEach( t  -> setDataModels.add(new ZSetDataModel(t.getValue(),t.getScore())));
+            return setDataModels;
+        }
+
+        @Override
+        public Long count(RedisKeyNs key, Serializable id, double min, double max) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            return getOperations().count(keyStr,min,max);
+        }
+
+        @Override
+        public Long size(RedisKeyNs key, Serializable id) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            return getOperations().size(keyStr);
+        }
+
+        @Override
+        public Long zCard(RedisKeyNs key, Serializable id) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            return getOperations().zCard(keyStr);
+        }
+
+        @Override
+        public Double score(RedisKeyNs key, Serializable id, String value) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            return getOperations().score(keyStr,value);
+        }
+
+        @Override
+        public Long removeRange(RedisKeyNs key, Serializable id, long start, long end) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            long expire = key.getExpire();
+            if(expire <= 0){
+                return getOperations().removeRange(keyStr,start,end);
+            }else{
+                Long[] results = new Long[1];
+                redisTemplate.executePipelined(new RedisCallback<Object>() {
+                    @Override
+                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
+                        results[0] = getOperations().removeRange(keyStr,start,end);
+                        getOperations().getOperations().expire(keyStr,expire,TimeUnit.SECONDS);
+                        return null;
+                    }
+                });
+                return results[0];
+            }
+        }
+
+        @Override
+        public Long removeRangeByScore(RedisKeyNs key, Serializable id, double min, double max) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            long expire = key.getExpire();
+            if(expire <= 0){
+                return getOperations().removeRangeByScore(keyStr,min,max);
+            }else{
+                Long[] results = new Long[1];
+                redisTemplate.executePipelined(new RedisCallback<Object>() {
+                    @Override
+                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
+                        results[0] = getOperations().removeRangeByScore(keyStr,min,max);
+                        getOperations().getOperations().expire(keyStr,expire,TimeUnit.SECONDS);
+                        return null;
+                    }
+                });
+                return results[0];
+            }
+        }
+
+        @Override
+        public Set<String> rangeByLex(RedisKeyNs key, Serializable id, ZSetRange range) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            return getOperations().rangeByLex(keyStr,range.getRange());
+        }
+
+        @Override
+        public Set<String> rangeByLex(RedisKeyNs key, Serializable id, ZSetRange range, ZSetLimit limit) {
+            String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
+            return getOperations().rangeByLex(keyStr,range.getRange(),limit.getLimit());
         }
     }
 }

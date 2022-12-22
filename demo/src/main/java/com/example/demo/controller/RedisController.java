@@ -41,11 +41,13 @@ public class RedisController {
         redisTemplate.executePipelined(new RedisCallback<Object>() {
             @Override
             public Object doInRedis(RedisConnection connection) throws DataAccessException {
+                redisTemplate.multi();
                 Long size = listOperations.size(key);
                 size = size == null?0:size;
                 System.err.println("当前数组长度"+size);
                 listOperations.rightPush(key, size);
                 listOperations.getOperations().expire(key,60,TimeUnit.SECONDS);
+                redisTemplate.exec();
                 return null;
             }
         });

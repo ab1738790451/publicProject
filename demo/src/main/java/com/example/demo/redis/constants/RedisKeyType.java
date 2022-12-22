@@ -11,7 +11,8 @@ public enum RedisKeyType {
     LIST("链表"),
     SET("集合"),
     STRING("字符串"),
-    HASH("哈希");
+    HASH("哈希"),
+    ZSET("有序集合");
 
     RedisKeyType(String descr){
         this.descr = descr;
