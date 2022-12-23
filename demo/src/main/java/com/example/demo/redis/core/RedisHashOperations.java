@@ -16,7 +16,7 @@ import java.util.Set;
  * @Company: 优积谷
  * @Date: 2022/12/20 14:04
  * @Version: 1.0.0
- * @Description: 描述
+ * @Description: redis哈希操作
  */
 public interface RedisHashOperations  {
 

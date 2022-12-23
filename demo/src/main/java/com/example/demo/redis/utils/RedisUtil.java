@@ -33,23 +33,33 @@ public class RedisUtil {
     private static ZSetExecutor zSetExecutor = new ZSetExecutor();
 
     private RedisUtil(){}
-
+    /**
+     * 字符串操作调用
+     */
     public static StringExecutor stringExecutor(){
         return stringExecutor;
     }
-
+    /**
+     * 集合操作调用
+     */
     public static SetExecutor SetExecutor(){
         return setExecutor;
     }
-
+    /**
+     * 链表操作调用
+     */
     public static ListExecutor listExecutor(){
         return listExecutor;
     }
-
+    /**
+     * 哈希操作调用
+     */
     public static HashExecutor hashExecutor(){
         return hashExecutor;
     }
-
+    /**
+     * 有序集合操作调用
+     */
     public static ZSetExecutor zSetExecutor(){
         return zSetExecutor;
     }
@@ -64,12 +74,20 @@ public class RedisUtil {
         return key.getNameSpace() + id.toString();
     }
 
+    /**
+     * 根据 {@key} 获取生存时间
+     * @param key key 前缀
+     * @param id key标识
+     * @return
+     */
     public static  long getExpire(RedisKeyNs key,Serializable id){
         String keyStr = getKeyStr(key,id,null);
         return redisTemplate.getExpire(keyStr);
     }
 
-
+    /**
+     * 字符串操作类，包含对字符串类型的各种操作方法
+     */
     public static class StringExecutor implements RedisStringOperations{
 
         @Override
@@ -266,7 +284,9 @@ public class RedisUtil {
 
     }
 
-
+    /**
+     * 集合操作类，包含对集合类型的各种操作方法
+     */
     public static class SetExecutor implements RedisSetOperations {
 
         @Override
@@ -394,7 +414,9 @@ public class RedisUtil {
         }
     }
 
-
+    /**
+     * 链表操作类，包含对链表类型的各种操作方法
+     */
     public static class ListExecutor implements RedisListOperations{
 
         private ListOperations<String, String> getListOperations(){
@@ -630,7 +652,9 @@ public class RedisUtil {
         }
     }
 
-
+    /**
+     * 哈希操作类，包含对哈希类型的各种操作方法
+     */
     public static class HashExecutor implements RedisHashOperations{
 
         private  HashOperations<String, String, String> getOperations(){
@@ -803,7 +827,9 @@ public class RedisUtil {
         }
     }
 
-
+    /**
+     * 有序集合操作类，包含对有序集合类型的各种操作方法
+     */
     public static class ZSetExecutor implements RedisZSetOperations{
 
         private  ZSetOperations<String, String> getOperations(){

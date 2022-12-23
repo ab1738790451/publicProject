@@ -8,7 +8,7 @@ import java.util.Set;
  * @Company: 优积谷
  * @Date: 2022/12/20 17:46
  * @Version: 1.0.0
- * @Description: 描述
+ * @Description: redis有序集合操作
  */
 public interface RedisZSetOperations {
     

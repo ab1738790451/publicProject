@@ -11,7 +11,7 @@ import java.util.List;
  * @Company: 优积谷
  * @Date: 2022/12/20 11:05
  * @Version: 1.0.0
- * @Description: 描述
+ * @Description: redis链表操作
  */
 public interface RedisListOperations {
 
