@@ -1,8 +1,11 @@
 package com.example.demo.redis.utils;
 
 import com.example.demo.config.SpringUtils;
+import com.example.demo.redis.constants.DefaultRedisKeyNs;
 import com.example.demo.redis.core.*;
 import com.example.demo.redis.constants.RedisKeyType;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.*;
@@ -21,6 +24,8 @@ import java.util.concurrent.TimeUnit;
 public class RedisUtil {
 
     private static RedisTemplate<String,String> redisTemplate = SpringUtils.getBean("redisTemplate",RedisTemplate.class);
+
+    private static RedissonClient redissonClient = SpringUtils.getBean("redissonClient",RedissonClient.class);
 
     private static StringExecutor stringExecutor = new StringExecutor();
 
@@ -313,86 +318,26 @@ public class RedisUtil {
         @Override
         public Long remove(RedisKeyNs key, Serializable id, Object... values) {
             String keyStr =  getKeyStr(key,id,RedisKeyType.SET);
-            long expire = key.getExpire();
-            if (expire <= 0) {
-                return redisTemplate.opsForSet().remove(keyStr, values);
-            } else {
-                Long[] size = new Long[1];
-                SetOperations<String, String> operations = redisTemplate.opsForSet();
-                redisTemplate.executePipelined(new RedisCallback<Object>() {
-                    @Override
-                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
-                        size[0] = operations.remove(keyStr, values);
-                        operations.getOperations().expire(keyStr, expire, TimeUnit.SECONDS);
-                        return null;
-                    }
-                });
-                return size[0];
-            }
+            return redisTemplate.opsForSet().remove(keyStr, values);
         }
 
         @Override
         public String pop(RedisKeyNs key, Serializable id) {
             String keyStr =  getKeyStr(key,id,RedisKeyType.SET);
-            long expire = key.getExpire();
-            if (expire <= 0) {
-                return redisTemplate.opsForSet().pop(keyStr);
-            } else {
-                String[] results = new String[1];
-                SetOperations<String, String> operations = redisTemplate.opsForSet();
-                redisTemplate.executePipelined(new RedisCallback<Object>() {
-                    @Override
-                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
-                        results[0] = operations.pop(keyStr);
-                        operations.getOperations().expire(keyStr, expire, TimeUnit.SECONDS);
-                        return null;
-                    }
-                });
-                return results[0];
-            }
+            return redisTemplate.opsForSet().pop(keyStr);
         }
 
         @Override
         public Set<String> pop(RedisKeyNs key, Serializable id, long count) {
             String keyStr =  getKeyStr(key,id,RedisKeyType.SET);
-            long expire = key.getExpire();
-            if (expire <= 0) {
-                return new HashSet<>(redisTemplate.opsForSet().pop(keyStr,count));
-            } else {
-                List[] results = new List[1];
-                SetOperations<String, String> operations = redisTemplate.opsForSet();
-                redisTemplate.executePipelined(new RedisCallback<Object>() {
-                    @Override
-                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
-                        results[0] =redisTemplate.opsForSet().pop(keyStr,count);
-                        operations.getOperations().expire(keyStr, expire, TimeUnit.SECONDS);
-                        return null;
-                    }
-                });
-                return new HashSet<>(results[0]);
-            }
+            return new HashSet<>(redisTemplate.opsForSet().pop(keyStr,count));
         }
 
         @Override
         public  Boolean move(RedisKeyNs key, Serializable id, String value, RedisKeyNs destKey, Serializable destId) {
             String keyStr =  getKeyStr(key,id,RedisKeyType.SET);
             String destKeyStr =  getKeyStr(destKey,destId,RedisKeyType.SET);
-            long expire = key.getExpire();
-            if (expire <= 0) {
-                return redisTemplate.opsForSet().move(keyStr,value,destKeyStr);
-            } else {
-                Boolean[] results = new Boolean[1];
-                SetOperations<String, String> operations = redisTemplate.opsForSet();
-                redisTemplate.executePipelined(new RedisCallback<Object>() {
-                    @Override
-                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
-                        results[0] = redisTemplate.opsForSet().move(keyStr,value,destKeyStr);
-                        operations.getOperations().expire(keyStr, expire, TimeUnit.SECONDS);
-                        return null;
-                    }
-                });
-                return results[0];
-            }
+            return redisTemplate.opsForSet().move(keyStr,value,destKeyStr);
         }
 
         @Override
@@ -587,21 +532,7 @@ public class RedisUtil {
         @Override
         public Long remove(RedisKeyNs key, Serializable id, long count, String value) {
             String keyStr =  getKeyStr(key,id,RedisKeyType.LIST);
-            long expire = key.getExpire();
-            if (expire <= 0) {
-                return  getListOperations().remove(keyStr, count,value);
-            } else {
-                Long[] size = new Long[1];
-                redisTemplate.executePipelined(new RedisCallback<Object>() {
-                    @Override
-                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
-                        size[0] = getListOperations().remove(keyStr, count,value);
-                        getListOperations().getOperations().expire(keyStr, expire, TimeUnit.SECONDS);
-                        return null;
-                    }
-                });
-                return size[0];
-            }
+            return  getListOperations().remove(keyStr, count,value);
         }
 
         @Override
@@ -614,41 +545,13 @@ public class RedisUtil {
         @Override
         public String lPop(RedisKeyNs key, Serializable id) {
             String keyStr =  getKeyStr(key,id,RedisKeyType.LIST);
-            long expire = key.getExpire();
-            if (expire <= 0) {
-                return  getListOperations().leftPop(keyStr);
-            } else {
-                String[] results = new String[1];
-                redisTemplate.executePipelined(new RedisCallback<Object>() {
-                    @Override
-                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
-                        results[0] = getListOperations().leftPop(keyStr);
-                        getListOperations().getOperations().expire(keyStr, expire, TimeUnit.SECONDS);
-                        return null;
-                    }
-                });
-                return results[0];
-            }
+            return  getListOperations().leftPop(keyStr);
         }
 
         @Override
         public String rPop(RedisKeyNs key, Serializable id) {
             String keyStr =  getKeyStr(key,id,RedisKeyType.LIST);
-            long expire = key.getExpire();
-            if (expire <= 0) {
-                return  getListOperations().rightPop(keyStr);
-            } else {
-                String[] results = new String[1];
-                redisTemplate.executePipelined(new RedisCallback<Object>() {
-                    @Override
-                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
-                        results[0] = getListOperations().rightPop(keyStr);
-                        getListOperations().getOperations().expire(keyStr, expire, TimeUnit.SECONDS);
-                        return null;
-                    }
-                });
-                return results[0];
-            }
+            return  getListOperations().rightPop(keyStr);
         }
     }
 
@@ -664,21 +567,7 @@ public class RedisUtil {
         @Override
         public Long delete(RedisKeyNs key, Serializable id, String... hashKeys) {
             String keyStr =  getKeyStr(key,id,RedisKeyType.HASH);
-            long expire = key.getExpire();
-            if(expire <= 0){
-                return getOperations().delete(keyStr,hashKeys);
-            }else{
-                Long[] sum = new Long[1];
-                redisTemplate.executePipelined(new RedisCallback<Object>() {
-                    @Override
-                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
-                        sum[0] = getOperations().delete(keyStr,hashKeys);
-                        getOperations().getOperations().expire(keyStr,expire,TimeUnit.SECONDS);
-                        return null;
-                    }
-                });
-                return sum[0];
-            }
+            return getOperations().delete(keyStr,hashKeys);
         }
 
         @Override
@@ -884,21 +773,7 @@ public class RedisUtil {
         @Override
         public Long remove(RedisKeyNs key, Serializable id, String... values) {
             String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
-            long expire = key.getExpire();
-            if(expire <= 0){
-                return getOperations().remove(keyStr,values);
-            }else{
-                Long[] results = new Long[1];
-                redisTemplate.executePipelined(new RedisCallback<Object>() {
-                    @Override
-                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
-                        results[0] = getOperations().remove(keyStr, values);
-                        getOperations().getOperations().expire(keyStr,expire,TimeUnit.SECONDS);
-                        return null;
-                    }
-                });
-                return results[0];
-            }
+            return getOperations().remove(keyStr,values);
         }
 
         @Override
@@ -1050,41 +925,13 @@ public class RedisUtil {
         @Override
         public Long removeRange(RedisKeyNs key, Serializable id, long start, long end) {
             String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
-            long expire = key.getExpire();
-            if(expire <= 0){
-                return getOperations().removeRange(keyStr,start,end);
-            }else{
-                Long[] results = new Long[1];
-                redisTemplate.executePipelined(new RedisCallback<Object>() {
-                    @Override
-                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
-                        results[0] = getOperations().removeRange(keyStr,start,end);
-                        getOperations().getOperations().expire(keyStr,expire,TimeUnit.SECONDS);
-                        return null;
-                    }
-                });
-                return results[0];
-            }
+            return getOperations().removeRange(keyStr,start,end);
         }
 
         @Override
         public Long removeRangeByScore(RedisKeyNs key, Serializable id, double min, double max) {
             String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
-            long expire = key.getExpire();
-            if(expire <= 0){
-                return getOperations().removeRangeByScore(keyStr,min,max);
-            }else{
-                Long[] results = new Long[1];
-                redisTemplate.executePipelined(new RedisCallback<Object>() {
-                    @Override
-                    public Object doInRedis(RedisConnection connection) throws DataAccessException {
-                        results[0] = getOperations().removeRangeByScore(keyStr,min,max);
-                        getOperations().getOperations().expire(keyStr,expire,TimeUnit.SECONDS);
-                        return null;
-                    }
-                });
-                return results[0];
-            }
+            return getOperations().removeRangeByScore(keyStr,min,max);
         }
 
         @Override
@@ -1098,5 +945,65 @@ public class RedisUtil {
             String keyStr =  getKeyStr(key,id,RedisKeyType.ZSET);
             return getOperations().rangeByLex(keyStr,range.getRange(),limit.getLimit());
         }
+    }
+
+    public boolean tryLock(Serializable id) throws InterruptedException {
+        String keyStr = getKeyStr(DefaultRedisKeyNs.DEFAULT_LOCK_KEY, id, null);
+        RLock lock = redissonClient.getLock(keyStr);
+        return lock.tryLock(0,DefaultRedisKeyNs.DEFAULT_LOCK_KEY.getExpire(),TimeUnit.SECONDS);
+    }
+
+    public boolean tryLock(RedisKeyNs key, Serializable id) throws InterruptedException {
+        String keyStr = getKeyStr(key, id, null);
+        RLock lock = redissonClient.getLock(keyStr);
+        return lock.tryLock(0,key.getExpire(),TimeUnit.SECONDS);
+    }
+
+    public void lock(RedisKeyNs key, Serializable id){
+        String keyStr = getKeyStr(key, id, null);
+        RLock lock = redissonClient.getLock(keyStr);
+        lock.lock(key.getExpire(),TimeUnit.SECONDS);
+    }
+
+    public void lock(Serializable id){
+        String keyStr = getKeyStr(DefaultRedisKeyNs.DEFAULT_LOCK_KEY, id, null);
+        RLock lock = redissonClient.getLock(keyStr);
+        lock.lock(DefaultRedisKeyNs.DEFAULT_LOCK_KEY.getExpire(),TimeUnit.SECONDS);
+    }
+
+    public void unlock(RedisKeyNs key, Serializable id){
+        String keyStr = getKeyStr(key, id, null);
+        RLock lock = redissonClient.getLock(keyStr);
+        lock.unlock();
+    }
+
+    public void unlock(Serializable id){
+        String keyStr = getKeyStr(DefaultRedisKeyNs.DEFAULT_LOCK_KEY, id, null);
+        RLock lock = redissonClient.getLock(keyStr);
+        lock.unlock();
+    }
+
+    public boolean isLocked(RedisKeyNs key, Serializable id){
+        String keyStr = getKeyStr(key, id, null);
+        RLock lock = redissonClient.getLock(keyStr);
+        return lock.isLocked();
+    }
+
+    public boolean isLocked(Serializable id){
+        String keyStr = getKeyStr(DefaultRedisKeyNs.DEFAULT_LOCK_KEY, id, null);
+        RLock lock = redissonClient.getLock(keyStr);
+        return lock.isLocked();
+    }
+
+    public boolean forceUnlock(RedisKeyNs key, Serializable id){
+        String keyStr = getKeyStr(key, id, null);
+        RLock lock = redissonClient.getLock(keyStr);
+        return lock.forceUnlock();
+    }
+
+    public boolean forceUnlock(Serializable id){
+        String keyStr = getKeyStr(DefaultRedisKeyNs.DEFAULT_LOCK_KEY, id, null);
+        RLock lock = redissonClient.getLock(keyStr);
+        return lock.forceUnlock();
     }
 }

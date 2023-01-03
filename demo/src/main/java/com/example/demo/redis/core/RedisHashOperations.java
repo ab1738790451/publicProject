@@ -26,6 +26,13 @@ public interface RedisHashOperations  {
 
     String get(RedisKeyNs key, Serializable id, String hashKey);
 
+    /**
+     * 从{@key}中获取多个hash key的值
+     * @param key
+     * @param id
+     * @param hashKeys
+     * @return
+     */
     List<String> multiGet(RedisKeyNs key, Serializable id, Collection<String> hashKeys);
 
     Long increment(RedisKeyNs key, Serializable id, String hashKey, long delta);
@@ -34,6 +41,13 @@ public interface RedisHashOperations  {
 
     Set<String> keys(RedisKeyNs key, Serializable id);
 
+    /**
+     * 获取单个hashkey的值长度
+     * @param key
+     * @param id
+     * @param hashKey
+     * @return
+     */
     Long lengthOfValue(RedisKeyNs key, Serializable id, String hashKey);
 
     Long size(RedisKeyNs key, Serializable id);
@@ -46,6 +60,12 @@ public interface RedisHashOperations  {
 
     List<String> values(RedisKeyNs key, Serializable id);
 
+    /**
+     * 获取{@key}所有的值
+     * @param key
+     * @param id
+     * @return
+     */
     Map<String, String> entries(RedisKeyNs key, Serializable id);
 
 }

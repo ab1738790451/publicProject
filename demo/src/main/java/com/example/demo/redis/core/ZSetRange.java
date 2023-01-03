@@ -7,7 +7,7 @@ import org.springframework.data.redis.connection.RedisZSetCommands;
  * @Company: 优积谷
  * @Date: 2022/12/21 17:33
  * @Version: 1.0.0
- * @Description: 描述
+ * @Description: zset截取模型
  */
 public class ZSetRange {
 

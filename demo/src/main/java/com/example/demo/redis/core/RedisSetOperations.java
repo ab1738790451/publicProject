@@ -35,10 +35,21 @@ public interface RedisSetOperations {
      Long ssize(RedisKeyNs key, Serializable id);
 
 
-
+     /**
+      * {@value}是否属于集合{@key}
+      * @param key
+      * @param id
+      * @param value
+      * @return
+      */
      Boolean isMember(RedisKeyNs key, Serializable id, String value);
 
-
+     /**
+      * 获取集合{@key}的所有值
+      * @param key
+      * @param id
+      * @return
+      */
      Set<String> members(RedisKeyNs key, Serializable id);
 
 }
