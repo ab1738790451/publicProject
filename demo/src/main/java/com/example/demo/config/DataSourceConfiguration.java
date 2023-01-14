@@ -26,8 +26,8 @@ import javax.sql.DataSource;
  * @Version: 1.0.0
  * @Description: 描述
  */
-@Configuration
-@MapperScan(basePackages = "com.example.demo.mapper.testOne",sqlSessionFactoryRef = "sqlSessionFactory1",sqlSessionTemplateRef = "sqlSessionTemplate1")
+//@Configuration
+//@MapperScan(basePackages = "com.example.demo.mapper.testOne",sqlSessionFactoryRef = "sqlSessionFactory1",sqlSessionTemplateRef = "sqlSessionTemplate1")
 public class DataSourceConfiguration {
 
 

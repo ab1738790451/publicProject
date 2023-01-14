@@ -20,8 +20,8 @@ import javax.sql.DataSource;
  * @Version: 1.0.0
  * @Description: 描述
  */
-@Configuration
-@MapperScan(basePackages = "com.example.demo.mapper.testTwo",sqlSessionFactoryRef = "sqlSessionFactory2",sqlSessionTemplateRef = "sqlSessionTemplate2")
+//@Configuration
+//@MapperScan(basePackages = "com.example.demo.mapper.testTwo",sqlSessionFactoryRef = "sqlSessionFactory2",sqlSessionTemplateRef = "sqlSessionTemplate2")
 public class DataSourceConfiguration2 {
 
 

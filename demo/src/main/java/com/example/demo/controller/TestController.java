@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,14 +39,15 @@ public class TestController {
     @Value("${tencent.api.webService.key:EKNBZ-T6NEG-FA5QI-IJQ3K-AS6N2-JZBDL,EKNBZ-T6NEG-FA5QI-IJQ3K-AS6N2-JZBDK}")
     private List<String> keys;
 
-    @Autowired
-   private TestService testService;
 
     @Autowired
     private RestTemplate restTemplate;
 
     @Autowired
     private MenuService menuServiceImpl;
+
+    @Autowired
+    private RedisTemplate delRedisTemplate;
 
     @ApiOperation(value = "方法一",tags = "方法一",httpMethod = "GET")
     @RequestMapping(value = "/one",method = RequestMethod.GET)
@@ -60,7 +62,7 @@ public class TestController {
     @ResponseBody
     public ResponseResult test2(String name,String userName,String message){
         TestWebSocket.sendMessageAll(name,userName,message);
-        return new ResponseResult(200,"查询成功",testService.queryAll());
+        return new ResponseResult(200,"查询成功");
     }
 
     @ApiOperation(value = "方法三",tags = "方法三",httpMethod = "GET")
@@ -140,4 +142,20 @@ public class TestController {
          return  modelAndView;
     }
 
+    @ApiOperation(value = "redis测试",tags = "塞值",httpMethod = "GET")
+    @RequestMapping(value = "/setRedis")
+    @ResponseBody
+    public ResponseResult setRedis(String key,String value){
+        delRedisTemplate.opsForValue().set(key,value,60);
+        return new ResponseResult(200,"查询成功");
+    }
+
+    @ApiOperation(value = "redis测试",tags = "塞值",httpMethod = "GET")
+    @RequestMapping(value = "/getRedis")
+    @ResponseBody
+    public ResponseResult setRedis(String key){
+        String o = (String) delRedisTemplate.opsForValue().get(key);
+        System.err.println(o);
+        return new ResponseResult(200,"查询成功");
+    }
 }
