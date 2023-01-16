@@ -192,17 +192,31 @@
 </body>
 <script type="text/javascript">
     function getToken() {
-        $.ajax({
-            url:"/getui/getToken",
-            type:"get",
-            dataType:"json",
-            success:function (res) {
-                console.log(res.data);
-            },
-            error:function (res) {
+           /* $.ajax({
+                url:"/getui/getToken",
+                type:"get",
+                dataType:"json",
+                success:function (res) {
+                    console.log(res.data);
+                },
+                error:function (res) {
 
-            }
-        });
+                }
+            });*/
+             let es =  new EventSource("https://96.push2.eastmoney.com/api/qt/stock/details/sse?fields1=f1,f2,f3,f4&fields2=f51,f52,f53,f54,f55&mpi=1000&ut=f057cbcbce2a86e2866ab8877db1d059&fltt=2&pos=-15&secid=0.002195&wbp2u=&wbp2u=|0|0|0|wap")
+             es.addEventListener('open',function () {
+                   console.log('open')
+             },false)
+            es.addEventListener("message",function (e) {
+                  console.log("message",e.data)
+            },false)
+            es.addEventListener("foo",function (e) {
+                console.log("foo",e.data)
+            },false)
+            es.addEventListener("error",function (e) {
+                console.log("error",e.data)
+            },false)
+
     }
 
 

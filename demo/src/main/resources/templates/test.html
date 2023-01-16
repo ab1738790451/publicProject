@@ -195,7 +195,8 @@
     var webSocket;
     function test() {
         testFunction();
-        webSocket = new WebSocket("ws:localhost:8080/webSocket/"+name+"/"+userName);
+        //webSocket = new WebSocket("ws:localhost:8080/webSocket/"+name+"/"+userName);
+        webSocket = new WebSocket(" ws://quote.eastmoney.com/newapi/getstockvote?code=sz002195");
         webSocket.onopen = function () {
            let date = new Date();
             userName = Math.ceil(Math.random()*100)+"_"+date.getMinutes()+"_"+date.getSeconds()+"_"+date.getMilliseconds();

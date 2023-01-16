@@ -7,8 +7,12 @@ import com.example.demo.entity.TencentIpModel;
 import com.example.demo.responseResult.ResponseResult;
 import com.example.demo.server.MenuService;
 import com.example.demo.server.TestService;
+import com.launchdarkly.eventsource.EventHandler;
+import com.launchdarkly.eventsource.EventSource;
+import com.launchdarkly.eventsource.MessageEvent;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import okhttp3.HttpUrl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -20,6 +24,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 
 
@@ -68,7 +74,7 @@ public class TestController {
     @RequestMapping(value = "/three1",method = RequestMethod.GET)
     public String test3(HttpServletRequest request, HttpServletResponse response, Model model){
         model.addAttribute("id",request.getParameter("id"));
-        return "testFour";
+        return "getui";
     }
 
     @ApiOperation(value = "方法三",tags = "方法三",httpMethod = "GET")
@@ -145,6 +151,57 @@ public class TestController {
     @ResponseBody
     public ResponseResult addMenu(){
         menuServiceImpl.insert();
+        return  new ResponseResult(200,"SUCCESS");
+    }
+
+
+
+    @RequestMapping("sse")
+    @ResponseBody
+    public ResponseResult sse() throws URISyntaxException {
+      EventHandler eventHandler =   new EventHandler() {
+            @Override
+            public void onOpen() throws Exception {
+                System.err.println("连接成功");
+            }
+
+            @Override
+            public void onClosed() throws Exception {
+
+            }
+
+            @Override
+            public void onMessage(String s, MessageEvent messageEvent) throws Exception {
+                System.err.println("s:"+s);
+                System.err.println("data:"+messageEvent.getData());
+            }
+
+            @Override
+            public void onComment(String s) throws Exception {
+
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+               System.err.println("error:"+throwable.getMessage());
+            }
+        };
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme("https")
+                .host("96.push2.eastmoney.com")
+                .addEncodedPathSegments("api/qt/stock/details/sse")
+                .addEncodedQueryParameter("fields1", "f1,f2,f3,f4")
+                .addEncodedQueryParameter("fields2","f51,f52,f53,f54,f55")
+                 .addEncodedQueryParameter("mpi","1000")
+                .addEncodedQueryParameter("ut","f057cbcbce2a86e2866ab8877db1d059")
+                .addEncodedQueryParameter("fltt","2")
+                .addEncodedQueryParameter("pos","-15")
+                .addEncodedQueryParameter("secid","0.002195")
+                .addEncodedQueryParameter("wbp2u","")
+                .addEncodedQueryParameter("wbp2u","|0|0|0|wap")
+                .build();
+        EventSource eventSource = new EventSource.Builder(eventHandler, url).build();
+        eventSource.start();
         return  new ResponseResult(200,"SUCCESS");
     }
 }
