@@ -154,12 +154,12 @@ public class TestController {
         return  new ResponseResult(200,"SUCCESS");
     }
 
-
+   static EventSource eventSource;
 
     @RequestMapping("sse")
     @ResponseBody
     public ResponseResult sse() throws URISyntaxException {
-      EventHandler eventHandler =   new EventHandler() {
+        EventHandler eventHandler =   new EventHandler() {
             @Override
             public void onOpen() throws Exception {
                 System.err.println("连接成功");
@@ -183,25 +183,32 @@ public class TestController {
 
             @Override
             public void onError(Throwable throwable) {
-               System.err.println("error:"+throwable.getMessage());
+                System.err.println("error:"+throwable.getMessage());
             }
         };
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("https")
-                .host("96.push2.eastmoney.com")
-                .addEncodedPathSegments("api/qt/stock/details/sse")
-                .addEncodedQueryParameter("fields1", "f1,f2,f3,f4")
-                .addEncodedQueryParameter("fields2","f51,f52,f53,f54,f55")
-                 .addEncodedQueryParameter("mpi","1000")
-                .addEncodedQueryParameter("ut","f057cbcbce2a86e2866ab8877db1d059")
+                .host("71.push2.eastmoney.com")
+                .addEncodedPathSegments("api/qt/stock/sse")
+                .addEncodedQueryParameter("ut","fa5fd1943c7b386f172d6893dbfba10b")
+                .addEncodedQueryParameter("fields","f120,f121,f122,f174,f175,f59,f163,f43,f57,f58,f169,f170,f46,f44,f51,f168,f47,f164,f116,f60,f45,f52,f50,f48,f167,f117,f71,f161,f49,f530,f135,f136,f137,f138,f139,f141,f142,f144,f145,f147,f148,f140,f143,f146,f149,f55,f62,f162,f92,f173,f104,f105,f84,f85,f183,f184,f185,f186,f187,f188,f189,f190,f191,f192,f107,f111,f86,f177,f78,f110,f262,f263,f264,f267,f268,f255,f256,f257,f258,f127,f199,f128,f198,f259,f260,f261,f171,f277,f278,f279,f288,f152,f250,f251,f252,f253,f254,f269,f270,f271,f272,f273,f274,f275,f276,f265,f266,f289,f290,f294,f295")
+                //.addEncodedQueryParameter("mpi","1000")
+                //.addEncodedQueryParameter("ut","f057cbcbce2a86e2866ab8877db1d059")
                 .addEncodedQueryParameter("fltt","2")
-                .addEncodedQueryParameter("pos","-15")
+                //.addEncodedQueryParameter("pos","-15")
                 .addEncodedQueryParameter("secid","0.002195")
-                .addEncodedQueryParameter("wbp2u","")
                 .addEncodedQueryParameter("wbp2u","|0|0|0|wap")
                 .build();
-        EventSource eventSource = new EventSource.Builder(eventHandler, url).build();
+        eventSource = new EventSource.Builder(eventHandler, url).build();
         eventSource.start();
+        return  new ResponseResult(200,"SUCCESS");
+    }
+
+
+    @RequestMapping("close")
+    @ResponseBody
+    public ResponseResult close() {
+        eventSource.close();
         return  new ResponseResult(200,"SUCCESS");
     }
 }
