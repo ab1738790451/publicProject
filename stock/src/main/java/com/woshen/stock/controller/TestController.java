@@ -1,5 +1,8 @@
 package com.woshen.stock.controller;
 
+import com.launchdarkly.eventsource.EventSource;
+import com.woshen.stock.core.EventSourceFactory;
+import com.woshen.stock.handler.StockDetailsHandler;
 import com.woshen.stock.server.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +26,7 @@ public class TestController {
     @Autowired
     private MenuService menuServiceImpl;
 
+    private static EventSource eventSource;
 
     @RequestMapping("loadMenus")
     @ResponseBody
@@ -30,5 +34,21 @@ public class TestController {
         Map<String,Object> map = new HashMap<>();
         map.put("data",menuServiceImpl.selectAll());
         return map;
+    }
+
+
+    @RequestMapping("loadStock")
+    @ResponseBody
+    public String loadStock(){
+        eventSource = EventSourceFactory.createEventSource(new StockDetailsHandler());
+        eventSource.start();
+        return "连接成功";
+    }
+
+    @RequestMapping("closeStock")
+    @ResponseBody
+    public String closeStock(){
+        eventSource.close();
+        return "断开成功";
     }
 }
