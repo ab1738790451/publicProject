@@ -3,6 +3,7 @@ package com.woshen.stock.controller;
 import com.launchdarkly.eventsource.EventSource;
 import com.woshen.stock.core.EventSourceFactory;
 import com.woshen.stock.handler.StockDetailsHandler;
+import com.woshen.stock.handler.StockTimeSharingHandler;
 import com.woshen.stock.server.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,7 +41,7 @@ public class TestController {
     @RequestMapping("loadStock")
     @ResponseBody
     public String loadStock(){
-        eventSource = EventSourceFactory.createEventSource(new StockDetailsHandler());
+        eventSource = EventSourceFactory.createEventSource(new StockTimeSharingHandler());
         eventSource.start();
         return "连接成功";
     }

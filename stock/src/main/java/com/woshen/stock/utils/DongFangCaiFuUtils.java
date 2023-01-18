@@ -27,4 +27,21 @@ public class DongFangCaiFuUtils {
                 .addEncodedQueryParameter("wbp2u","|0|0|0|wap")
                 .build();
     }
+
+    public static HttpUrl getSocketTimeSharingHttpUrl(String code){
+        return new HttpUrl.Builder()
+                .scheme("https")
+                .host(new Random().nextInt(80) +".push2.eastmoney.com")
+                .addEncodedPathSegments("api/qt/stock/trends2/sse")
+                .addEncodedQueryParameter("ut","fa5fd1943c7b386f172d6893dbfba10b")
+                .addEncodedQueryParameter("fields1","f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f17")
+                .addEncodedQueryParameter("fields2","f51,f52,f53,f54,f55,f56,f57,f58")
+                .addEncodedQueryParameter("mpi","1000")
+                .addEncodedQueryParameter("secid","0."+code)
+                .addEncodedQueryParameter("ndays","1")
+                .addEncodedQueryParameter("iscr","0")
+                .addEncodedQueryParameter("iscca","0")
+                .addEncodedQueryParameter("wbp2u","|0|0|0|wap")
+                .build();
+    }
 }
