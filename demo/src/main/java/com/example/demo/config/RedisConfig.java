@@ -42,7 +42,7 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, Serializable> delRedisTemplate(RedisConnectionFactory redisConnectionFactory){
+    public RedisTemplate<String, Serializable> delRedisTemplate(LettuceConnectionFactory redisConnectionFactory){
            RedisTemplate<String,Serializable> template = new RedisTemplate<>();
            template.setKeySerializer(new StringRedisSerializer());
            template.setValueSerializer(new StringRedisSerializer());

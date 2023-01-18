@@ -148,7 +148,7 @@ public class TestController {
          return  modelAndView;
     }
 
-<<<<<<< HEAD
+
     @ApiOperation(value = "redis测试",tags = "塞值",httpMethod = "GET")
     @RequestMapping(value = "/setRedis")
     @ResponseBody
@@ -160,18 +160,18 @@ public class TestController {
     @ApiOperation(value = "redis测试",tags = "塞值",httpMethod = "GET")
     @RequestMapping(value = "/getRedis")
     @ResponseBody
-    public ResponseResult setRedis(String key){
+    public ResponseResult setRedis(String key) {
         String o = (String) delRedisTemplate.opsForValue().get(key);
         System.err.println(o);
-        return new ResponseResult(200,"查询成功");
-=======
+        return new ResponseResult(200, "查询成功");
+    }
+
 
     @RequestMapping("addMenu")
     @ResponseBody
     public ResponseResult addMenu(){
         menuServiceImpl.insert();
         return  new ResponseResult(200,"SUCCESS");
->>>>>>> 03b5ea3049087cf6bce18b751c066be984028e21
     }
 
    static EventSource eventSource;
