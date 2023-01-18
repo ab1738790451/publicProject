@@ -52,6 +52,7 @@ public class TestController {
     @ApiOperation(value = "方法一",tags = "方法一",httpMethod = "GET")
     @RequestMapping(value = "/one",method = RequestMethod.GET)
     public String test(HttpServletRequest request, HttpServletResponse response){
+        Enumeration<String> headerNames = request.getHeaderNames();
         String ipAddr = IpUtil.getIpAddr(request);
         System.err.println(ipAddr);
         return "test";
@@ -134,7 +135,6 @@ public class TestController {
 
 
     @RequestMapping("toEdit")
-    @ResponseBody
     public ModelAndView toEdit(HttpServletRequest request,HttpServletResponse response,Integer lastLayId,Integer id){
          ModelAndView modelAndView = new ModelAndView("/testFour");
          modelAndView.addObject("lastLayId",lastLayId);
@@ -142,6 +142,7 @@ public class TestController {
          return  modelAndView;
     }
 
+<<<<<<< HEAD
     @ApiOperation(value = "redis测试",tags = "塞值",httpMethod = "GET")
     @RequestMapping(value = "/setRedis")
     @ResponseBody
@@ -157,5 +158,13 @@ public class TestController {
         String o = (String) delRedisTemplate.opsForValue().get(key);
         System.err.println(o);
         return new ResponseResult(200,"查询成功");
+=======
+
+    @RequestMapping("addMenu")
+    @ResponseBody
+    public ResponseResult addMenu(){
+        menuServiceImpl.insert();
+        return  new ResponseResult(200,"SUCCESS");
+>>>>>>> 03b5ea3049087cf6bce18b751c066be984028e21
     }
 }
