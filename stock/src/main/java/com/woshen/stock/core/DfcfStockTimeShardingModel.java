@@ -12,7 +12,7 @@ import java.util.List;
 *@description 股票趋势
 */
 @Data
-public class DfcfStockTimeSharding {
+public class DfcfStockTimeShardingModel {
     /**
      * 股票代码
      */

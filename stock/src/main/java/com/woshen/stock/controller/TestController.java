@@ -6,6 +6,7 @@ import com.woshen.stock.core.EventSourceFactory;
 import com.woshen.stock.entity.StockDayInformation;
 import com.woshen.stock.handler.StockDetailsHandler;
 import com.woshen.stock.handler.StockTimeSharingHandler;
+import com.woshen.stock.handler.StockZixuanHandler;
 import com.woshen.stock.server.MenuService;
 import com.woshen.stock.server.impl.StockTimeSharingServiceImpl;
 import com.woshen.stock.xxljob.StockDayImformationJob;
@@ -64,5 +65,15 @@ public class TestController {
     public String closeStock() throws InterruptedException {
         stockDayImformationJob.exec();
         return "断开成功";
+    }
+
+    @RequestMapping("loadzixuan")
+    @ResponseBody
+    public String loadzixuan(String secids) throws InterruptedException {
+        EventSource eventSource = EventSourceFactory.createEventSource(secids, new StockZixuanHandler());
+        eventSource.start();
+        Thread.sleep(10000);
+        eventSource.close();
+        return "加载自选";
     }
 }

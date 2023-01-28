@@ -44,7 +44,7 @@ public class StockDayImformationJob {
             asyncLoad(t.getCode());
         });
         Thread.sleep(20000);
-        if(page.getPages() < pageIndex ){
+        if(page.getPages() > pageIndex ){
             execOnePage(pageIndex +1,pageSize);
         }
     }

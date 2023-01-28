@@ -44,4 +44,20 @@ public class DongFangCaiFuUtils {
                 .addEncodedQueryParameter("wbp2u","|0|0|0|wap")
                 .build();
     }
+
+    public static HttpUrl getSocketZixuanHttpUrl(String secids){
+        return new HttpUrl.Builder()
+                .scheme("https")
+                .host(new Random().nextInt(80) +".push2.eastmoney.com")
+                .addEncodedPathSegments("api/qt/ulist/sse")
+                .addEncodedQueryParameter("invt","3")
+                .addEncodedQueryParameter("pi","0")
+                .addEncodedQueryParameter("pz","27")
+                .addEncodedQueryParameter("mpi","2000")
+                .addEncodedQueryParameter("secids",secids)
+                .addEncodedQueryParameter("po","1")
+                .addEncodedQueryParameter("ut","6d2ffaa6a585d612eda28417681d58fb")
+                .addEncodedQueryParameter("fields","f12,f13,f19,f14,f139,f148,f2,f4,f1,f125,f18,f3,f152,f5,f30,f31,f32,f6,f8,f7,f10,f22,f9,f112,f100")
+                .build();
+    }
 }
