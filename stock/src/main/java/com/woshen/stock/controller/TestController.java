@@ -1,17 +1,26 @@
 package com.woshen.stock.controller;
 
 import com.launchdarkly.eventsource.EventSource;
+import com.woshen.common.config.SpringUtils;
 import com.woshen.stock.core.EventSourceFactory;
+import com.woshen.stock.entity.StockDayInformation;
 import com.woshen.stock.handler.StockDetailsHandler;
 import com.woshen.stock.handler.StockTimeSharingHandler;
 import com.woshen.stock.server.MenuService;
+import com.woshen.stock.server.impl.StockTimeSharingServiceImpl;
+import com.woshen.stock.xxljob.StockDayImformationJob;
+import com.woshen.stock.xxljob.StockTrendsJob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: liuhaibo
@@ -27,7 +36,12 @@ public class TestController {
     @Autowired
     private MenuService menuServiceImpl;
 
-    private static EventSource eventSource;
+    @Autowired
+    private StockTrendsJob stockTrendsJob;
+
+    @Autowired
+    private StockDayImformationJob stockDayImformationJob;
+
 
     @RequestMapping("loadMenus")
     @ResponseBody
@@ -40,16 +54,15 @@ public class TestController {
 
     @RequestMapping("loadStock")
     @ResponseBody
-    public String loadStock(){
-        eventSource = EventSourceFactory.createEventSource(new StockTimeSharingHandler());
-        eventSource.start();
+    public String loadStock() throws InterruptedException {
+        stockTrendsJob.exec();
         return "连接成功";
     }
 
     @RequestMapping("closeStock")
     @ResponseBody
-    public String closeStock(){
-        eventSource.close();
+    public String closeStock() throws InterruptedException {
+        stockDayImformationJob.exec();
         return "断开成功";
     }
 }

@@ -5,7 +5,7 @@ import com.launchdarkly.eventsource.EventSource;
 import com.launchdarkly.eventsource.MessageEvent;
 import okhttp3.HttpUrl;
 
-/**
+/**12111
  * @Author: liuhaibo
  * @Company: 优积谷
  * @Date: 2023/1/18 16:08
@@ -16,7 +16,7 @@ public class EventSourceFactory {
 
     private EventSourceFactory(){}
 
-    public static EventSource createEventSource(EventSourceEextension eventSourceEextension){
+    public static EventSource createEventSource(String code,EventSourceEextension eventSourceEextension){
         EventHandler eventHandler =   new EventHandler() {
             @Override
             public void onOpen() throws Exception {
@@ -43,6 +43,6 @@ public class EventSourceFactory {
                 eventSourceEextension.onError(throwable);
             }
         };
-        return new EventSource.Builder(eventHandler, eventSourceEextension.getUrl()).build();
+        return new EventSource.Builder(eventHandler, eventSourceEextension.getUrl(code)).build();
     }
 }

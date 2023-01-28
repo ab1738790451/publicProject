@@ -48,5 +48,5 @@ public interface EventSourceEextension {
      * 连接的url
      * @return
      */
-    HttpUrl getUrl();
+    HttpUrl getUrl(String code);
 }
