@@ -6,14 +6,19 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.launchdarkly.eventsource.EventSource;
 import com.woshen.stock.core.EventSourceFactory;
 import com.woshen.stock.entity.Stock;
+import com.woshen.stock.entity.StockTimeSharing;
 import com.woshen.stock.handler.StockTimeSharingHandler;
 import com.woshen.stock.server.IStockService;
+import com.woshen.stock.server.IStockTimeSharingService;
 import com.woshen.stock.utils.TaskUtil;
 import com.xxl.job.core.handler.annotation.XxlJob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
 *@company woshen
@@ -28,6 +33,9 @@ public class StockTrendsJob {
     @Autowired
     private IStockService stockServiceImpl;
 
+    @Autowired
+    private IStockTimeSharingService stockTimeSharingServiceImpl;
+
     @XxlJob("stockTrendsJob")
     public void exec(String... params) throws InterruptedException {
         execOnePage(1,5);
@@ -39,8 +47,19 @@ public class StockTrendsJob {
         queryWrapper.eq("type","GP");
         IPage<Stock> page = stockServiceImpl.getBaseMapper().selectPage(stockPage, queryWrapper);
         List<Stock> records = page.getRecords();
+        if(CollectionUtils.isEmpty(records)){
+            return;
+        }
+        List<String> codes = records.stream().map(Stock::getCode).collect(Collectors.toList());
+        QueryWrapper<StockTimeSharing> stockTimeSharingQueryWrapper = new QueryWrapper<>();
+        stockTimeSharingQueryWrapper.in("code",codes);
+        stockTimeSharingQueryWrapper.eq("date", LocalDate.now());
+        List<StockTimeSharing> list = stockTimeSharingServiceImpl.list(stockTimeSharingQueryWrapper);
+        List<String> excludeCodes = list.stream().map(StockTimeSharing::getCode).collect(Collectors.toList());
         records.stream().forEach(t -> {
-            asyncLoad(t.getCode());
+            if(!excludeCodes.contains(t.getCode())){
+                asyncLoad(t.getCode());
+            }
         });
         Thread.sleep(20000);
         if(page.getPages() > pageIndex ){

@@ -12,6 +12,7 @@
     <artifactId>stock</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>stock</name>
+    <packaging>jar</packaging>
     <description>stock project</description>
     <properties>
         <java.version>1.8</java.version>
@@ -102,6 +103,11 @@
             <groupId>com.launchdarkly</groupId>
             <artifactId>okhttp-eventsource</artifactId>
             <version>2.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.15.3</version>
         </dependency>
     </dependencies>
 

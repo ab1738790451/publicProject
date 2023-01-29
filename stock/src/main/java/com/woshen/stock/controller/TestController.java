@@ -10,12 +10,14 @@ import com.woshen.stock.handler.StockZixuanHandler;
 import com.woshen.stock.server.MenuService;
 import com.woshen.stock.server.impl.StockTimeSharingServiceImpl;
 import com.woshen.stock.xxljob.StockDayImformationJob;
+import com.woshen.stock.xxljob.StockRedJob;
 import com.woshen.stock.xxljob.StockTrendsJob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
@@ -43,6 +45,8 @@ public class TestController {
     @Autowired
     private StockDayImformationJob stockDayImformationJob;
 
+    @Autowired
+    private StockRedJob stockRedJob;
 
     @RequestMapping("loadMenus")
     @ResponseBody
@@ -74,6 +78,13 @@ public class TestController {
         eventSource.start();
         Thread.sleep(10000);
         eventSource.close();
+        return "加载自选";
+    }
+
+    @RequestMapping("stockRedJob")
+    @ResponseBody
+    public String stockRedJob() throws IOException, InterruptedException {
+      stockRedJob.exec();
         return "加载自选";
     }
 }
