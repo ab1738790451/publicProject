@@ -37,8 +37,12 @@ public class StockRedJob {
             String text = a.text();
             String[] split = text.split("\\)");
             String code = split[0].replace("(", "");
+            //创业板股票收录
+            if(code.startsWith("3")){
+                continue;
+            }
             code = code.startsWith("6")?("1."+code):("0."+code);
-            String stockName = split[1].replace("吧", "");
+            //String stockName = split[1].replace("吧", "");
             codes.append(code);
             codes.append(",");
         }
