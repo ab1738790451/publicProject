@@ -8,6 +8,7 @@ import com.woshen.stock.core.DfcfZixuanModel;
 import com.woshen.stock.core.EventSourceEextension;
 import com.woshen.stock.entity.Stock;
 import com.woshen.stock.server.impl.StockServiceImpl;
+import com.woshen.stock.utils.BaseConfigUtils;
 import com.woshen.stock.utils.DongFangCaiFuUtils;
 import okhttp3.HttpUrl;
 
@@ -48,6 +49,10 @@ public class StockZixuanHandler implements EventSourceEextension {
         for (int i = 0; i <total ; i++) {
             JSONObject item = (JSONObject)diff.get(String.valueOf(i));
             DfcfZixuanModel dfcfZixuanModel = item.toJavaObject(DfcfZixuanModel.class);
+            Double f2 = dfcfZixuanModel.getF2();
+            if(f2 > Integer.valueOf(BaseConfigUtils.getProperty("stock.red.maxprice","5000"))){
+                continue;
+            }
             QueryWrapper<Stock> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("code",dfcfZixuanModel.getF12());
             Stock one = bean.getOne(queryWrapper);

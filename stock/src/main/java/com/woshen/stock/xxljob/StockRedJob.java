@@ -37,7 +37,7 @@ public class StockRedJob {
             String text = a.text();
             String[] split = text.split("\\)");
             String code = split[0].replace("(", "");
-            //创业板股票收录
+            //创业板股票不收录
             if(code.startsWith("3")){
                 continue;
             }
