@@ -57,9 +57,9 @@ public class TestController {
     }
 
 
-    @RequestMapping("loadStock")
+    @RequestMapping("stockTrend")
     @ResponseBody
-    public String loadStock() throws InterruptedException {
+    public String stockTrend() throws InterruptedException {
         stockTrendsJob.exec();
         return "连接成功";
     }
@@ -84,7 +84,18 @@ public class TestController {
     @RequestMapping("stockRedJob")
     @ResponseBody
     public String stockRedJob() throws IOException, InterruptedException {
-      stockRedJob.exec();
+        stockRedJob.exec();
+        return "加载自选";
+    }
+
+
+    @RequestMapping("loadStock")
+    @ResponseBody
+    public String loadStock(String code) throws IOException, InterruptedException {
+        EventSource eventSource = EventSourceFactory.createEventSource(code, new StockDetailsHandler());
+        eventSource.start();
+        Thread.sleep(10000);
+        eventSource.close();
         return "加载自选";
     }
 }

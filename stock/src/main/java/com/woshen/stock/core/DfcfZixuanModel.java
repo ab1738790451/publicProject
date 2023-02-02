@@ -2,6 +2,8 @@ package com.woshen.stock.core;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /**
 *@company woshen
 *@author liuhaibo
@@ -13,11 +15,11 @@ import lombok.Data;
 public class DfcfZixuanModel {
 
     private Integer f1;//"f1": 2,
-    private Double  f2;//当前价"f2": 274,
+    private BigDecimal f2;//当前价"f2": 274,
     private Integer f3;//"f3": 1004,
     private Integer f4;//涨跌幅  "f4": 25,
     private Integer f5;//总手 "f5": 5351280,
-    private Double f6;//成交额 "f6": 1422512638.61,
+    private BigDecimal f6;//成交额 "f6": 1422512638.61,
     private Integer f7;//换手率 "f7": 964,
     private Integer f8;//振幅 "f8": 946,
     private Integer f9;//市盈率 "f9": 3617,
@@ -32,7 +34,7 @@ public class DfcfZixuanModel {
     private Integer f31;//最新价 "f31": 274,
     private Integer f32;// "f32": null,
     private String f100;//行业 "f100": "互联网服务",
-    private Double f112;// "f112": 0.056810671,
+    private BigDecimal f112;// "f112": 0.056810671,
     private Integer f125;// "f125": 0,
     private Integer f139;//  "f139": 2,
     private Integer f148;// "f148": 1089,

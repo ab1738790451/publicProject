@@ -12,6 +12,8 @@ import com.woshen.stock.utils.BaseConfigUtils;
 import com.woshen.stock.utils.DongFangCaiFuUtils;
 import okhttp3.HttpUrl;
 
+import java.math.BigDecimal;
+
 /**
 *@company woshen
 *@author liuhaibo
@@ -49,8 +51,8 @@ public class StockZixuanHandler implements EventSourceEextension {
         for (int i = 0; i <total ; i++) {
             JSONObject item = (JSONObject)diff.get(String.valueOf(i));
             DfcfZixuanModel dfcfZixuanModel = item.toJavaObject(DfcfZixuanModel.class);
-            Double f2 = dfcfZixuanModel.getF2();
-            if(f2 > Integer.valueOf(BaseConfigUtils.getProperty("stock.red.maxprice","5000"))){
+            BigDecimal f2 = dfcfZixuanModel.getF2();
+            if(f2.doubleValue() > Integer.valueOf(BaseConfigUtils.getProperty("stock.red.maxprice","5000"))){
                 continue;
             }
             QueryWrapper<Stock> queryWrapper = new QueryWrapper<>();
