@@ -9,6 +9,7 @@ import com.woshen.stock.handler.StockTimeSharingHandler;
 import com.woshen.stock.handler.StockZixuanHandler;
 import com.woshen.stock.server.MenuService;
 import com.woshen.stock.server.impl.StockTimeSharingServiceImpl;
+import com.woshen.stock.utils.StockUtils;
 import com.woshen.stock.xxljob.StockDayImformationJob;
 import com.woshen.stock.xxljob.StockRedJob;
 import com.woshen.stock.xxljob.StockTrendsJob;

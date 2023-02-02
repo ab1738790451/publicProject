@@ -22,6 +22,11 @@ public class StockUtils {
 
     private static String STCOK_DOMAIN = "https://api.doctorxiong.club";
 
+    /**
+     * 获取股票基本信息
+     * @param code
+     * @return
+     */
     public static Map<String,Object> getStockMessage(String code){
         RestTemplate restTemplate = new RestTemplate();
         Map<String,Object> params = new HashMap<>();
@@ -29,12 +34,22 @@ public class StockUtils {
         return restTemplate.getForObject(STCOK_DOMAIN + "/v1/stock?code={code}", Map.class, params);
     }
 
+    /**
+     * 获取行业板块
+     * @return
+     */
     public static Map<String,Object> getIndustryRank(){
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.getForObject(STCOK_DOMAIN + "/v1/stock/industry/rank", Map.class);
     }
 
-
+    /**
+     * 获取股票排行
+     * @param industryCode
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
     public static Map<String,Object> getStockRank(String industryCode,Integer pageIndex,Integer pageSize){
         RestTemplate restTemplate = new RestTemplate();
         Map<String,Object> params = new HashMap<>();
@@ -51,7 +66,11 @@ public class StockUtils {
         return restTemplate.postForObject(STCOK_DOMAIN + "/v1/stock/rank",httpEntity ,Map.class);
     }
 
-
+    /**
+     * 获取分时数据
+     * @param code
+     * @return
+     */
     public static Map<String,Object> getKlineMin(String code){
         RestTemplate restTemplate = new RestTemplate();
         Map<String,Object> params = new HashMap<>();
@@ -59,7 +78,13 @@ public class StockUtils {
         return restTemplate.getForObject(STCOK_DOMAIN + "/v1/stock/min?code={code}",Map.class, params);
     }
 
-
+    /**获取日数据
+     *
+     * @param code
+     * @param startDate
+     * @param endDate
+     * @return
+     */
     public static Map<String,Object> getKlineDay(String code, LocalDate startDate,LocalDate endDate){
         RestTemplate restTemplate = new RestTemplate();
         Map<String,Object> params = new HashMap<>();
@@ -73,7 +98,13 @@ public class StockUtils {
         return restTemplate.getForObject(STCOK_DOMAIN + "/v1/stock/kline/day?code={code}&startDate={startDate}&endDate={endDate}",Map.class, params);
     }
 
-
+    /**
+     * 获取周数据
+     * @param code
+     * @param startDate
+     * @param endDate
+     * @return
+     */
     public static Map<String,Object> getKlineWeek(String code, LocalDate startDate,LocalDate endDate){
         RestTemplate restTemplate = new RestTemplate();
         Map<String,Object> params = new HashMap<>();
@@ -87,6 +118,13 @@ public class StockUtils {
         return restTemplate.getForObject(STCOK_DOMAIN + "/v1/stock/kline/week?code={code}&startDate={startDate}&endDate={endDate}",Map.class, params);
     }
 
+    /**
+     * 获取月数据
+     * @param code
+     * @param startDate
+     * @param endDate
+     * @return
+     */
     public static Map<String,Object> getKlineMonth(String code, LocalDate startDate,LocalDate endDate){
         RestTemplate restTemplate = new RestTemplate();
         Map<String,Object> params = new HashMap<>();
@@ -100,6 +138,11 @@ public class StockUtils {
         return restTemplate.getForObject(STCOK_DOMAIN + "/v1/stock/kline/month?code={code}&startDate={startDate}&endDate={endDate}",Map.class, params);
     }
 
+    /**
+     *获取全部股票
+     * @param keyWord
+     * @return
+     */
     public static Map<String,Object> getKlineAll(String keyWord){
         RestTemplate restTemplate = new RestTemplate();
         Map<String,Object> params = new HashMap<>();
