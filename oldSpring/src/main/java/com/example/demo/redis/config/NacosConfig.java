@@ -1,5 +1,12 @@
 package com.example.demo.redis.config;
 
+import com.alibaba.nacos.api.annotation.NacosProperties;
+import com.alibaba.nacos.api.config.ConfigType;
+import com.alibaba.nacos.spring.context.annotation.config.EnableNacosConfig;
+import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+
 /**
  * @Author: liuhaibo
  * @Company: 优积谷
@@ -7,17 +14,10 @@ package com.example.demo.redis.config;
  * @Version: 1.0.0
  * @Description: 描述
  */
-
-import com.alibaba.nacos.api.annotation.NacosProperties;
-import com.alibaba.nacos.api.config.ConfigType;
-import com.alibaba.nacos.spring.context.annotation.config.EnableNacosConfig;
-import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
-import org.springframework.context.annotation.Configuration;
-
-
 @Configuration
-@EnableNacosConfig(globalProperties = @NacosProperties(serverAddr = "${application.name}",namespace = "${application.name}"))
-@NacosPropertySource(dataId = "${application.name}",groupId = "${application.name}",autoRefreshed = true,type = ConfigType.PROPERTIES)
+@PropertySource("classpath:application.properties")
+@EnableNacosConfig(globalProperties = @NacosProperties(serverAddr = "${nacos.server-addr}",namespace = "${nacos.namespace}"))
+@NacosPropertySource(dataId = "${application.name}",groupId = "${nacos.groupId}",autoRefreshed = true,type = ConfigType.PROPERTIES)
 public class NacosConfig {
 
 }
