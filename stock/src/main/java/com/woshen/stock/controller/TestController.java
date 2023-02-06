@@ -1,5 +1,6 @@
 package com.woshen.stock.controller;
 
+import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
 import com.launchdarkly.eventsource.EventSource;
 import com.woshen.common.config.SpringUtils;
 import com.woshen.stock.core.EventSourceFactory;

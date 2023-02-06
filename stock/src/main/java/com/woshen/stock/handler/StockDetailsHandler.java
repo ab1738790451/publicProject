@@ -72,6 +72,7 @@ public class StockDetailsHandler implements EventSourceEextension {
           stockDayInformation.setTodayClose(dfcfStockModel.getF43());
           stockDayInformation.setHigh(dfcfStockModel.getF44());
           stockDayInformation.setLow(dfcfStockModel.getF45());
+          stockDayInformation.setAverage(dfcfStockModel.getF71());
           stockDayInformation.setVolume(dfcfStockModel.getF47());
           stockDayInformation.setTurnover(dfcfStockModel.getF48());
           stockDayInformation.setTurnoverRate(dfcfStockModel.getF168());

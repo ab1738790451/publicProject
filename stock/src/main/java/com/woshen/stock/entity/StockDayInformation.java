@@ -66,6 +66,11 @@ public class StockDayInformation implements Serializable {
     private BigDecimal low;
 
     /**
+     * 平均价
+     */
+    private BigDecimal average;
+
+    /**
      * 成交量
      */
     private Integer volume;
