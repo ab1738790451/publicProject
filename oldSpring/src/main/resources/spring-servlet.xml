@@ -9,6 +9,8 @@
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc.xsd
         ">
+    <!--在servlet.xml 中导入的properties中的配置变成全局配置-->
+    <context:property-placeholder location="classpath:spring-redis.properties" ignore-unresolvable="true" />
 
     <!--开启注解功能-->
     <context:annotation-config></context:annotation-config>
@@ -98,7 +100,14 @@
         <property name="maxUploadSize" value="83886080" /><!-- 80M -->
         <property name="maxInMemorySize" value="2048" />
     </bean>
-
+    <!--与<context:property-placeholder location="classpath:spring-redis.properties" ignore-unresolvable="true" /> 作用相同
+        <bean id="prop" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+            <property name="locations">
+                <array>
+                    <value>classpath:spring-redis.properties</value>
+                </array>
+            </property>
+        </bean>-->
 
     <!--默认的文件路径过滤-->
     <!--在所有的handlemapping之后生效，必须在<mvc:annotation-driven>之后-->

@@ -1,5 +1,6 @@
 package com.example.demo.redis.config;
 
+import com.alibaba.nacos.api.config.annotation.NacosValue;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
@@ -13,6 +14,7 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.util.StringUtils;
 import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.JedisShardInfo;
 
 /**
  * @Author: liuhaibo
@@ -24,13 +26,16 @@ import redis.clients.jedis.JedisPoolConfig;
 @Configuration
 public class RedisConfig {
 
-    @Value("${redis.host:43.140.209.247}")
+    @Value("${redis.host}")
+    //@NacosValue(value = "${redis.host}", autoRefreshed = true)
     private String host;
 
-    @Value("${redis.port:6379}")
+    @Value("${redis.port}")
+    //@NacosValue(value = "${redis.port}", autoRefreshed = true)
     private String port;
 
-    @Value("${redis.pass:woshen@redis-2022}")
+    @Value("${redis.pass}")
+    //@NacosValue(value = "${redis.pass}", autoRefreshed = true)
     private String password;
 
 
@@ -48,7 +53,7 @@ public class RedisConfig {
     @Bean("poolConfig")
     public JedisPoolConfig poolConfig(){
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-        jedisPoolConfig.setMinIdle(5);
+        jedisPoolConfig.setMinIdle(1);
         jedisPoolConfig.setMaxIdle(5);
         jedisPoolConfig.setMaxTotal(64);
         jedisPoolConfig.setMaxWaitMillis(10000);
