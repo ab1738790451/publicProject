@@ -10,7 +10,7 @@
         http://www.springframework.org/schema/mvc/spring-mvc.xsd
         ">
     <!--在servlet.xml 中导入的properties中的配置变成全局配置-->
-    <context:property-placeholder location="classpath:spring-redis.properties" ignore-unresolvable="true" />
+    <context:property-placeholder location="classpath:application.properties" ignore-unresolvable="true" />
 
     <!--开启注解功能-->
     <context:annotation-config></context:annotation-config>
