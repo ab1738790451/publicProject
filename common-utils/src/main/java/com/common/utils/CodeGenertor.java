@@ -57,6 +57,8 @@ public class CodeGenertor {
         sc.entityBuilder().enableLombok();
         sc.entityBuilder().idType(IdType.AUTO);
         sc.entityBuilder().naming(NamingStrategy.underline_to_camel);
+        sc.mapperBuilder().enableBaseColumnList();
+        sc.mapperBuilder().enableBaseResultMap();
         //sc.controllerBuilder().superClass()
         sc.addInclude(properties.getProperty("table"));
         mpg.strategy(sc.build());

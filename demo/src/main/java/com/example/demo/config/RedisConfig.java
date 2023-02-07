@@ -21,8 +21,8 @@ import java.io.Serializable;
 *@version 1.0
 *@description
 */
-@EnableCaching
-@Configuration
+//@EnableCaching
+//@Configuration
 public class RedisConfig {
 
     @Value("${spring.redis.host}")
@@ -34,19 +34,21 @@ public class RedisConfig {
     @Value("${spring.redis.password}")
     private String password;
 
-    @Bean
+/*    @Bean
     public LettuceConnectionFactory lettuceConnectionFactory(){
         RedisStandaloneConfiguration redisConfiguration = new RedisStandaloneConfiguration(host,port);
         redisConfiguration.setPassword(password);
-        return new LettuceConnectionFactory(redisConfiguration);
-    }
+        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(redisConfiguration);
+        lettuceConnectionFactory.setDatabase(0);
+        return lettuceConnectionFactory;
+    }*/
 
-    @Bean
+ /*   @Bean
     public RedisTemplate<String, Serializable> delRedisTemplate(LettuceConnectionFactory redisConnectionFactory){
            RedisTemplate<String,Serializable> template = new RedisTemplate<>();
            template.setKeySerializer(new StringRedisSerializer());
            template.setValueSerializer(new StringRedisSerializer());
            template.setConnectionFactory(redisConnectionFactory);
            return template;
-    }
+    }*/
 }

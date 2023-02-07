@@ -53,7 +53,7 @@ public class TestController {
     private MenuService menuServiceImpl;
 
     @Autowired
-    private RedisTemplate delRedisTemplate;
+    private RedisTemplate redisTemplate;
 
     @ApiOperation(value = "方法一",tags = "方法一",httpMethod = "GET")
     @RequestMapping(value = "/one",method = RequestMethod.GET)
@@ -153,7 +153,7 @@ public class TestController {
     @RequestMapping(value = "/setRedis")
     @ResponseBody
     public ResponseResult setRedis(String key,String value){
-        delRedisTemplate.opsForValue().set(key,value,60);
+        redisTemplate.opsForValue().set(key,value,60);
         return new ResponseResult(200,"查询成功");
     }
 
@@ -161,7 +161,7 @@ public class TestController {
     @RequestMapping(value = "/getRedis")
     @ResponseBody
     public ResponseResult setRedis(String key) {
-        String o = (String) delRedisTemplate.opsForValue().get(key);
+        String o = (String) redisTemplate.opsForValue().get(key);
         System.err.println(o);
         return new ResponseResult(200, "查询成功");
     }
