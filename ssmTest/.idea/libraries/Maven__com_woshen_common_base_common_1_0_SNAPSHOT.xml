@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.woshen.common:base-common:1.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../javatools/maven_Resporty/com/woshen/common/base-common/1.0-SNAPSHOT/base-common-1.0-20230209.173801-3.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../../javatools/maven_Resporty/com/woshen/common/base-common/1.0-SNAPSHOT/base-common-1.0-20230209.173801-3-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../javatools/maven_Resporty/com/woshen/common/base-common/1.0-SNAPSHOT/base-common-1.0-20230209.173801-3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

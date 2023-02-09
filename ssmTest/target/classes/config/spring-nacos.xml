@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:nacos="http://nacos.io/schema/nacos"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://nacos.io/schema/nacos
+       http://nacos.io/schema/nacos.xsd">
+
+
+    <nacos:annotation-driven></nacos:annotation-driven>
+
+    <nacos:global-properties server-addr="127.0.0.1:8848" username="nacos" password="nacos" namespace="8c682558-e1b2-4ba5-949c-e8d645a8747b" />
+
+    <nacos:property-source data-id="web-ssmTest" group-id="DEFAULT_GROUP" auto-refreshed="true" type="properties" name="web-ssm-test" />
+
+</beans>

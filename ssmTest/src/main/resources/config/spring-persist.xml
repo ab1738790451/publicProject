@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+        ">
+    <import resource="spring-datasource.xml"/>
+
+    <!--开启注解功能-->
+    <context:annotation-config></context:annotation-config>
+
+    <!--注解扫描包路径-->
+    <context:component-scan base-package="com.woshen" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+        <context:include-filter expression="org.springframework.stereotype.Repository" type="annotation"/>
+        <context:include-filter type="annotation" expression="org.springframework.context.annotation.Configuration"/>
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
+        <context:include-filter type="annotation" expression="org.springframework.context.annotation.ComponentScan"/>
+    </context:component-scan>
+
+    <!--sqlSession工厂-->
+    <bean id="sqlSessionFactory" class="com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean">
+        <property name="dataSource" ref="datasource" />
+        <property name="mapperLocations" value="classpath:/mapper/*.xml"/>
+        <property name="configuration" ref="mybatisConfigurer"/>
+    </bean>
+
+    <!--dao层扫描加入到ioc容器中-->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.woshen.mapper"/>
+        <property name="sqlSessionTemplateBeanName" value="sessionTemplate"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+    <!--SqlSession模板-->
+    <bean id="sessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
+    <!--开启驼峰映射和允许多返回结果-->
+    <bean id="mybatisConfigurer" class="com.baomidou.mybatisplus.core.MybatisConfiguration">
+        <property name="mapUnderscoreToCamelCase" value="true"/>
+        <property name="multipleResultSetsEnabled" value="true"/>
+     </bean>
+
+</beans>
