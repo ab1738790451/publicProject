@@ -9,15 +9,6 @@
     <!--一定不能选错-->
     <packaging>war</packaging>
     <properties>
-     <spring-version>5.1.6.RELEASE</spring-version>
-     <jetty-version>9.4.8.v20180619</jetty-version>
-     <mybatis-spring-version>2.0.7</mybatis-spring-version>
-     <fastjson-version>1.2.79</fastjson-version>
-     <mysql-version>8.0.28</mysql-version>
-     <slf4j-version>1.7.36</slf4j-version>
-     <druid-version>1.2.8</druid-version>
-     <nacos-version>1.1.1</nacos-version>
-    <bitwalker-version>1.21</bitwalker-version>
         <!--编译编码-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -132,7 +123,7 @@
         <plugin>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
-                <version>${jetty-version}</version>
+                <version>9.4.8.v20180619</version>
                 <configuration>
                     <httpConnector>
                         <port>80</port>

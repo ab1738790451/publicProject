@@ -22,7 +22,6 @@ import java.util.Map;
 
 /**
  * @Author: liuhaibo
- * @Company: 优积谷
  * @Date: 2022/10/18 16:08
  * @Version: 1.0.0
  * @Description: 描述
@@ -40,7 +39,7 @@ public class LoginController {
             ByteArrayOutputStream img = VerifyCodeUtil.createImg(code);
             modelAndView.addObject("codeImg",Base64.getEncoder().encodeToString(img.toByteArray()));
             String sessionId = "session-" + RandomUtils.getRandomByCase((byte) 6) + LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
-            LocalCahceUtil.set(sessionId,code,100*60);
+            LocalCahceUtil.set(sessionId,code,5*60);
             modelAndView.addObject("sessionId",sessionId);
         }catch (Exception e){
             e.printStackTrace();
@@ -55,13 +54,13 @@ public class LoginController {
     public ResponseResult loadCode(String sessionId){
         try{
             LocalCahceUtil.deleted(sessionId);
-            String sessionId2 = "session-"+ RandomUtils.getRandomByCase((byte) 6) + LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
+           /* String sessionId2 = "session-"+ RandomUtils.getRandomByCase((byte) 6) + LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();*/
             String code = RandomUtils.getRandomByLowerCaseAndNum((byte) 5);
             ByteArrayOutputStream img = VerifyCodeUtil.createImg(code);
-            LocalCahceUtil.set(sessionId, code,100*60);
+            LocalCahceUtil.setAndExtT(sessionId, code,2*60,true);
             Map<String,Object> data= new HashMap<>();
             data.put("code",Base64.getEncoder().encodeToString(img.toByteArray()));
-            data.put("sessionId",sessionId2);
+            data.put("sessionId",sessionId);
             return new ResponseResult(data);
         }catch (Exception e){
             e.printStackTrace();
@@ -83,8 +82,9 @@ public class LoginController {
             }
         }
          try{
-             ByteArrayOutputStream img = VerifyCodeUtil.createImg("5d2hk");
-             LocalCahceUtil.setAndExtT(sessionId,"5d2hk",100*60,true);
+             String newCode = RandomUtils.getRandomByLowerCaseAndNum((byte) 5);
+             ByteArrayOutputStream img = VerifyCodeUtil.createImg(newCode);
+             LocalCahceUtil.setAndExtT(sessionId,newCode,2*60,true);
              return new ResponseResult(400,"登录失败",Base64.getEncoder().encodeToString(img.toByteArray()));
          }catch (Exception e){
              e.printStackTrace();
