@@ -51,6 +51,12 @@
             <artifactId>velocity-engine-core</artifactId>
             <version>2.2</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.31</version>
+        </dependency>
     </dependencies>
     <!--jar 上传-->
     <distributionManagement>

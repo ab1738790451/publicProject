@@ -2,11 +2,10 @@ package com.common.utils;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
-import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
-import com.baomidou.mybatisplus.generator.config.GlobalConfig;
-import com.baomidou.mybatisplus.generator.config.PackageConfig;
-import com.baomidou.mybatisplus.generator.config.StrategyConfig;
+import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
+import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -29,12 +28,11 @@ public class CodeGenertor {
         // 数据源配置
         DataSourceConfig dataSourceConfig = new  DataSourceConfig.Builder(properties.getProperty("datasource.url"),properties.getProperty("datasource.username"),properties.getProperty("datasource.password")).build();
         AutoGenerator mpg = new AutoGenerator(dataSourceConfig);
-
         // 全局配置
         GlobalConfig.Builder builder = new GlobalConfig.Builder();
         builder.outputDir(projectPath + properties.getProperty("product.path"));//设置代码生成路径
         builder.fileOverride();//是否覆盖以前文件
-        builder.openDir(false);//是否打开生成目录
+        builder.openDir(false);
         builder.author(properties.getProperty("author"));//设置项目作者名称
         mpg.global(builder.build());
 
@@ -62,9 +60,8 @@ public class CodeGenertor {
         //sc.controllerBuilder().superClass()
         sc.addInclude(properties.getProperty("table"));
         mpg.strategy(sc.build());
-
         // 生成代码
-        mpg.execute();
+        mpg.execute(new FreemarkerTemplateEngine());
     }
 
 }
