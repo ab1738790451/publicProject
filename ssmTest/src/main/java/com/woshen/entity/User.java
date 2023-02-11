@@ -1,57 +1,87 @@
 package com.woshen.entity;
 
-import lombok.Data;
-
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
-*@company woshen
-*@author liuhaibo
-*@Date 2022/11/15 23:22
-*@version 1.0
-*@description
-*/
+ * <p>
+ * 用户表
+ * </p>
+ *
+ * @author liuhaibo
+ * @since 2023-02-12
+ */
 @Data
-public class User {
+@EqualsAndHashCode(callSuper = false)
+public class User implements Serializable {
+
+
     /**
-     * 用户uid
+     * id
      */
-    private String userId;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
+
     /**
-     * 用户名称
+     * 用户名
      */
-    private String userName;
+    private String name;
+
     /**
-     * 登录账号
+     * 用户账号
      */
+    @TableField("login_id")
     private String loginId;
+
     /**
      * 手机号
      */
+    @TableField("mobile_phone")
     private Integer mobilePhone;
+
     /**
      * 昵称
      */
+    @TableField("nicke_name")
     private String nickeName;
+
     /**
      * 电子邮箱
      */
     private String email;
+
     /**
      * 头像
      */
+    @TableField("head_img")
     private String headImg;
 
     /**
-     * 密码
+     * 用户状态
+     */
+    private String status;
+
+    /**
+     * 加密的密码
      */
     private String password;
+
     /**
      * 创建时间
      */
+    @TableField("create_time")
     private LocalDateTime createTime;
+
     /**
      * 更新时间
      */
+    @TableField("update_time")
     private LocalDateTime updateTime;
+
+
 }

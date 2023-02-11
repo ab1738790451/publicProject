@@ -1,20 +1,20 @@
 package com.woshen.mapper;
 
 import com.woshen.entity.Menu;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Select;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
- * @Author: liuhaibo
- * @Company: 优积谷
- * @Date: 2022/6/21 10:49
- * @Version: 1.0.0
- * @Description: 描述
+ * <p>
+ *  Mapper 接口
+ * </p>
+ *
+ * @author liuhaibo
+ * @since 2023-02-12
  */
-@Repository
-public interface MenuMapper {
+public interface MenuMapper extends BaseMapper<Menu> {
     @Select("select * from menu where status = 'NORMAL'")
     List<Menu> selectAll();
 }

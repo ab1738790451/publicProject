@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.woshen.mapper.MenuMapper">
+<mapper namespace="com.woshen.mapper.UserRoleMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.woshen.entity.Menu">
+    <resultMap id="BaseResultMap" type="com.woshen.entity.UserRole">
         <id column="id" property="id" />
-        <result column="title" property="title" />
-        <result column="url" property="url" />
-        <result column="parent_id" property="parentId" />
-        <result column="status" property="status" />
+        <result column="user_type" property="userType" />
+        <result column="role_ids" property="roleIds" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, title, url, parent_id, status, create_time, update_time
+        id, user_type, role_ids, create_time, update_time
     </sql>
 
 </mapper>

@@ -2,26 +2,25 @@ package com.woshen.service.impl;
 
 import com.woshen.entity.Menu;
 import com.woshen.mapper.MenuMapper;
-import com.woshen.service.MenuService;
+import com.woshen.service.IMenuService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
+
 import java.util.List;
 
 /**
- * @Author: liuhaibo
- * @Company: 优积谷
- * @Date: 2022/6/21 10:52
- * @Version: 1.0.0
- * @Description: 描述
+ * <p>
+ *  服务实现类
+ * </p>
+ *
+ * @author liuhaibo
+ * @since 2023-02-12
  */
 @Service
-public class MenuServiceImpl implements MenuService {
-
-    @Resource
-    private MenuMapper menuMapper;
+public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IMenuService {
 
     @Override
-    public List<Menu> selectAll() {
-        return menuMapper.selectAll();
+    public List<Menu> selectAll(){
+        return this.getBaseMapper().selectAll();
     }
 }

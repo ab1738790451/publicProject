@@ -5,8 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
-import com.woshen.common.base.model.TreeNode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -20,35 +18,36 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Menu extends TreeNode<Menu> implements Serializable {
+public class UserRole implements Serializable {
 
 
+    /**
+     * 用户id
+     */
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    private String title;
+    /**
+     * 角色类型 超级管理员 、普通管理员 、普通用户
+     */
+    @TableField("user_type")
+    private String userType;
 
-    private String url;
+    /**
+     * 用户角色id
+     */
+    @TableField("role_ids")
+    private String roleIds;
 
-    @TableField("parent_id")
-    private Integer parentId;
-
-    private String status;
-
-    @TableField("create_time")
+    /**
+     * 创建时间
+     */
     private LocalDateTime createTime;
 
-    @TableField("update_time")
+    /**
+     * 更新时间
+     */
     private LocalDateTime updateTime;
 
 
-    @Override
-    public Integer getParent() {
-        return this.parentId;
-    }
-
-    @Override
-    public Integer getNodeId() {
-        return this.id;
-    }
 }

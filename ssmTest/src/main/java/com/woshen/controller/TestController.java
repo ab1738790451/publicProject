@@ -3,7 +3,7 @@ package com.woshen.controller;
 import com.woshen.common.base.utils.TreeNodeUtil;
 import com.woshen.common.webcommon.model.ResponseResult;
 import com.woshen.common.webcommon.utils.WebUtils;
-import com.woshen.service.MenuService;
+import com.woshen.service.IMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 public class TestController {
 
     @Autowired
-    private MenuService menuServiceImpl;
+    private IMenuService menuServiceImpl;
 
     @RequestMapping("index")
     public ModelAndView index(HttpServletRequest request,HttpServletResponse response){
