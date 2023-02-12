@@ -3,6 +3,7 @@ package com.woshen.controller;
 import com.woshen.common.base.utils.TreeNodeUtil;
 import com.woshen.common.webcommon.model.ResponseResult;
 import com.woshen.common.webcommon.utils.WebUtils;
+import com.woshen.entity.Menu;
 import com.woshen.service.IMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,7 +48,7 @@ public class TestController {
     @RequestMapping(value = "/three",method = RequestMethod.GET)
     public ModelAndView test31(HttpServletRequest request,HttpServletResponse response){
         ModelAndView modelAndView = new ModelAndView("testThree");
-        modelAndView.addObject("menus",menuServiceImpl.selectAll());
+        modelAndView.addObject("menus",menuServiceImpl.selectPage(new Menu()).getRecords());
         modelAndView.addObject("id",request.getParameter("id"));
         return modelAndView;
     }
@@ -70,7 +71,7 @@ public class TestController {
     @RequestMapping(value = "loadMenu",method = RequestMethod.GET)
     @ResponseBody
     public ResponseResult loadMenu(HttpServletRequest request, HttpServletResponse response){
-        return new ResponseResult(new TreeNodeUtil(menuServiceImpl.selectAll()).getTreeDatas());
+        return new ResponseResult(new TreeNodeUtil(menuServiceImpl.selectPage(new Menu()).getRecords()).getTreeDatas());
     }
 
     @PostMapping("dosave")

@@ -1,10 +1,7 @@
 package com.woshen.mapper;
 
-import com.woshen.entity.Menu;
+import com.woshen.entity.App;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Select;
-
-import java.util.List;
 
 /**
  * <p>
@@ -14,6 +11,6 @@ import java.util.List;
  * @author liuhaibo
  * @since 2023-02-12
  */
-public interface MenuMapper extends BaseMapper<Menu> {
+public interface AppMapper extends BaseMapper<App> {
 
 }

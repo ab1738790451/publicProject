@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import com.woshen.common.baseTempl.BaseEntity;
 import com.woshen.common.constants.DataStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,7 +21,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Role implements Serializable {
+public class Role extends BaseEntity<Integer> {
 
 
     /**
@@ -58,4 +59,8 @@ public class Role implements Serializable {
     private LocalDateTime updateTime;
 
 
+    @Override
+    public Integer getPk() {
+        return id;
+    }
 }

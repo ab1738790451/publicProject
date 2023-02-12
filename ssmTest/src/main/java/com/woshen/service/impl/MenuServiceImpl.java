@@ -1,23 +1,24 @@
 package com.woshen.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.woshen.common.base.utils.StringUtils;
+import com.woshen.common.baseTempl.BaseServiceImpl;
 import com.woshen.common.beanModel.BeanUtils;
 import com.woshen.common.beanModel.PageInfo;
-import com.woshen.common.beanModel.UserModel;
+import com.woshen.entity.App;
 import com.woshen.entity.Menu;
+import com.woshen.mapper.AppMapper;
 import com.woshen.mapper.MenuMapper;
 import com.woshen.service.IMenuService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -28,12 +29,7 @@ import java.util.*;
  * @since 2023-02-12
  */
 @Service
-public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IMenuService {
-
-    @Override
-    public List<Menu> selectAll(){
-        return this.getBaseMapper().selectAll();
-    }
+public class MenuServiceImpl extends BaseServiceImpl<Integer, MenuMapper, Menu> implements IMenuService {
 
     public QueryWrapper<Menu> getBaseWrapper(Menu menu) {
         try {

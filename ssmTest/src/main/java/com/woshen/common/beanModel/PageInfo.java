@@ -12,7 +12,6 @@ public class PageInfo {
 
     private Integer pageSize;
 
-
     public Integer getPageIndex() {
         return pageIndex == null?1:pageIndex;
     }

@@ -20,40 +20,39 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class UserRole extends BaseEntity<Integer> {
-
+public class App extends BaseEntity<Integer> {
 
     /**
-     * 用户id
+     * id
      */
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     /**
-     * 角色类型 超级管理员 、普通管理员 、普通用户
+     * 应用名称
      */
-    @TableField("user_type")
-    private String userType;
+    private String appName;
 
     /**
-     * 用户角色id
+     * 数据状态
      */
-    @TableField("role_ids")
-    private String roleIds;
+    private String status;
 
     /**
      * 创建时间
      */
+    @TableField("create_time")
     private LocalDateTime createTime;
 
     /**
      * 更新时间
      */
+    @TableField("update_time")
     private LocalDateTime updateTime;
 
 
     @Override
     public Integer getPk() {
-        return id;
+        return this.id;
     }
 }

@@ -1,9 +1,9 @@
 package com.woshen.service.impl;
 
 import com.woshen.common.baseTempl.BaseServiceImpl;
-import com.woshen.entity.Role;
-import com.woshen.mapper.RoleMapper;
-import com.woshen.service.IRoleService;
+import com.woshen.entity.App;
+import com.woshen.mapper.AppMapper;
+import com.woshen.service.IAppService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2023-02-12
  */
 @Service
-public class RoleServiceImpl extends BaseServiceImpl<Integer, RoleMapper, Role> implements IRoleService {
+public class AppServiceImpl extends BaseServiceImpl<Integer,AppMapper,App>  implements IAppService {
 
 }
