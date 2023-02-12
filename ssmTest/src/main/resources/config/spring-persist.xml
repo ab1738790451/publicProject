@@ -43,6 +43,8 @@
     <bean id="mybatisConfigurer" class="com.baomidou.mybatisplus.core.MybatisConfiguration">
         <property name="mapUnderscoreToCamelCase" value="true"/>
         <property name="multipleResultSetsEnabled" value="true"/>
+        <!--打印日志-->
+        <property name="logImpl" value="org.apache.ibatis.logging.stdout.StdOutImpl"/>
      </bean>
 
 </beans>

@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
+import com.woshen.common.constants.DataStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -41,7 +43,7 @@ public class Role implements Serializable {
     /**
      * 数据状态
      */
-    private String status;
+    private DataStatus status;
 
     /**
      * 创建时间

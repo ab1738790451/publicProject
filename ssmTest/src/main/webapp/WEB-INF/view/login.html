@@ -157,7 +157,7 @@
             dataType:"json",
             success:function (res) {
                 if(res.code == 200){
-                    location.href = "/test/six";
+                    location.href = "/index";
                 }else{
                     alert("登录失败");
                     $(".login-img").attr("src","data:image/jpg;base64,"+res.data);

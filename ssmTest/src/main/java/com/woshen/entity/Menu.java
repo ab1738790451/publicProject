@@ -5,8 +5,11 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 import com.woshen.common.base.model.TreeNode;
+import com.woshen.common.beanModel.PageInfo;
+import com.woshen.common.constants.DataStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -33,7 +36,7 @@ public class Menu extends TreeNode<Menu> implements Serializable {
     @TableField("parent_id")
     private Integer parentId;
 
-    private String status;
+    private DataStatus status;
 
     @TableField("create_time")
     private LocalDateTime createTime;
@@ -41,6 +44,11 @@ public class Menu extends TreeNode<Menu> implements Serializable {
     @TableField("update_time")
     private LocalDateTime updateTime;
 
+    @TableField(exist = false)
+    private Map<String,Object> queryParams;
+
+    @TableField(exist = false)
+    private PageInfo pageInfo;
 
     @Override
     public Integer getParent() {

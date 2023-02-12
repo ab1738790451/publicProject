@@ -1,5 +1,6 @@
 package com.woshen.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.woshen.entity.Menu;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -16,4 +17,6 @@ import java.util.List;
 public interface IMenuService extends IService<Menu> {
 
     List<Menu> selectAll();
+
+    Page<Menu> selectPage(Menu menu);
 }

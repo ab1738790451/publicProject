@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/test")
@@ -86,5 +87,11 @@ public class TestController {
         modelAndView.addObject("lastLayId",lastLayId);
         modelAndView.addObject("id",id);
         return  modelAndView;
+    }
+
+    @RequestMapping("test")
+    @ResponseBody
+    public ResponseResult test(HttpServletResponse response) throws IOException {
+        return new ResponseResult(200);
     }
 }
