@@ -10,8 +10,6 @@ import com.woshen.common.base.utils.StringUtils;
 import com.woshen.common.beanModel.BeanUtils;
 import com.woshen.common.beanModel.PageInfo;
 import com.woshen.common.constants.DataStatus;
-import com.woshen.entity.Menu;
-
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.HashMap;

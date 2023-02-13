@@ -2,7 +2,6 @@ package com.woshen.service;
 
 import com.woshen.common.baseTempl.BaseService;
 import com.woshen.entity.UserRole;
-import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>

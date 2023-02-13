@@ -1,18 +1,15 @@
 package com.woshen.common.baseTempl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.woshen.common.beanModel.PageInfo;
 import com.woshen.common.webcommon.model.ResponseResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 
 /**
  * @Author: liuhaibo
- * @Company: 优积谷
  * @Date: 2022/8/15 14:23
  * @Version: 1.0.0
  * @Description: 描述

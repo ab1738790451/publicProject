@@ -3,8 +3,6 @@ package com.woshen.common.baseTempl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.woshen.entity.Menu;
-
 import java.io.Serializable;
 
 /**
