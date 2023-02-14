@@ -7,7 +7,7 @@
     <script src="/static/js/publicUtils.js" type="text/javascript"></script>
     <script src="/static/js/common.js" type="text/javascript"></script>
     <link href="/static/layui/css/layui.css" rel="stylesheet">
-    <title th:text="${serviceName}"></title>
+    <title >菜单列表</title>
     <style>
        .main-body{
            padding: 18px;
@@ -15,7 +15,10 @@
     </style>
 </head>
 <body class="main-body">
-<form class="layui-form" action="/test/three" id="dataForm" >
+<form class="layui-form" action="/menu/list" id="dataForm" >
+    <input id="pageIndex" name="pageInfo.pageIndex" th:value="${queryData?.pageInfo?.pageIndex}" type="hidden">
+    <input id="pageSize" name="pageInfo.pageSize" th:value="${queryData?.pageInfo?.pageSize}" type="hidden">
+    <input id="pageTotal"  th:value="${pageData.total}" type="hidden">
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">ID</label>
@@ -47,30 +50,31 @@
         <div class="layui-inline">
             <label class="layui-form-label">创建时间</label>
             <div class="layui-input-inline">
-                <input type="text" name="startTime" id="createStartTime"  autocomplete="off"   th:value="${#temporals.format(queryData?.queryParams?.createStartTime,'yyyy-MM-dd  HH:mm:ss')}" class="layui-input" >
+                <input type="text" name="startTime" id="createStartTime"  autocomplete="off"   th:value="${#temporals.format(queryData?.queryParam['createStartTime'],'yyyy-MM-dd  HH:mm:ss')}" class="layui-input" >
             </div>
             <div class="layui-form-mid">-</div>
             <div class="layui-input-inline">
-                <input type="text" name="endTime" id="createEndTime" th:value="${#temporals.format(queryData?.queryParams?.createEndTime,'yyyy-MM-dd HH:mm:ss')}"  autocomplete="off" class="layui-input" >
+                <input type="text" name="endTime" id="createEndTime" th:value="${#temporals.format(queryData?.queryParam['createEndTime'],'yyyy-MM-dd HH:mm:ss')}"  autocomplete="off" class="layui-input" >
             </div>
         </div>
             <div class="layui-inline">
                 <label class="layui-form-label">更新时间</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="startTime" id="endStartTime"   th:value="${#temporals.format(queryData?.queryParams?.endStartTime,'yyyy-MM-dd  HH:mm:ss')}" autocomplete="off" class="layui-input" >
+                    <input type="text" name="startTime" id="updateStartTime"   th:value="${#temporals.format(queryData?.queryParam['updateStartTime'],'yyyy-MM-dd  HH:mm:ss')}" autocomplete="off" class="layui-input" >
                 </div>
                 <div class="layui-form-mid">-</div>
                 <div class="layui-input-inline">
-                    <input type="text" name="endTime" id="endEndTime"  th:value="${#temporals.format(queryData?.queryParams?.endEndTime,'yyyy-MM-dd  HH:mm:ss')}" autocomplete="off" class="layui-input" >
+                    <input type="text" name="endTime" id="updateEndTime"  th:value="${#temporals.format(queryData?.queryParam['updateEndTime'],'yyyy-MM-dd  HH:mm:ss')}" autocomplete="off" class="layui-input" >
                 </div>
             </div>
-        </div>
-
         <div class="layui-inline">
             <button id="search" class="layui-btn layuiadmin-btn-list" lay-submit >
                 <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
             </button>
         </div>
+        </div>
+
+
     </div>
 
 </form>
@@ -100,7 +104,7 @@
     </tr>
     </tbody>
 </table>
-
+<div id="page"></div>
 <script type="text/html" id="toolbar">
     <a class="layui-btn layui-btn-xs " lay-event="add">新增</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
@@ -116,8 +120,10 @@
 
 </body>
 <script type="text/javascript">
-    layui.use(['form','laydate','table'],function () {
+    layui.use(['form','laydate','table','laypage'],function () {
           var laydate = layui.laydate;
+          var laypage = layui.laypage;
+
         laydate.render(
             {
                 elem:'#createStartTime',
@@ -138,7 +144,7 @@
                 elem:'#endEndTime',
                 type:'datetime'
             })
-        renderList("列表","menu",layui.table);
+        renderList("列表","menu");
     });
 
 

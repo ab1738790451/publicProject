@@ -1,8 +1,11 @@
 package com.woshen.common.baseTempl;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.woshen.common.beanModel.PageInfo;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
 *@company woshen
@@ -12,15 +15,34 @@ import java.io.Serializable;
 *@description
 */
 public abstract class BaseEntity<Pk> implements Serializable {
-
+    @TableField(exist = false)
     private PageInfo pageInfo;
 
+    @TableField(exist = false)
+    private Map<String,Object> queryParam;
+
     public PageInfo getPageInfo() {
-        return pageInfo == null?new PageInfo():pageInfo;
+        return pageInfo = pageInfo == null?new PageInfo():pageInfo;
     }
 
     public void setPageInfo(PageInfo pageInfo) {
         this.pageInfo = pageInfo;
+    }
+
+    public Map<String, Object> getQueryParam() {
+        return queryParam = queryParam==null?new HashMap<>():queryParam;
+    }
+
+    public Object getQueryParam(String key) {
+        return getQueryParam().get(key);
+    }
+
+    public void setQueryParam(Map<String, Object> queryParam) {
+        this.queryParam = queryParam;
+    }
+
+    public void addQueryParam(String key,Object value){
+        getQueryParam().put(key,value);
     }
 
     public abstract Integer getPk();

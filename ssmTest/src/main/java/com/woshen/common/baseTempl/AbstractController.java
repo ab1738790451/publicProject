@@ -2,7 +2,9 @@ package com.woshen.common.baseTempl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.woshen.common.webcommon.model.ResponseResult;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,25 +47,31 @@ public abstract class  AbstractController<PK extends Serializable,T extends Base
     @RequestMapping("list")
     public ModelAndView list(HttpServletRequest request, HttpServletResponse response,T queryData){
         ModelAndView mav = new ModelAndView(getModule() + "/list");
-        mav.addObject("dataPage",loadList(queryData));
+        mav.addObject("pageData",loadList(queryData));
         mav.addObject("queryData",queryData);
         return mav;
     }
 
-    @RequestMapping("toedit")
-    public ModelAndView toedit(HttpServletRequest request, HttpServletResponse response,String lastLayId,T pk){
-        ModelAndView modelAndView = new ModelAndView(getModule() + "/toedit");
+    @RequestMapping("toEdit")
+    public ModelAndView toedit(HttpServletRequest request, HttpServletResponse response,String lastLayId,PK pk){
+        ModelAndView modelAndView = new ModelAndView(getModule() + "/edit");
         modelAndView.addObject("lastLayId",lastLayId);
-        modelAndView.addObject("data",getService().getById(pk));
+        if(pk != null) {
+            modelAndView.addObject("data", getService().getById(pk));
+        }
         return  modelAndView;
     }
 
+    @RequestMapping("del")
+    @ResponseBody
     public ResponseResult del(PK... pks){
       getService().del(pks);
       return new ResponseResult(200,"SUCCESS");
     }
 
-    public ResponseResult save(T queryData){
+    @RequestMapping("dosave")
+    @ResponseBody
+    public ResponseResult dosave(@RequestBody T queryData){
         Integer pk = getService().dosave(queryData);
         int i = pk == null ? 500 : 200;
         return new ResponseResult(i,i==200?"SUCCESS":"ERROR");

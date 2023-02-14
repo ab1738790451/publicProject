@@ -25,7 +25,10 @@
         <property name="dataSource" ref="datasource" />
         <property name="mapperLocations" value="classpath:/mapper/*.xml"/>
         <property name="configuration" ref="mybatisConfigurer"/>
+        <property name="plugins" ref="paginationInterceptor"/>
     </bean>
+
+    <bean id="paginationInterceptor" class="com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor" />
 
     <!--dao层扫描加入到ioc容器中-->
     <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">

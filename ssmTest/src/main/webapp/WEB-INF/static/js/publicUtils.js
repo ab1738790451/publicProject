@@ -11,7 +11,8 @@ var ajaxUtil = new (function(){
             $.ajax({
                 url:url,
                 type:'post',
-                data:data,
+                data:JSON.stringify(data),
+                contentType:'application/json;charset=utf-8',
                 dataType:'json',
                 success:function (res) {
                     layer.close(index);
@@ -40,7 +41,8 @@ var ajaxUtil = new (function(){
                 let index = layer.load(2, {time: 10*1000});
                 $.ajax({
                     url:url,
-                    data:data,
+                    data:JSON.stringify(data),
+                    contentType:'application/json;charset=utf-8',
                     type:'post',
                     dataType:'json',
                     success:function (res) {

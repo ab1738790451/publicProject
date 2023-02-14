@@ -32,23 +32,21 @@ public class Menu extends BaseEntity<Integer> implements  BaseTreeNode<Menu> {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
+    private String appId;
+
     private String title;
 
     private String url;
 
-    @TableField("parent_id")
+    private String isMenu;
+
     private Integer parentId;
 
     private DataStatus status;
 
-    @TableField("create_time")
     private LocalDateTime createTime;
 
-    @TableField("update_time")
     private LocalDateTime updateTime;
-
-    @TableField(exist = false)
-    private Map<String,Object> queryParams;
 
     @Override
     public Integer getParent() {
@@ -62,10 +60,12 @@ public class Menu extends BaseEntity<Integer> implements  BaseTreeNode<Menu> {
     @TableField(exist = false)
     private List<Menu> children;
 
+    @Override
     public List<Menu> getChildren() {
         return children;
     }
 
+    @Override
     public void setChildren(List<Menu> children) {
         this.children = children;
     }

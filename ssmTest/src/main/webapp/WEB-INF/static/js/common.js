@@ -21,24 +21,27 @@ function renderEdit(submitFilter,lastLayId){
 }
 
 
-function renderList(title,module,table) {
-    currTable = table;
-    moduleName = module;
-    table.on('tool(tableList)',function (obj) {
-        defalutTableToolEvent(table,obj);
-    });
-    table.on('toolbar(tableList)',function (obj) {
-        defalutTableToolBarEvent(table,obj);
-    });
+function renderList(title,module) {
+    layui.use(['form','table','laypage'],function () {
+        currTable = layui.table
+        moduleName = module;
+        let laypage = layui.laypage;
 
-    var defaultToolbar=['filter'];
-    defaultToolbar.push({ //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
-        title: '查询条件展示与隐藏',
-        layEvent: 'search_display',
-        icon: 'layui-icon-layer'
-    })
+        currTable.on('tool(tableList)',function (obj) {
+        defalutTableToolEvent(currTable,obj);
+        });
+        currTable.on('toolbar(tableList)',function (obj) {
+        defalutTableToolBarEvent(currTable,obj);
+        });
 
-    table.init('tableList', {
+        var defaultToolbar=['filter'];
+        defaultToolbar.push({ //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+            title: '查询条件展示与隐藏',
+            layEvent: 'search_display',
+            icon: 'layui-icon-layer'
+        })
+
+        currTable.init('tableList', {
         id: 'tableList',
         // skin: 'line', //行边框风格
         even: true, //开启隔行背景
@@ -51,9 +54,60 @@ function renderList(title,module,table) {
         /*done: function () {
             relayout()
         }*/
-    });
+        });
 
-    table.render();
+        currTable.render();
+
+        //执行一个laypage实例
+        laypage.render({
+            elem: 'page', //注意，这里的 test1 是 ID，不用加 # 号
+            count: $("#pageTotal").val(), //数据总数，从服务端得到
+            limit: $("#pageSize").val(),
+            curr:$("#pageIndex").val(),
+            limits:[10,20,30,50,100],
+            layout:['prev', 'page', 'next','limit'],
+        });
+
+        if($(".layui-laypage-prev").length != 0 && !$(".layui-laypage-prev").hasClass("layui-disabled")){
+            $(".layui-laypage-prev").on('click',function () {
+                let prePage =  $(".layui-laypage-prev").attr("data-page") +1;
+                $("#pageIndex").val(prePage);
+                $("#pageSize").val($(".layui-laypage-limits").find("select").val());
+                $("#search").click();
+            })
+        }
+
+        if($(".layui-laypage-next").length != 0 && !$(".layui-laypage-next").hasClass("layui-disabled")){
+            $(".layui-laypage-next").on('click',function () {
+                let prePage =  $(".layui-laypage-next").attr("data-page") -1 ;
+                $("#pageIndex").val(prePage);
+                $("#pageSize").val($(".layui-laypage-limits").find("select").val());
+                $("#search").click();
+            })
+        }
+
+        $("#page").find("a").each(function (index,item) {
+             if(!$(this).hasClass("layui-laypage-prev") && $(this).hasClass("layui-laypage-next")){
+                 $(this).on('click',function () {
+                     let dataPage =  $(this).attr("data-page");
+                     $("#pageIndex").val(dataPage);
+                     $("#pageSize").val($(".layui-laypage-limits").find("select").val());
+                     $("#search").click();
+                 })
+
+             }
+        })
+
+        $("#page").find(".layui-laypage-limits").find("option").each(function (index,item) {
+            if($(this).attr("selected") != true){
+                $(this).on('click',function () {
+                    $("#pageSize").val($(".layui-laypage-limits").find("select").val());
+                    $("#search").click();
+                })
+
+            }
+        })
+    });
 }
 
 //表格头部工具栏事件

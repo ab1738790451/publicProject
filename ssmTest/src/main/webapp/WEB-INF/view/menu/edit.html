@@ -15,23 +15,32 @@
     </style>
 </head>
 <body class="main-body">
-<form class="layui-form" action="/test/dosave" id="dataForm" >
-
+<form class="layui-form" action="/menu/dosave" id="dataForm" >
+    <input type="hidden" name="id" th:value="${data?.id}">
 
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
-            <label class="layui-form-label">title</label>
-            <div class="layui-input-inline">
-                <input type="text" th:name="title"   th:value="${dbData.title}" autocomplete="off" class="layui-input" >
+            <label class="layui-form-label">应用id</label>
+            <div class="layui-input-inline" lay-verify="requried">
+                <input type="text" th:name="appId"   th:value="${data?.appId}" autocomplete="off" class="layui-input" >
             </div>
         </div>
     </div>
 
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
-            <label class="layui-form-label">title</label>
-            <div class="layui-input-inline">
-                <input type="text" th:name="url"   th:value="${dbData.url}" autocomplete="off" class="layui-input" >
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-inline" lay-verify="requried">
+                <input type="text" th:name="title"   th:value="${data?.title}" autocomplete="off" class="layui-input" >
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item query-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">url</label>
+            <div class="layui-input-inline" lay-verify="requried">
+                <input type="text" th:name="url"   th:value="${data?.url}" autocomplete="off" class="layui-input" >
             </div>
         </div>
     </div>
@@ -39,9 +48,25 @@
 
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
-            <label class="layui-form-label">parentId</label>
+            <label class="layui-form-label">菜单类型</label>
             <div class="layui-input-inline">
-                <input type="text" th:name="parentId"   th:value="${dbData.parentId}" autocomplete="off" class="layui-input" oninput="this.value=this.value.replace(/[^\d]/g,'')" onproperty="this.value=this.value.replace(/[^\d]/g,'')" maxlength="11">
+              <!--  <select name="isMenu" lay-verify="requried">
+                    <option>请选择</option>
+                    <option value="Y">是</option>
+                    <option value="N">否</option>
+                </select>-->
+                <input type="radio" name="isMenu" value="nan" title="菜单" th:checked="${data?.isMenu == null || data?.isMenu == 'Y'}">
+                <input type="radio" name="isMenu" value="nv" title="功能" th:checked="${data?.isMenu == 'N'}">
+            </div>
+
+        </div>
+    </div>
+
+    <div class="layui-form-item query-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">父级id</label>
+            <div class="layui-input-inline" lay-verify="requried">
+                <input type="text" th:name="parentId"   th:value="${data?.parentId}" autocomplete="off" class="layui-input" oninput="this.value=this.value.replace(/[^\d-]/g,'')" onproperty="this.value=this.value.replace(/[^\d-]/g,'')" maxlength="11">
             </div>
         </div>
     </div>

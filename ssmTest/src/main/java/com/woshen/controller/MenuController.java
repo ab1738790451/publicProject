@@ -1,14 +1,13 @@
 package com.woshen.controller;
 
+import com.woshen.common.baseTempl.AbstractController;
+import com.woshen.common.baseTempl.BaseService;
 import com.woshen.entity.Menu;
 import com.woshen.service.IMenuService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * @Author: liuhaibo
@@ -18,16 +17,13 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RequestMapping("menu")
 @Controller
-public class MenuController {
+public class MenuController extends AbstractController<Integer,Menu> {
 
     @Resource
     private IMenuService menuServiceImpl;
 
-    @RequestMapping("list")
-    public ModelAndView list(HttpServletRequest request, HttpServletResponse response, Menu queryData){
-        ModelAndView mav = new ModelAndView("/menu/list");
-        mav.addObject("pageData",menuServiceImpl.selectPage(queryData));
-        mav.addObject("queryData",queryData);
-        return mav;
+    @Override
+    public BaseService getService() {
+        return menuServiceImpl;
     }
 }

@@ -3,6 +3,7 @@ package com.woshen.common.beanModel;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Parameter;
 import java.util.*;
 
 /**
@@ -70,6 +71,10 @@ public class BeanUtils {
                         continue;
                     }
                     if(name.startsWith("is") && method.getReturnType().getTypeName().equals(boolean.class.getTypeName()) && name.length() > 2){
+                        Parameter[] parameters = method.getParameters();
+                        if(parameters != null && parameters.length > 0){
+                            continue;
+                        }
                         Object fieldValue = method.invoke(value,empty);
                         String fieldName = name.substring(2);
                         //大写开头的字段
@@ -79,6 +84,10 @@ public class BeanUtils {
                         exclude.add(fieldName);
                         resultMap.put(fieldName,fieldValue);
                     }else if(name.startsWith("get") && name.length() > 3){
+                        Parameter[] parameters = method.getParameters();
+                        if(parameters != null && parameters.length > 0){
+                            continue;
+                        }
                         Object fieldValue = method.invoke(value,empty);
                         String fieldName = name.substring(3);
                         //大写开头的字段
