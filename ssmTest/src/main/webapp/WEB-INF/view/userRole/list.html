@@ -15,7 +15,7 @@
     </style>
 </head>
 <body class="main-body">
-<form class="layui-form" action="/menu/list" id="dataForm" >
+<form class="layui-form" action="/userRole/list" id="dataForm" >
     <input id="pageIndex" name="pageInfo.pageIndex" th:value="${queryData?.pageInfo?.pageIndex}" type="hidden">
     <input id="pageSize" name="pageInfo.pageSize" th:value="${queryData?.pageInfo?.pageSize}" type="hidden">
     <input id="pageTotal"  th:value="${pageData.total}" type="hidden">
@@ -27,26 +27,18 @@
             </div>
         </div>
             <div class="layui-inline">
-                <label class="layui-form-label">title</label>
+                <label class="layui-form-label">用户类型</label>
                 <div class="layui-input-inline">
-                    <input type="text" th:name="title"   th:value="${queryData.title}" autocomplete="off" class="layui-input" >
+                    <input type="text" th:name="userType"   th:value="${queryData.userType}" autocomplete="off" class="layui-input" >
                 </div>
             </div>
 
             <div class="layui-inline">
-                <label class="layui-form-label">url</label>
+                <label class="layui-form-label">角色id</label>
                 <div class="layui-input-inline">
-                    <input type="text" th:name="url"   th:value="${queryData.url}" autocomplete="off" class="layui-input" >
+                    <input type="text" th:name="roleIds"   th:value="${queryData.roleIds}" autocomplete="off" class="layui-input" >
                 </div>
             </div>
-
-            <div class="layui-inline">
-                <label class="layui-form-label">父菜单id</label>
-                <div class="layui-input-inline">
-                    <input type="text" th:name="parentId"   th:value="${queryData.parentId}" autocomplete="off" class="layui-input" >
-                </div>
-            </div>
-
         <div class="layui-inline">
             <label class="layui-form-label">创建时间</label>
             <div class="layui-input-inline">
@@ -111,7 +103,7 @@
 </script>
 
 <script type="text/html" id="barDemo">
-    <!--<a class="layui-btn layui-btn-xs " lay-event="detail">查看</a>-->
+    <a class="layui-btn layui-btn-xs " lay-event="detail">查看</a>
     <a class="layui-btn layui-btn-xs " lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs " lay-event="del">删除</a>
 </script>
@@ -143,7 +135,7 @@
                 elem:'#endEndTime',
                 type:'datetime'
             })
-        renderList("列表","menu");
+        renderList("列表","userRole");
     });
 
 

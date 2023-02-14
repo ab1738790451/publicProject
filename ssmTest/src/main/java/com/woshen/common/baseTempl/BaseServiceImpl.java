@@ -77,7 +77,11 @@ public class BaseServiceImpl<Pk extends Serializable,E extends BaseMapper<T>,T e
 
     @Override
     public Integer dosave(T queryData) {
-        save(queryData);
+        if(queryData.getPk() == null){
+            save(queryData);
+        }else{
+            updateById(queryData);
+        }
         return queryData.getPk();
     }
 }

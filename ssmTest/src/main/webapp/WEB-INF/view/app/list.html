@@ -15,7 +15,7 @@
     </style>
 </head>
 <body class="main-body">
-<form class="layui-form" action="/menu/list" id="dataForm" >
+<form class="layui-form" action="/app/list" id="dataForm" >
     <input id="pageIndex" name="pageInfo.pageIndex" th:value="${queryData?.pageInfo?.pageIndex}" type="hidden">
     <input id="pageSize" name="pageInfo.pageSize" th:value="${queryData?.pageInfo?.pageSize}" type="hidden">
     <input id="pageTotal"  th:value="${pageData.total}" type="hidden">
@@ -27,26 +27,11 @@
             </div>
         </div>
             <div class="layui-inline">
-                <label class="layui-form-label">title</label>
+                <label class="layui-form-label">应用名称</label>
                 <div class="layui-input-inline">
-                    <input type="text" th:name="title"   th:value="${queryData.title}" autocomplete="off" class="layui-input" >
+                    <input type="text" th:name="appName"   th:value="${queryData.appName}" autocomplete="off" class="layui-input" >
                 </div>
             </div>
-
-            <div class="layui-inline">
-                <label class="layui-form-label">url</label>
-                <div class="layui-input-inline">
-                    <input type="text" th:name="url"   th:value="${queryData.url}" autocomplete="off" class="layui-input" >
-                </div>
-            </div>
-
-            <div class="layui-inline">
-                <label class="layui-form-label">父菜单id</label>
-                <div class="layui-input-inline">
-                    <input type="text" th:name="parentId"   th:value="${queryData.parentId}" autocomplete="off" class="layui-input" >
-                </div>
-            </div>
-
         <div class="layui-inline">
             <label class="layui-form-label">创建时间</label>
             <div class="layui-input-inline">
@@ -83,9 +68,7 @@
     <tr>
         <th lay-data="{field:'left',type:'checkbox',algin:'center'}"></th>
         <th lay-data="{field:'id'}">ID</th>
-        <th lay-data="{field:'title'}">名称</th>
-        <th lay-data="{field:'url'}">url</th>
-        <th lay-data="{field:'parentId'}">父菜单</th>
+        <th lay-data="{field:'appName'}">应用名称</th>
         <th lay-data="{field:'createTime'}">创建时间</th>
         <th lay-data="{field:'updateTime'}">创建时间</th>
         <th lay-data="{fixed:'right',title:'操作', width:200, align:'center',toolbar: '#barDemo'}"></th>
@@ -95,9 +78,7 @@
     <tr th:each="item:${pageData.records}">
         <td></td>
         <td th:text="${item.id}"></td>
-        <td th:text="${item.title}"></td>
-        <td th:text="${item.url}"></td>
-        <td th:text="${item.parentId}"></td>
+        <td th:text="${item.appName}"></td>
         <td th:text="${#temporals.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
         <td th:text="${#temporals.format(item.updateTime,'yyyy-MM-dd HH:mm:ss')}"></td>
         <td></td>
@@ -111,7 +92,7 @@
 </script>
 
 <script type="text/html" id="barDemo">
-    <!--<a class="layui-btn layui-btn-xs " lay-event="detail">查看</a>-->
+    <a class="layui-btn layui-btn-xs " lay-event="detail">查看</a>
     <a class="layui-btn layui-btn-xs " lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs " lay-event="del">删除</a>
 </script>
@@ -143,7 +124,7 @@
                 elem:'#endEndTime',
                 type:'datetime'
             })
-        renderList("列表","menu");
+        renderList("列表","app");
     });
 
 

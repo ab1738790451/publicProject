@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import com.woshen.common.baseTempl.BaseEntity;
+import com.woshen.common.webcommon.model.DataStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -36,7 +37,7 @@ public class App extends BaseEntity<Integer> {
     /**
      * 数据状态
      */
-    private String status;
+    private DataStatus status;
 
     /**
      * 创建时间

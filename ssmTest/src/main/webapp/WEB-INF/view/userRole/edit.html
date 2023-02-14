@@ -15,62 +15,41 @@
     </style>
 </head>
 <body class="main-body">
-<form class="layui-form" action="/menu/dosave" id="dataForm" >
+<form class="layui-form" action="/userRole/dosave" id="dataForm" >
     <input type="hidden" name="id" th:value="${data?.id}">
 
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">应用id</label>
             <div class="layui-input-inline" lay-verify="requried">
-                <input type="text" name="appId"   th:value="${data?.appId}" autocomplete="off" class="layui-input" >
+                <input type="text" th:name="appId"   th:value="${data?.appId}" autocomplete="off" class="layui-input" oninput="this.value=this.value.replace(/[^\d]/g,'')" onproperty="this.value=this.value.replace(/[^\d]/g,'')" maxlength="11" >
             </div>
         </div>
     </div>
 
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
-            <label class="layui-form-label">标题</label>
+            <label class="layui-form-label">角色ids</label>
             <div class="layui-input-inline" lay-verify="requried">
-                <input type="text" name="title"   th:value="${data?.title}" autocomplete="off" class="layui-input" >
+                <input type="text" th:name="roleIds"   th:value="${data?.roleIds}" autocomplete="off" class="layui-input" >
             </div>
         </div>
     </div>
 
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
-            <label class="layui-form-label">url</label>
-            <div class="layui-input-inline" lay-verify="requried">
-                <input type="text" name="url"   th:value="${data?.url}" autocomplete="off" class="layui-input" >
-            </div>
-        </div>
-    </div>
-
-
-    <div class="layui-form-item query-form-item">
-        <div class="layui-inline">
-            <label class="layui-form-label">菜单类型</label>
+            <label class="layui-form-label">用户类型</label>
             <div class="layui-input-inline">
-              <!--  <select name="isMenu" lay-verify="requried">
+                <select name="userType" lay-verify="requried">
                     <option>请选择</option>
-                    <option value="Y">是</option>
-                    <option value="N">否</option>
-                </select>-->
-                <input type="radio" name="isMenu" value="Y" title="菜单" th:checked="${data?.isMenu == null || data?.isMenu == 'Y'}">
-                <input type="radio" name="isMenu" value="N" title="功能" th:checked="${data?.isMenu == 'N'}">
+                    <option value="SUPER_ADMIN">超级管理员</option>
+                    <option value="ADMIN">普通管理员</option>
+                    <option value="ORDINARY">普通用户</option>
+                </select>
             </div>
 
         </div>
     </div>
-
-    <div class="layui-form-item query-form-item">
-        <div class="layui-inline">
-            <label class="layui-form-label">父级id</label>
-            <div class="layui-input-inline" lay-verify="requried">
-                <input type="text" name="parentId"   th:value="${data?.parentId}" autocomplete="off" class="layui-input" oninput="this.value=this.value.replace(/[^\d-]/g,'')" onproperty="this.value=this.value.replace(/[^\d-]/g,'')" maxlength="11">
-            </div>
-        </div>
-    </div>
-
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
             <button id="save" class="layui-btn layuiadmin-btn-list" lay-submit  lay-filter="save">保存</button>

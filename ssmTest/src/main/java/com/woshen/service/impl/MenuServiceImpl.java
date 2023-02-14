@@ -3,6 +3,7 @@ package com.woshen.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.woshen.common.base.utils.StringUtils;
 import com.woshen.common.baseTempl.BaseServiceImpl;
+import com.woshen.common.webcommon.model.DataStatus;
 import com.woshen.entity.Menu;
 import com.woshen.mapper.MenuMapper;
 import com.woshen.service.IMenuService;
@@ -50,6 +51,7 @@ public class MenuServiceImpl extends BaseServiceImpl<Integer, MenuMapper, Menu> 
         LocalDateTime now = LocalDateTime.now();
         if(queryData.getId() == null){
             queryData.setCreateTime(now);
+            queryData.setStatus(DataStatus.NORMAL);
         }
         queryData.setUpdateTime(now);
         return super.dosave(queryData);

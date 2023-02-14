@@ -3,16 +3,11 @@ package com.woshen.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-
 import com.woshen.common.base.model.BaseTreeNode;
-import com.woshen.common.base.model.TreeNode;
 import com.woshen.common.baseTempl.BaseEntity;
-import com.woshen.common.beanModel.PageInfo;
-import com.woshen.common.constants.DataStatus;
+import com.woshen.common.webcommon.model.DataStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

@@ -68,7 +68,7 @@ function renderList(title,module) {
             layout:['prev', 'page', 'next','limit'],
         });
 
-        if($(".layui-laypage-prev").length != 0 && !$(".layui-laypage-prev").hasClass("layui-disabled")){
+        if($(".layui-laypage-prev").length != 0 && !($(".layui-laypage-prev").hasClass("layui-disabled"))){
             $(".layui-laypage-prev").on('click',function () {
                 let prePage =  $(".layui-laypage-prev").attr("data-page") +1;
                 $("#pageIndex").val(prePage);
@@ -77,7 +77,7 @@ function renderList(title,module) {
             })
         }
 
-        if($(".layui-laypage-next").length != 0 && !$(".layui-laypage-next").hasClass("layui-disabled")){
+        if($(".layui-laypage-next").length != 0 && !($(".layui-laypage-next").hasClass("layui-disabled"))){
             $(".layui-laypage-next").on('click',function () {
                 let prePage =  $(".layui-laypage-next").attr("data-page") -1 ;
                 $("#pageIndex").val(prePage);
@@ -87,7 +87,7 @@ function renderList(title,module) {
         }
 
         $("#page").find("a").each(function (index,item) {
-             if(!$(this).hasClass("layui-laypage-prev") && $(this).hasClass("layui-laypage-next")){
+             if(!$(this).hasClass("layui-laypage-prev") && !$(this).hasClass("layui-laypage-next")){
                  $(this).on('click',function () {
                      let dataPage =  $(this).attr("data-page");
                      $("#pageIndex").val(dataPage);
@@ -98,15 +98,10 @@ function renderList(title,module) {
              }
         })
 
-        $("#page").find(".layui-laypage-limits").find("option").each(function (index,item) {
-            if($(this).attr("selected") != true){
-                $(this).on('click',function () {
-                    $("#pageSize").val($(".layui-laypage-limits").find("select").val());
-                    $("#search").click();
-                })
-
-            }
-        })
+        $("#page").find(".layui-laypage-limits").find("select").on('change',function (item) {
+            $("#pageSize").val($(this).val());
+            $("#search").click();
+        });
     });
 }
 
@@ -139,7 +134,7 @@ function defalutTableToolEvent(table,obj) {
     var data = obj.data;
     switch (obj.event) {
         case "edit":
-            top.tabChange(tabFilter,moduleName + data.id,'修改',"/"+moduleName+"/toEdit?lastLayId="+currTabLayId);
+            top.tabChange(tabFilter,moduleName + data.id,'修改',"/"+moduleName+"/toEdit?lastLayId="+currTabLayId+"&pk="+data.id);
             break;
         case "del":
             break;

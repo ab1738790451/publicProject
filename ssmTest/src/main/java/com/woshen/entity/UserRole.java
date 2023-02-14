@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.woshen.common.baseTempl.BaseEntity;
+import com.woshen.common.constants.UserType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -32,7 +33,7 @@ public class UserRole extends BaseEntity<Integer> {
      * 角色类型 超级管理员 、普通管理员 、普通用户
      */
     @TableField("user_type")
-    private String userType;
+    private UserType userType;
 
     /**
      * 用户角色id
