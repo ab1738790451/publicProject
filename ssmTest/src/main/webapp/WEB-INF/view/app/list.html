@@ -23,13 +23,13 @@
         <div class="layui-inline">
             <label class="layui-form-label">ID</label>
             <div class="layui-input-inline">
-                <input type="text" th:name="id"   th:value="${queryData.id}" autocomplete="off" class="layui-input" oninput="this.value=this.value.replace(/[^\d]/g,'')" onproperty="this.value=this.value.replace(/[^\d]/g,'')" maxlength="11">
+                <input type="text" name="id"   th:value="${queryData.id}" autocomplete="off" class="layui-input" oninput="this.value=this.value.replace(/[^\d]/g,'')" onproperty="this.value=this.value.replace(/[^\d]/g,'')" maxlength="11">
             </div>
         </div>
             <div class="layui-inline">
                 <label class="layui-form-label">应用名称</label>
                 <div class="layui-input-inline">
-                    <input type="text" th:name="appName"   th:value="${queryData.appName}" autocomplete="off" class="layui-input" >
+                    <input type="text" name="appName"   th:value="${queryData.appName}" autocomplete="off" class="layui-input" >
                 </div>
             </div>
         <div class="layui-inline">

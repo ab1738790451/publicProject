@@ -26,9 +26,12 @@ var ajaxUtil = new (function(){
                         layer.msg(res.message,{icon:2});
                     }
                 },
-                error:function () {
+                error:function (err) {
                     layer.close(index);
-                    layer.msg("提交失败",{icon:2});
+                    let text = err.responseText;
+                    if(text.length != 0 && text.indexOf("alert") != -1){
+                        $('body').html(err.responseText);
+                    }
                 }
             });
         })
@@ -61,9 +64,11 @@ var ajaxUtil = new (function(){
                             layer.msg(res.message,{icon:2});
                         }
                     },
-                    error:function () {
+                    error:function (err) {
                         layer.close(index);
-                        layer.msg("保存失败",{icon:2});
+                        if(err.responseText.length != 0 && err.responseText.indexOf("<srcipt>") !=-1){
+                            $('body').html(err.responseText);
+                        }
                     }
                 });
         });
@@ -84,8 +89,10 @@ var ajaxUtil = new (function(){
                     layer.msg(res.message,{icon:2});
                 }
             },
-            error:function () {
-                layer.msg("请求失败",{icon:2});
+            error:function (err) {
+                if(err.responseText.length != 0 && err.responseText.indexOf("<srcipt>") !=-1){
+                    $('body').html(err.responseText);
+                }
             }
         });
     });
@@ -107,8 +114,10 @@ var ajaxUtil = new (function(){
                     layer.msg(res.message,{icon:2});
                 }
             },
-            error:function () {
-                layer.msg("请求失败",{icon:2});
+            error:function (err) {
+                if(err.responseText.length != 0 && err.responseText.indexOf("<srcipt>") !=-1){
+                    $('body').html(err.responseText);
+                }
             }
         });
     });

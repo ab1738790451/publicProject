@@ -7,6 +7,7 @@ import com.woshen.common.webcommon.model.DefaultUserModel;
 import com.woshen.common.webcommon.model.ResponseResult;
 import com.woshen.common.webcommon.utils.LocalCahceUtil;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -49,7 +50,7 @@ public class LoginController {
     }
 
 
-    @RequestMapping("loadCode")
+    @PostMapping("loadCode")
     @ResponseBody
     public ResponseResult loadCode(String sessionId){
         try{
@@ -68,7 +69,7 @@ public class LoginController {
         return new ResponseResult(500,"ERROR");
     }
 
-    @RequestMapping("doLogin")
+    @PostMapping("doLogin")
     @ResponseBody
     public ResponseResult doLogin(HttpServletRequest request, HttpServletResponse response, String userName, String password, String sessionId, String code){
         String s = LocalCahceUtil.get(sessionId);

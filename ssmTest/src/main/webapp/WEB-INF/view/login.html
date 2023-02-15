@@ -7,6 +7,8 @@
     <meta content="yes" name="apple-mobile-web-app-capable" >
     <meta content="black" name="apple-mobile-web-app-status-bar-style" >
     <meta content="telephone=no" name="format-detection" >
+    <script src="/static/layui/layui.js"  type="text/javascript"></script>
+    <link href="/static/layui/css/layui.css" rel="stylesheet">
     <title >登录</title>
     <style>
 
@@ -112,13 +114,19 @@
         $(".login-button").on('click',function () {
             doLogin();
         })
+
+        $("input[name=code]").keydown(function (event) {
+              if(event.keyCode == 13){
+                  doLogin();
+              }
+        })
     })
 
     function resetCode() {
              $.ajax({
-                 url:"/loadCode",
+                 url:"/loadCode?sessionId="+$("input[name=sessionId]").val(),
                  type:"post",
-                 data:{sessionId:$("input[name=sessionId]").val()},
+                 //data:{sessionId:$("input[name=sessionId]").val()},
                  dataType:"json",
                  success:function (res) {
                    if(res.code == 200){
@@ -137,29 +145,29 @@
     function doLogin() {
         let userName = $("input[name=userName]").val();
         if(isEmpty(userName)){
-            alert("请先输入用户名")
+            layer.msg('请先输入用户名',{icon:0,time:1000});
             return false;
         }
         let password = $("input[name=password]").val();
         if(isEmpty(password)){
-            alert("请先输入用户密码")
+            layer.msg('请先输入用户密码',{icon:0,time:1000});
             return false;
         }
         let code = $("input[name=code]").val();
         if(isEmpty(code)){
-            alert("请先输入验证码")
+            layer.msg('请先输入验证码',{icon:0,time:1000});
             return false;
         }
         $.ajax({
-            url:"/doLogin",
-            type:"get",
-            data:{sessionId:$("input[name=sessionId]").val(),userName:userName,password:password,code:code},
+            url:"/doLogin?sessionId="+$("input[name=sessionId]").val()+"&userName="+userName+"&password="+password+"&code="+code,
+            type:"post",
+            //data:{sessionId:$("input[name=sessionId]").val(),userName:userName,password:password,code:code},
             dataType:"json",
             success:function (res) {
                 if(res.code == 200){
                     location.href = "/index";
                 }else{
-                    alert("登录失败");
+                    layer.msg('登陆失败',{icon:2,time:1000});
                     $(".login-img").attr("src","data:image/jpg;base64,"+res.data);
                 }
             },

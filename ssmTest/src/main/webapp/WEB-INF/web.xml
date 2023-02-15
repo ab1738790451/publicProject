@@ -55,7 +55,7 @@
             <url-pattern>/*</url-pattern>
           </filter-mapping>
 
-         <!-- <filter>
+        <!--  <filter>
               <filter-name>writeFilter</filter-name>
               <filter-class>com.woshen.common.config.WriteFilter</filter-class>
           </filter>
