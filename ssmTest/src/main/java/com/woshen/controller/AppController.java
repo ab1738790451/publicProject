@@ -1,8 +1,10 @@
 package com.woshen.controller;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.woshen.common.baseTempl.AbstractController;
 import com.woshen.common.baseTempl.BaseService;
+import com.woshen.common.webcommon.model.DataStatus;
 import com.woshen.entity.App;
 import com.woshen.service.IAppService;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,5 +31,11 @@ public class AppController extends AbstractController<Integer, App> {
     @Override
     public IAppService getService() {
         return appServiceImpl;
+    }
+
+    @Override
+    public Page<App> loadList(App queryData) {
+        queryData.setStatus(DataStatus.NORMAL);
+        return super.loadList(queryData);
     }
 }

@@ -36,6 +36,7 @@ public class IndexController {
     @RequestMapping(value = "loadMenu",method = RequestMethod.GET)
     @ResponseBody
     public ResponseResult loadMenu(HttpServletRequest request, HttpServletResponse response){
+        String header = request.getHeader("X-Requested-With");
         Menu menu = new Menu();
         menu.setIsMenu("Y");
         return new ResponseResult(new TreeNodeUtil(menuServiceImpl.selectPage(menu).getRecords()).getTreeDatas());

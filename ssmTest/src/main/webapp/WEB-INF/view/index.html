@@ -149,14 +149,14 @@
 
 
     $(function(){
-           ajaxUtil.syncGet({url:"/test/loadMenu",rollback:function (res) {
+           ajaxUtil.syncGet({url:"/loadMenu",rollback:function (res) {
                   menuUtils.treeMenu("tree-menu",res.data,{ title:"title",
                       dataUrl:"url",
                       layId:"id",
                       children:"children"});
            }});
 
-            ajaxUtil.syncGet({url:"/test/loadMenu",rollback:function (res) {
+            ajaxUtil.syncGet({url:"/loadMenu",rollback:function (res) {
                     navUtil.mergeNavData(res.data,[{
                         hasImg:true,
                         img:'//t.cn/RCzsdCq',

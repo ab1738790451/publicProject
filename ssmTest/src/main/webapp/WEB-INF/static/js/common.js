@@ -28,10 +28,10 @@ function renderList(title,module) {
         let laypage = layui.laypage;
 
         currTable.on('tool(tableList)',function (obj) {
-        defalutTableToolEvent(currTable,obj);
+        defaultTableToolEvent(currTable,obj);
         });
         currTable.on('toolbar(tableList)',function (obj) {
-        defalutTableToolBarEvent(currTable,obj);
+        defaultTableToolBarEvent(currTable,obj);
         });
 
         var defaultToolbar=['filter'];
@@ -106,13 +106,24 @@ function renderList(title,module) {
 }
 
 //表格头部工具栏事件
-function defalutTableToolBarEvent(table,obj) {
+function defaultTableToolBarEvent(table,obj) {
     var data = table.checkStatus(obj.config.id).data;
     switch (obj.event) {
         case "add":
             top.tabChange(tabFilter,moduleName + "-0",'新增',"/"+moduleName+"/toEdit?lastLayId="+currTabLayId);
             break;
         case "dels":
+            if(data.length == 0){
+                layer.msg("请至少选择一条数据",{icon:2});
+                return ;
+            }
+            let pks = [];
+            for(let item of data){
+                pks.push(item.id);
+            }
+            ajaxUtil.confirmRequest("/"+moduleName + "/del?pks="+pks,null,"批量删除","是否确定要删除选中数据",function () {
+                $("#search").click();
+            });
             break;
         case "search_display":
             let display =  $("#dataForm").css("display");
@@ -130,13 +141,16 @@ function defalutTableToolBarEvent(table,obj) {
 }
 
 //表格行事件
-function defalutTableToolEvent(table,obj) {
+function defaultTableToolEvent(table,obj) {
     var data = obj.data;
     switch (obj.event) {
         case "edit":
             top.tabChange(tabFilter,moduleName + data.id,'修改',"/"+moduleName+"/toEdit?lastLayId="+currTabLayId+"&pk="+data.id);
             break;
         case "del":
+            ajaxUtil.confirmRequest("/"+moduleName + "/del",{pks:data.id},"批量删除","是否确定要删除选中数据",function () {
+                $("#search").click();
+            });
             break;
     }
     if(typeof tableToolEvent == 'function'){

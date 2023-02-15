@@ -1,7 +1,9 @@
 package com.woshen.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.woshen.common.baseTempl.AbstractController;
 import com.woshen.common.baseTempl.BaseService;
+import com.woshen.common.webcommon.model.DataStatus;
 import com.woshen.entity.Menu;
 import com.woshen.service.IMenuService;
 import org.springframework.stereotype.Controller;
@@ -25,5 +27,11 @@ public class MenuController extends AbstractController<Integer,Menu> {
     @Override
     public BaseService getService() {
         return menuServiceImpl;
+    }
+
+    @Override
+    public Page<Menu> loadList(Menu queryData) {
+        queryData.setStatus(DataStatus.NORMAL);
+        return super.loadList(queryData);
     }
 }

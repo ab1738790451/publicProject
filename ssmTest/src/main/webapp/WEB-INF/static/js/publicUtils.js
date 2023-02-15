@@ -10,9 +10,8 @@ var ajaxUtil = new (function(){
             let index = layer.load(2, {time: 10*1000});
             $.ajax({
                 url:url,
-                type:'post',
-                data:JSON.stringify(data),
-                contentType:'application/json;charset=utf-8',
+                type:'get',
+                data:data,
                 dataType:'json',
                 success:function (res) {
                     layer.close(index);
@@ -56,7 +55,6 @@ var ajaxUtil = new (function(){
                                 }else{
                                     layer.msg(res.message,{icon:1});
                                 }
-
                             }
 
                         }else{

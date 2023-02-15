@@ -53,8 +53,8 @@ public class LoginController {
     @ResponseBody
     public ResponseResult loadCode(String sessionId){
         try{
-            LocalCahceUtil.deleted(sessionId);
-           /* String sessionId2 = "session-"+ RandomUtils.getRandomByCase((byte) 6) + LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();*/
+            /*LocalCahceUtil.deleted(sessionId);
+            String sessionId2 = "session-"+ RandomUtils.getRandomByCase((byte) 6) + LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();*/
             String code = RandomUtils.getRandomByLowerCaseAndNum((byte) 5);
             ByteArrayOutputStream img = VerifyCodeUtil.createImg(code);
             LocalCahceUtil.setAndExtT(sessionId, code,2*60,true);

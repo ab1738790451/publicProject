@@ -41,7 +41,7 @@ public class BaseServiceImpl<Pk extends Serializable,E extends BaseMapper<T>,T e
                     continue;
                 }
                 String fieldName = field.getName();
-                allEq.put(StringUtils.humpToUnderline(fieldName),map.get(queryData));
+                allEq.put(StringUtils.humpToUnderline(fieldName),map.get(fieldName));
             }
             queryWrapper.select(allEq.keySet().stream().toArray(String[]::new));
             if(allEq.entrySet().size() != 0){
@@ -73,6 +73,7 @@ public class BaseServiceImpl<Pk extends Serializable,E extends BaseMapper<T>,T e
         UpdateWrapper<T> updateWrapper = new UpdateWrapper<>();
         updateWrapper.in("id",pks);
         updateWrapper.set("status", DataStatus.DELETED);
+        this.update(updateWrapper);
     }
 
     @Override

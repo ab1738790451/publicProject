@@ -47,7 +47,7 @@ public abstract class  AbstractController<PK extends Serializable,T extends Base
     @RequestMapping("list")
     public ModelAndView list(HttpServletRequest request, HttpServletResponse response,T queryData){
         ModelAndView mav = new ModelAndView(getModule() + "/list");
-        mav.addObject("pageData",loadList(queryData));
+        mav.addObject("pageData",this.loadList(queryData));
         mav.addObject("queryData",queryData);
         return mav;
     }

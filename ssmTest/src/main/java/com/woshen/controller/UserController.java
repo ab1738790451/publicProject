@@ -1,7 +1,9 @@
 package com.woshen.controller;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.woshen.common.baseTempl.AbstractController;
+import com.woshen.common.webcommon.model.DataStatus;
 import com.woshen.entity.Role;
 import com.woshen.entity.User;
 import com.woshen.service.IRoleService;
@@ -29,5 +31,11 @@ public class UserController extends AbstractController<Integer, User> {
     @Override
     public IUserService getService() {
         return userServiceImpl;
+    }
+
+    @Override
+    public Page<User> loadList(User queryData) {
+        queryData.setStatus(DataStatus.NORMAL);
+        return super.loadList(queryData);
     }
 }
