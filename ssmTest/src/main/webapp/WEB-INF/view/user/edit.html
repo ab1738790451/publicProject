@@ -85,6 +85,20 @@
 
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
+            <label class="layui-form-label">用户类型</label>
+            <div class="layui-input-inline">
+                <select name="userType" lay-verify="requried">
+                    <option value="ORDINARY">普通用户</option>
+                    <option value="ADMIN">普通管理员</option>
+                    <option value="SUPER_ADMIN">超级管理员</option>
+                </select>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="layui-form-item query-form-item">
+        <div class="layui-inline">
             <button id="save" class="layui-btn layuiadmin-btn-list" lay-submit  lay-filter="save">保存</button>
         </div>
     </div>

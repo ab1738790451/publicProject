@@ -71,7 +71,7 @@
         <th lay-data="{field:'appName'}">应用名称</th>
         <th lay-data="{field:'createTime'}">创建时间</th>
         <th lay-data="{field:'updateTime'}">创建时间</th>
-        <th lay-data="{fixed:'right',title:'操作', width:200, align:'center',toolbar: '#barDemo'}"></th>
+        <th lay-data="{fixed:'right',title:'操作', width:300, align:'center',toolbar: '#tool'}"></th>
     </tr>
     </thead>
     <tbody>
@@ -91,9 +91,10 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="dels">删除</a>
 </script>
 
-<script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs " lay-event="detail">查看</a>
+<script type="text/html" id="tool">
     <a class="layui-btn layui-btn-xs " lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-xs " lay-event="menu">菜单管理</a>
+    <a class="layui-btn layui-btn-xs " lay-event="role">角色管理</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs " lay-event="del">删除</a>
 </script>
 
@@ -130,7 +131,15 @@
 
 
     function tableToolEvent(table,obj) {
-
+       let data =  obj.data;
+       switch (obj.event) {
+          case 'menu':
+              top.tabAdd(tabFilter,"menu" + "-0",'菜单管理',"/menu/list?lastLayId="+currTabLayId+"&appId="+data.id);
+              break;
+          case 'role':
+              top.tabAdd(tabFilter,"role" + "-0",'菜单管理',"/role/list?lastLayId="+currTabLayId+"&appId="+data.id);
+              break;
+       }
     }
 
     function tableToolBarEvent(table,obj) {

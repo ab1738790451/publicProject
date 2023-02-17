@@ -54,27 +54,6 @@
                 </div>
             </div>
 
-            <div class="layui-inline">
-                <label class="layui-form-label">邮箱</label>
-                <div class="layui-input-inline">
-                    <input type="text" th:name="email"   th:value="${queryData.email}" autocomplete="off" class="layui-input" >
-                </div>
-            </div>
-
-            <div class="layui-inline">
-                <label class="layui-form-label">头像</label>
-                <div class="layui-input-inline">
-                    <input type="text" th:name="headImg"   th:value="${queryData.headImg}" autocomplete="off" class="layui-input" >
-                </div>
-            </div>
-
-            <div class="layui-inline">
-                <label class="layui-form-label">密码</label>
-                <div class="layui-input-inline">
-                    <input type="text" th:name="password"   th:value="${queryData.password}" autocomplete="off" class="layui-input" >
-                </div>
-            </div>
-
         <div class="layui-inline">
             <label class="layui-form-label">创建时间</label>
             <div class="layui-input-inline">
@@ -117,10 +96,10 @@
         <th lay-data="{field:'nickeName'}">昵称</th>
         <th lay-data="{field:'email'}">电子邮箱</th>
         <th lay-data="{field:'headImg'}">头像</th>
-        <th lay-data="{field:'password'}">密码</th>
+       <!-- <th lay-data="{field:'password'}">密码</th>-->
         <th lay-data="{field:'createTime'}">创建时间</th>
         <th lay-data="{field:'updateTime'}">创建时间</th>
-        <th lay-data="{fixed:'right',title:'操作', width:200, align:'center',toolbar: '#barDemo'}"></th>
+        <th lay-data="{fixed:'right',title:'操作', width:200, align:'center',toolbar: '#tool'}"></th>
     </tr>
     </thead>
     <tbody>
@@ -133,7 +112,7 @@
         <td th:text="${item.nickeName}"></td>
         <td th:text="${item.email}"></td>
         <td th:text="${item.headImg}"></td>
-        <td th:text="${item.password}"></td>
+       <!-- <td th:text="${item.password}"></td>-->
         <td th:text="${#temporals.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
         <td th:text="${#temporals.format(item.updateTime,'yyyy-MM-dd HH:mm:ss')}"></td>
         <td></td>
@@ -146,7 +125,7 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="dels">删除</a>
 </script>
 
-<script type="text/html" id="barDemo">
+<script type="text/html" id="tool">
     <a class="layui-btn layui-btn-xs " lay-event="detail">查看</a>
     <a class="layui-btn layui-btn-xs " lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs " lay-event="del">删除</a>

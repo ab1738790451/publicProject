@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import com.woshen.common.baseTempl.BaseEntity;
+import com.woshen.common.constants.UserType;
 import com.woshen.common.webcommon.model.DataStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -84,6 +85,8 @@ public class User extends BaseEntity<Integer> {
     @TableField("update_time")
     private LocalDateTime updateTime;
 
+    @TableField(exist = false)
+    private UserType userType;
 
     @Override
     public Integer getPk() {

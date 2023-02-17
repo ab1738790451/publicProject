@@ -77,7 +77,11 @@ public abstract class  AbstractController<PK extends Serializable,T extends Base
         return new ResponseResult(i,i==200?"SUCCESS":"ERROR");
     }
     public Page<T> loadList(T queryData){
-       return getService().selectPage(queryData);
+        Integer pageSize = queryData.getPageInfo().getPageSize();
+        if(pageSize > 100){
+            queryData.getPageInfo().setPageSize(10);
+        }
+        return getService().selectPage(queryData);
     }
 
    public abstract BaseService<PK,T> getService();

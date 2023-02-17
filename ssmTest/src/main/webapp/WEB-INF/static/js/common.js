@@ -8,7 +8,7 @@ function renderEdit(submitFilter,lastLayId){
     layui.use(['form'],function () {
         var form = layui.form;
         form.on('submit('+submitFilter+')',function (data) {
-            if (typeof beforeSubmit == 'funtion') {
+            if (typeof beforeSubmit == 'function') {
                 if (!beforeSubmit(data)) {
                     return false;
                 }

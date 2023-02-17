@@ -4,14 +4,18 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.woshen.common.base.utils.ByteUtil;
 import com.woshen.common.base.utils.StringUtils;
 import com.woshen.common.baseTempl.BaseServiceImpl;
+import com.woshen.common.constants.UserType;
 import com.woshen.common.webcommon.model.DataStatus;
 import com.woshen.entity.User;
 import com.woshen.entity.UserRole;
 import com.woshen.mapper.UserMapper;
+import com.woshen.service.IUserRoleService;
 import com.woshen.service.IUserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 
 /**
@@ -24,6 +28,9 @@ import java.time.LocalDateTime;
  */
 @Service
 public class UserServiceImpl extends BaseServiceImpl<Integer, UserMapper, User> implements IUserService {
+
+    @Resource
+    private IUserRoleService userRoleServiceImpl;
 
     @Override
     public QueryWrapper<User> getBaseWrapper(User queryData) {
@@ -50,8 +57,10 @@ public class UserServiceImpl extends BaseServiceImpl<Integer, UserMapper, User> 
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Integer dosave(User queryData) {
         LocalDateTime now = LocalDateTime.now();
+        Integer id = queryData.getId();
         if(queryData.getId() == null){
             queryData.setCreateTime(now);
             queryData.setStatus(DataStatus.NORMAL);
@@ -60,7 +69,18 @@ public class UserServiceImpl extends BaseServiceImpl<Integer, UserMapper, User> 
            queryData.setPassword(ByteUtil.byteToHexadecimal(DigestUtils.md5Digest(queryData.getPassword().getBytes())));
         }
         queryData.setUpdateTime(now);
-        return super.dosave(queryData);
+        Integer pk = super.dosave(queryData);
+        if(id == null){
+            UserRole userRole = new UserRole();
+            userRole.setUserType(queryData.getUserType());
+            userRoleServiceImpl.dosave(userRole);
+        }else if(queryData.getUserType() != null){
+            UserRole userRole = new UserRole();
+            userRole.setId(id);
+            userRole.setUserType(queryData.getUserType());
+            userRoleServiceImpl.dosave(userRole);
+        }
+        return pk;
     }
 
 }
