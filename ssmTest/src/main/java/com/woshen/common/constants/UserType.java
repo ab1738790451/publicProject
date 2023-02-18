@@ -8,7 +8,9 @@ package com.woshen.common.constants;
  * @description
  */
 public enum UserType {
-    ;
+    ORDINARY("普通用户"),
+    ADMIN("管理员"),
+    SUPER_ADMIN("超级管理员");
     UserType(String desc){
         this.desc = desc;
         this.value = this.name();

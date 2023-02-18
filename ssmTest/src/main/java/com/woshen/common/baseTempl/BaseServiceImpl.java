@@ -10,6 +10,10 @@ import com.woshen.common.base.utils.StringUtils;
 import com.woshen.common.beanModel.BeanUtils;
 import com.woshen.common.beanModel.PageInfo;
 import com.woshen.common.constants.DataStatus;
+import com.woshen.common.webcommon.annotation.EnableEncryption;
+import com.woshen.common.webcommon.annotation.EncryptionField;
+import com.woshen.common.webcommon.utils.EncryptionUtils;
+
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -32,7 +36,9 @@ public class BaseServiceImpl<Pk extends Serializable,E extends BaseMapper<T>,T e
                 return queryWrapper;
             }
             Map<String, Object> map = BeanUtils.beanToMap(queryData);
-            Field[] fields = queryData.getClass().getDeclaredFields();
+            Class<? extends BaseEntity> aClass = queryData.getClass();
+            Field[] fields = aClass.getDeclaredFields();
+            EnableEncryption enableEncryption = aClass.getAnnotation(EnableEncryption.class);
             Map<String,Object> allEq = new HashMap<>();
             for (int i = 0; i < fields.length; i++) {
                 Field field = fields[i];
@@ -41,7 +47,14 @@ public class BaseServiceImpl<Pk extends Serializable,E extends BaseMapper<T>,T e
                     continue;
                 }
                 String fieldName = field.getName();
-                allEq.put(StringUtils.humpToUnderline(fieldName),map.get(fieldName));
+                Object o = map.get(fieldName);
+                if(o != null && enableEncryption != null &&  o instanceof String){
+                    EncryptionField encryptionField = field.getAnnotation(EncryptionField.class);
+                    if(encryptionField != null){
+                        o = EncryptionUtils.encryption((String) o);
+                    }
+                }
+                allEq.put(StringUtils.humpToUnderline(fieldName),o);
             }
             queryWrapper.select(allEq.keySet().stream().toArray(String[]::new));
             if(allEq.entrySet().size() != 0){
@@ -65,7 +78,7 @@ public class BaseServiceImpl<Pk extends Serializable,E extends BaseMapper<T>,T e
         }else{
             pageInfo = queryData.getPageInfo();
         }
-       return (Page<T>) this.page(new Page<>(pageInfo.getPageIndex(),pageInfo.getPageSize()),getBaseWrapper(queryData));
+       return (Page<T>) super.page(new Page<>(pageInfo.getPageIndex(),pageInfo.getPageSize()),getBaseWrapper(queryData));
     }
 
     @Override
@@ -73,15 +86,15 @@ public class BaseServiceImpl<Pk extends Serializable,E extends BaseMapper<T>,T e
         UpdateWrapper<T> updateWrapper = new UpdateWrapper<>();
         updateWrapper.in("id",pks);
         updateWrapper.set("status", DataStatus.DELETED);
-        this.update(updateWrapper);
+        super.update(updateWrapper);
     }
 
     @Override
     public Integer dosave(T queryData) {
         if(queryData.getPk() == null){
-            save(queryData);
+            super.save(queryData);
         }else{
-            updateById(queryData);
+            super.updateById(queryData);
         }
         return queryData.getPk();
     }

@@ -78,7 +78,7 @@
         <div class="layui-inline">
             <label class="layui-form-label">密码</label>
             <div class="layui-input-inline" lay-verify="requried">
-                <input type="text" th:name="password"   th:value="${data?.password}" autocomplete="off" class="layui-input" oninput="this.value=this.value.replace(/[^\d]/g,'')" onproperty="this.value=this.value.replace(/[^\d]/g,'')" maxlength="11">
+                <input type="text" th:name="password"   autocomplete="off" class="layui-input" oninput="this.value=this.value.replace(/[^\d]/g,'')" onproperty="this.value=this.value.replace(/[^\d]/g,'')" maxlength="11">
             </div>
         </div>
     </div>

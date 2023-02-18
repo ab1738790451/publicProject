@@ -25,11 +25,16 @@
         <property name="dataSource" ref="datasource" />
         <property name="mapperLocations" value="classpath:/mapper/*.xml"/>
         <property name="configuration" ref="mybatisConfigurer"/>
-        <property name="plugins" ref="paginationInterceptor"/>
+        <property name="plugins" >
+            <array>
+                <ref bean="paginationInterceptor"/>
+                <ref bean="dbModifyInterceptor"/>
+            </array>
+        </property>
     </bean>
 
     <bean id="paginationInterceptor" class="com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor" />
-
+    <bean id="dbModifyInterceptor" class="com.woshen.common.webcommon.interceptor.DbModifyInterceptor"/>
     <!--dao层扫描加入到ioc容器中-->
     <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.woshen.mapper"/>
