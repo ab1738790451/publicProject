@@ -3,7 +3,6 @@ var tabFilter = top.tabFilter;
 var moduleName;
 var currTabLayId = top.currTabLayId;
 
-
 function renderEdit(submitFilter,lastLayId){
     layui.use(['form'],function () {
         var form = layui.form;
@@ -21,7 +20,7 @@ function renderEdit(submitFilter,lastLayId){
 }
 
 
-function renderList(title,module,searchFilter) {
+function renderList(title,module,searchFilter,done) {
     layui.use(['form','table','laypage'],function () {
         currTable = layui.table
         moduleName = module;
@@ -52,57 +51,14 @@ function renderList(title,module,searchFilter) {
         limit: Number.MAX_VALUE,
         page: false,
         done: function () {
-           let treeCol = $("#tableList").attr("treeCol");
-           if(treeCol){
-               let cellClass = ".laytable-cell-1-0-"+treeCol;
-               const observer = new MutationObserver(function(mutations) {
-                   mutations.forEach(function(mutation) {
-                       let classs = mutation.target.classList;
-                       for (let item of classs){
-                           if(item == 'parent_node_colse'){
-                               $(mutation.target).find('i').html("&#xe623;")
-                           }else if(item == 'parent_node_open'){
-                               $(mutation.target).find('i').html("&#xe625;")
-                           }
-                       }
-                   });
-               });
-
-               $(".tree-node").each(function (index,item) {
-                    let level =  $(this).attr('node-level');
-                    if(level > 0){
-                       let tr = $(".layui-table-body tr")[index];
-                       $(tr).addClass('node_close');
-                    }
-               })
-               $(".layui-table-body "+cellClass).each(function (index,item) {
-                  let trIndex =  $(this).closest('tr').attr("data-index");
-                   let tr = $("#tableList").find("tbody").find("tr")[trIndex];
-                   let td = $(tr).find(".parent_node_colse");
-                   if(td.length > 0){
-                       let html  = $(this).html();
-                       $(this).html('<i class="layui-icon">&#xe623;</i>' + html)
-                       $(this).on('click',function () {
-                             if($(this).hasClass('parent_node_colse') || !$(this).hasClass('parent_node_open')){
-                                 $(this).removeClass('parent_node_colse');
-                                 $(this).addClass('parent_node_open');
-                                 $($(this).closest('tr').next()).removeClass('node_close');
-                             }else{
-                                 $(this).removeClass('parent_node_open');
-                                 $(this).addClass('parent_node_colse');
-                                 $($(this).closest('tr').next()).addClass('node_close');
-                             }
-                       })
-                   }
-                   observer.observe(item, { attributes: true, attributeFilter: ["class"] })
-               })
-           }
-
+            if(typeof done == 'function'){
+                done();
+            }
         }
         });
 
         currTable.render();
-        searchFilter = (searchFilter == undefined || searchFilter.length == 0)?'search':searchFilter;
+        searchFilter = (searchFilter == undefined || searchFilter == null || searchFilter.length == 0)?'search':searchFilter;
         form.on('submit('+searchFilter+')',function (data) {
             if (typeof beforeSearch == 'function') {
                 if (!beforeSearch(data)) {
@@ -158,6 +114,143 @@ function renderList(title,module,searchFilter) {
         });
     });
 }
+
+function renderTree(title,module,searchFilter,treeUrl){
+    let array = $("#dataForm").serializeArray();
+    let value ={};
+    for (let item of array){
+        value[item.name] = item.value;
+    }
+    ajaxUtil.get({url:treeUrl,data:value,rollback:function (res) {
+            let data = res.data.treeDatas;
+            let heads =  $("#tableList").find("thead").find("th");
+            let headArray = [];
+            for (let i=0;i < heads.length; i++){
+                let layData = $(heads[i]).attr('lay-data');
+                let splits = layData.replace("{","").replace("}","").replace("'","").replace("'","").split(",");
+                let field = "";
+                for(let item of splits){
+                    let key = item.split(":")[0];
+                    if(key == 'field'){
+                        field = item.split(":")[1];
+                    }
+                }
+                let node = {};
+                let colNum =  $("#tableList").attr("treeCol");
+                if(field == 'left'){
+                    colNum += 1;
+                    node['field'] = 'left';
+                    node['parentNode'] = -1;
+                }else{
+                    node['field'] = field;
+                    if(colNum == i+1){
+                        node['parentNode'] = 1;
+                    }else{
+                        node['parentNode'] = 0;
+                    }
+                }
+                headArray.push(node);
+            }
+            let html = "";
+            for(let item of data){
+                html +=iteretor(item,headArray,0);
+            }
+            $("#tableList").find("tbody").html(html);
+            renderList(title,module,searchFilter,function () {
+                let treeCol = $("#tableList").attr("treeCol");
+                if(treeCol){
+                    let cellClass = ".laytable-cell-1-0-"+treeCol;
+                    const observer = new MutationObserver(function(mutations) {
+                        mutations.forEach(function(mutation) {
+                            let classs = mutation.target.classList;
+                            for (let item of classs){
+                                if(item == 'parent_node_colse'){
+                                    $(mutation.target).find('i').html("&#xe623;")
+                                }else if(item == 'parent_node_open'){
+                                    $(mutation.target).find('i').html("&#xe625;")
+                                }
+                            }
+                        });
+                    });
+
+                    $(".tree-node").each(function (index,item) {
+                        let level =  $(this).attr('node-level');
+                        if(level > 0){
+                            let tr = $(".layui-table-body tr")[index];
+                            $(tr).addClass('node_close');
+                        }
+                    })
+                    $(".layui-table-body "+cellClass).each(function (index,item) {
+                        let trIndex =  $(this).closest('tr').attr("data-index");
+                        let tr = $("#tableList").find("tbody").find("tr")[trIndex];
+                        let level = $(tr).attr('node-level');
+                        let td = $(tr).find(".parent_node_colse");
+                        if(td.length > 0){
+                            let html  = $(this).html();
+                            $(this).html(getmultipartBlank(level) + '<i class="layui-icon">&#xe623;</i>' + html)
+                            $(this).on('click',function () {
+                                if($(this).hasClass('parent_node_colse') || !$(this).hasClass('parent_node_open')){
+                                    $(this).removeClass('parent_node_colse');
+                                    $(this).addClass('parent_node_open');
+                                    $($(this).closest('tr').next()).removeClass('node_close');
+                                }else{
+                                    $(this).removeClass('parent_node_open');
+                                    $(this).addClass('parent_node_colse');
+                                    $($(this).closest('tr').next()).addClass('node_close');
+                                }
+                            })
+                        }else{
+                            let html  = $(this).html();
+                            $(this).html(getmultipartBlank(level)  + html)
+                        }
+                        observer.observe(item, { attributes: true, attributeFilter: ["class"] })
+                    })
+                }
+            })
+        }});
+}
+function iteretor(data,headArray,level) {
+    let html = "";
+    let children =  data.children;
+    if(children != null && children.length > 0){
+        html += tdHtml(headArray,data,level,true);
+        for (let item of children){
+            html += iteretor(item,headArray,level +1);
+        }
+    }else{
+        html += tdHtml(headArray,data,level,false);
+    }
+    return html;
+}
+
+function tdHtml(headArray,data,level,hasIcon) {
+    let html = '<tr class="tree-node" node-level="'+level+'" ';
+    html += (level ==0) ?'>':'class="node_close" >'
+    for (let item of headArray){
+        if(item.parentNode == -1){
+            html += '<td></td>';
+        }else if(item.parentNode == 1 && hasIcon){
+            html += '<td class="parent_node_colse">';
+            html +=data[item.field]+'</td>'
+        }else{
+            html += '<td>'+data[item.field]+'</td>'
+        }
+    }
+    html += '</tr>';
+    return html;
+}
+
+function getmultipartBlank(num) {
+    let html = "";
+    if(num == 0){
+        return html;
+    }
+    for (let i = 0; i < num *4 ; i++) {
+        html += "&nbsp;"
+    }
+    return html;
+}
+
 
 //表格头部工具栏事件
 function defaultTableToolBarEvent(table,obj) {

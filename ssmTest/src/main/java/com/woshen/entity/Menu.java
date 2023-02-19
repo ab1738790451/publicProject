@@ -27,7 +27,7 @@ public class Menu extends BaseEntity<Integer> implements  BaseTreeNode<Menu> {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    private String appId;
+    private Integer appId;
 
     private String title;
 

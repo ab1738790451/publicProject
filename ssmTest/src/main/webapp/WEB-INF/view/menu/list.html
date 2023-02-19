@@ -24,12 +24,12 @@
     <input id="pageTotal"  th:value="${pageData.total}" type="hidden">
     <input id="appId" name="appId" th:value="${queryData.appId}" type="hidden">
     <div class="layui-form-item query-form-item">
-        <div class="layui-inline">
+   <!--     <div class="layui-inline">
             <label class="layui-form-label">ID</label>
             <div class="layui-input-inline">
                 <input type="text" th:name="id"   th:value="${queryData.id}" autocomplete="off" class="layui-input" oninput="this.value=this.value.replace(/[^\d]/g,'')" onproperty="this.value=this.value.replace(/[^\d]/g,'')" maxlength="11">
             </div>
-        </div>
+        </div>-->
             <div class="layui-inline">
                 <label class="layui-form-label">title</label>
                 <div class="layui-input-inline">
@@ -44,12 +44,12 @@
                 </div>
             </div>
 
-            <div class="layui-inline">
+           <!-- <div class="layui-inline">
                 <label class="layui-form-label">父菜单id</label>
                 <div class="layui-input-inline">
                     <input type="text" th:name="parentId"   th:value="${queryData.parentId}" autocomplete="off" class="layui-input" >
                 </div>
-            </div>
+            </div>-->
 
         <div class="layui-inline">
             <label class="layui-form-label">创建时间</label>
@@ -89,10 +89,10 @@
         <th lay-data="{field:'id',hide:true}">ID</th>
         <th lay-data="{field:'title'}">名称</th>
         <th lay-data="{field:'url'}">url</th>
-        <th lay-data="{field:'parentId'}">父菜单</th>
+        <th lay-data="{field:'parentId',hide:true}">父菜单</th>
         <th lay-data="{field:'createTime'}">创建时间</th>
         <th lay-data="{field:'updateTime'}">创建时间</th>
-        <th lay-data="{fixed:'right',title:'操作', width:200, align:'center',toolbar: '#barDemo'}"></th>
+        <th lay-data="{fixed:'right',title:'操作', width:200, align:'center',toolbar: '#tool'}"></th>
     </tr>
     </thead>
     <tbody>
@@ -114,8 +114,8 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="dels">删除</a>
 </script>
 
-<script type="text/html" id="barDemo">
-    <!--<a class="layui-btn layui-btn-xs " lay-event="detail">查看</a>-->
+<script type="text/html" id="tool">
+    <a class="layui-btn layui-btn-xs " lay-event="add">新增</a>
     <a class="layui-btn layui-btn-xs " lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs " lay-event="del">删除</a>
 </script>
@@ -147,107 +147,20 @@
                 elem:'#endEndTime',
                 type:'datetime'
             })
-        //renderList("列表","menu");
+
     });
 
-    let loadPage = false;
     $(function () {
-         let data ={};
-         beforeSearch(data);
+        renderTree("列表","menu",null,"/menu/treeList");
     })
 
-    function beforeSearch(value){
-        if(!loadPage){
-            loadHtml(value)
-            loadPage = true;
-            return false
-        }
-        return true;
-    }
-
-    function loadHtml(value) {
-        ajaxUtil.get({url:"/menu/treeList",data:value.field,rollback:function (res) {
-                let data = res.data.treeDatas;
-                let heads =  $("#tableList").find("thead").find("th");
-                let headArray = [];
-                for (let i=0;i < heads.length; i++){
-                    let layData = $(heads[i]).attr('lay-data');
-                    let splits = layData.replace("{","").replace("}","").replace("'","").replace("'","").split(",");
-                    let field = "";
-                    for(let item of splits){
-                        let key = item.split(":")[0];
-                        if(key == 'field'){
-                            field = item.split(":")[1];
-                        }
-                    }
-                    let node = {};
-                    let colNum =  $("#tableList").attr("treeCol");
-                    if(field == 'left'){
-                        colNum += 1;
-                        node['field'] = 'left';
-                        node['parentNode'] = -1;
-                    }else{
-                        node['field'] = field;
-                        if(colNum == i+1){
-                            node['parentNode'] = 1;
-                        }else{
-                            node['parentNode'] = 0;
-                        }
-                    }
-                    headArray.push(node);
-                }
-                let html = "";
-                for(let item of data){
-                    html +=iteretor(item,headArray,0);
-                }
-                $("#tableList").find("tbody").html(html);
-                renderList("列表","menu");
-
-            }});
-    }
-    function iteretor(data,headArray,level) {
-       let html = "";
-       let children =  data.children;
-       if(children != null && children.length > 0){
-           html += tdHtml(headArray,data,level,true);
-           for (let item of children){
-               html += iteretor(item,headArray,level +1);
-           }
-       }else{
-           html += tdHtml(headArray,data,level,false);
-       }
-       return html;
-    }
-
-    function tdHtml(headArray,data,level,hasIcon) {
-          let html = '<tr class="tree-node" node-level="'+level+'" ';
-          html += (level ==0) ?'>':'class="node_close" >'
-          for (let item of headArray){
-              if(item.parentNode == -1){
-                  html += '<td></td>';
-              }else if(item.parentNode == 1 && hasIcon){
-                  html += '<td class="parent_node_colse">';
-                  html +=data[item.field]+'</td>'
-              }else{
-                  html += '<td>'+data[item.field]+'</td>'
-              }
-          }
-          html += '</tr>';
-          return html;
-    }
-
-    function getmultipartBlank(num) {
-        let html = "";
-        if(num == 0){
-            return html;
-        }
-        for (let i = 0; i < num; i++) {
-             html += " "
-        }
-        return html;
-    }
     function tableToolEvent(table,obj) {
-
+         let data =obj.data;
+         switch (obj.event) {
+            case 'add':
+                tabAdd(tabFilter,currTabLayId,"menu-0","菜单添加","/menu/toedit?pk="+data.id+"&parentId="+data.parentId+"&appId="+$("#appId").val())
+                break;
+         }
     }
 
     function tableToolBarEvent(table,obj) {

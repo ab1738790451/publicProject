@@ -2,6 +2,7 @@ package com.woshen.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.woshen.common.base.utils.StringUtils;
 import com.woshen.common.base.utils.TreeNodeUtil;
 import com.woshen.common.baseTempl.AbstractController;
 import com.woshen.common.baseTempl.BaseService;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -40,12 +42,16 @@ public class MenuController extends AbstractController<Integer,Menu> {
 
     @Override
     public Page<Menu> loadList(Menu queryData) {
+        queryData.setStatus(DataStatus.NORMAL);
         Integer parentId = queryData.getParentId();
         if(parentId == null){
             queryData.setParentId(-1);
         }
-        queryData.setStatus(DataStatus.NORMAL);
-        return super.loadList(queryData);
+        Page<Menu> menuPage = super.loadList(queryData);
+        if(parentId == null){
+            queryData.setParentId(null);
+        }
+        return menuPage;
     }
 
 
@@ -80,5 +86,25 @@ public class MenuController extends AbstractController<Integer,Menu> {
             menus.addAll(list);
             iteratedSubitem(menus,list.stream().map(Menu::getId).collect(Collectors.toList()));
         }
+    }
+
+    @Override
+    public ModelAndView toedit(HttpServletRequest request, HttpServletResponse response, String lastLayId, Integer pk) {
+        ModelAndView mav = super.toedit(request, response, lastLayId, pk);
+        Object data = mav.getModel().get("data");
+        if(data ==null){
+            Menu menu = new Menu();
+            String parentId = request.getParameter("parentId");
+            if(StringUtils.isNotBlank(parentId)) {
+                menu.setParentId(Integer.valueOf(parentId));
+            }
+            String appId = request.getParameter("appId");
+            if(StringUtils.isNotBlank(appId)) {
+                menu.setAppId(Integer.valueOf(appId));
+            }
+                mav.addObject("data",menu);
+        }
+
+        return mav;
     }
 }
