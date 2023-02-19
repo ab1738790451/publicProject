@@ -12,6 +12,9 @@
        .main-body{
            padding: 18px;
        }
+        .node_close{
+            display: none;
+        }
     </style>
 </head>
 <body class="main-body">
@@ -69,7 +72,7 @@
                 </div>
             </div>
         <div class="layui-inline">
-            <button id="search" class="layui-btn layuiadmin-btn-list" lay-submit >
+            <button id="search" class="layui-btn layuiadmin-btn-list" lay-submit lay-filter="search" >
                 <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
             </button>
         </div>
@@ -79,11 +82,11 @@
     </div>
 
 </form>
-<table class="layui-table" id="tableList" lay-size="lg"  lay-filter="tableList"  >
+<table class="layui-table" id="tableList" lay-size="lg"  lay-filter="tableList"  treeCol="2">
     <thead>
     <tr>
         <th lay-data="{field:'left',type:'checkbox',algin:'center'}"></th>
-        <th lay-data="{field:'id'}">ID</th>
+        <th lay-data="{field:'id',hide:true}">ID</th>
         <th lay-data="{field:'title'}">名称</th>
         <th lay-data="{field:'url'}">url</th>
         <th lay-data="{field:'parentId'}">父菜单</th>
@@ -93,7 +96,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="item:${pageData.records}">
+ <!--   <tr th:each="item:${pageData.records}">
         <td></td>
         <td th:text="${item.id}"></td>
         <td th:text="${item.title}"></td>
@@ -102,7 +105,7 @@
         <td th:text="${#temporals.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
         <td th:text="${#temporals.format(item.updateTime,'yyyy-MM-dd HH:mm:ss')}"></td>
         <td></td>
-    </tr>
+    </tr>-->
     </tbody>
 </table>
 <div id="page"></div>
@@ -144,11 +147,105 @@
                 elem:'#endEndTime',
                 type:'datetime'
             })
-        renderList("列表","menu");
+        //renderList("列表","menu");
     });
 
+    let loadPage = false;
+    $(function () {
+         let data ={};
+         beforeSearch(data);
+    })
 
+    function beforeSearch(value){
+        if(!loadPage){
+            loadHtml(value)
+            loadPage = true;
+            return false
+        }
+        return true;
+    }
 
+    function loadHtml(value) {
+        ajaxUtil.get({url:"/menu/treeList",data:value.field,rollback:function (res) {
+                let data = res.data.treeDatas;
+                let heads =  $("#tableList").find("thead").find("th");
+                let headArray = [];
+                for (let i=0;i < heads.length; i++){
+                    let layData = $(heads[i]).attr('lay-data');
+                    let splits = layData.replace("{","").replace("}","").replace("'","").replace("'","").split(",");
+                    let field = "";
+                    for(let item of splits){
+                        let key = item.split(":")[0];
+                        if(key == 'field'){
+                            field = item.split(":")[1];
+                        }
+                    }
+                    let node = {};
+                    let colNum =  $("#tableList").attr("treeCol");
+                    if(field == 'left'){
+                        colNum += 1;
+                        node['field'] = 'left';
+                        node['parentNode'] = -1;
+                    }else{
+                        node['field'] = field;
+                        if(colNum == i+1){
+                            node['parentNode'] = 1;
+                        }else{
+                            node['parentNode'] = 0;
+                        }
+                    }
+                    headArray.push(node);
+                }
+                let html = "";
+                for(let item of data){
+                    html +=iteretor(item,headArray,0);
+                }
+                $("#tableList").find("tbody").html(html);
+                renderList("列表","menu");
+
+            }});
+    }
+    function iteretor(data,headArray,level) {
+       let html = "";
+       let children =  data.children;
+       if(children != null && children.length > 0){
+           html += tdHtml(headArray,data,level,true);
+           for (let item of children){
+               html += iteretor(item,headArray,level +1);
+           }
+       }else{
+           html += tdHtml(headArray,data,level,false);
+       }
+       return html;
+    }
+
+    function tdHtml(headArray,data,level,hasIcon) {
+          let html = '<tr class="tree-node" node-level="'+level+'" ';
+          html += (level ==0) ?'>':'class="node_close" >'
+          for (let item of headArray){
+              if(item.parentNode == -1){
+                  html += '<td></td>';
+              }else if(item.parentNode == 1 && hasIcon){
+                  html += '<td class="parent_node_colse">';
+                  html +=data[item.field]+'</td>'
+              }else{
+                  html += '<td>'+data[item.field]+'</td>'
+              }
+          }
+          html += '</tr>';
+          return html;
+    }
+
+    function getmultipartBlank(num) {
+        let html = "";
+        if(num == 0){
+            return html;
+        }
+        for (let i = 0; i < num; i++) {
+             html += " "
+        }
+        return html;
+    }
     function tableToolEvent(table,obj) {
 
     }

@@ -10,6 +10,7 @@ import com.woshen.service.IMenuService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -55,5 +56,10 @@ public class MenuServiceImpl extends BaseServiceImpl<Integer, MenuMapper, Menu> 
         }
         queryData.setUpdateTime(now);
         return super.dosave(queryData);
+    }
+
+    @Override
+    public List<Menu> selectAll(Menu menu) {
+        return this.getBaseMapper().selectAll(menu);
     }
 }

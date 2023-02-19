@@ -39,6 +39,6 @@ public class IndexController {
         String header = request.getHeader("X-Requested-With");
         Menu menu = new Menu();
         menu.setIsMenu("Y");
-        return new ResponseResult(new TreeNodeUtil(menuServiceImpl.selectPage(menu).getRecords()).getTreeDatas());
+        return new ResponseResult(new TreeNodeUtil(menuServiceImpl.selectAll(menu)).getTreeDatas());
     }
 }

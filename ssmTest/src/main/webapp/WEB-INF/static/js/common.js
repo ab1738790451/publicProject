@@ -21,12 +21,12 @@ function renderEdit(submitFilter,lastLayId){
 }
 
 
-function renderList(title,module) {
+function renderList(title,module,searchFilter) {
     layui.use(['form','table','laypage'],function () {
         currTable = layui.table
         moduleName = module;
         let laypage = layui.laypage;
-
+        var form = layui.form;
         currTable.on('tool(tableList)',function (obj) {
         defaultTableToolEvent(currTable,obj);
         });
@@ -51,12 +51,66 @@ function renderList(title,module) {
         title: title,
         limit: Number.MAX_VALUE,
         page: false,
-        /*done: function () {
-            relayout()
-        }*/
+        done: function () {
+           let treeCol = $("#tableList").attr("treeCol");
+           if(treeCol){
+               let cellClass = ".laytable-cell-1-0-"+treeCol;
+               const observer = new MutationObserver(function(mutations) {
+                   mutations.forEach(function(mutation) {
+                       let classs = mutation.target.classList;
+                       for (let item of classs){
+                           if(item == 'parent_node_colse'){
+                               $(mutation.target).find('i').html("&#xe623;")
+                           }else if(item == 'parent_node_open'){
+                               $(mutation.target).find('i').html("&#xe625;")
+                           }
+                       }
+                   });
+               });
+
+               $(".tree-node").each(function (index,item) {
+                    let level =  $(this).attr('node-level');
+                    if(level > 0){
+                       let tr = $(".layui-table-body tr")[index];
+                       $(tr).addClass('node_close');
+                    }
+               })
+               $(".layui-table-body "+cellClass).each(function (index,item) {
+                  let trIndex =  $(this).closest('tr').attr("data-index");
+                   let tr = $("#tableList").find("tbody").find("tr")[trIndex];
+                   let td = $(tr).find(".parent_node_colse");
+                   if(td.length > 0){
+                       let html  = $(this).html();
+                       $(this).html('<i class="layui-icon">&#xe623;</i>' + html)
+                       $(this).on('click',function () {
+                             if($(this).hasClass('parent_node_colse') || !$(this).hasClass('parent_node_open')){
+                                 $(this).removeClass('parent_node_colse');
+                                 $(this).addClass('parent_node_open');
+                                 $($(this).closest('tr').next()).removeClass('node_close');
+                             }else{
+                                 $(this).removeClass('parent_node_open');
+                                 $(this).addClass('parent_node_colse');
+                                 $($(this).closest('tr').next()).addClass('node_close');
+                             }
+                       })
+                   }
+                   observer.observe(item, { attributes: true, attributeFilter: ["class"] })
+               })
+           }
+
+        }
         });
 
         currTable.render();
+        searchFilter = (searchFilter == undefined || searchFilter.length == 0)?'search':searchFilter;
+        form.on('submit('+searchFilter+')',function (data) {
+            if (typeof beforeSearch == 'function') {
+                if (!beforeSearch(data)) {
+                    return false;
+                }
+            }
+            return true;
+        });
 
         //执行一个laypage实例
         laypage.render({
