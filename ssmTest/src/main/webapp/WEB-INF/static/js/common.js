@@ -19,16 +19,18 @@ function renderEdit(submitFilter,lastLayId){
     });
 }
 
-
+//表格初始化
 function renderList(title,module,searchFilter,done) {
     layui.use(['form','table','laypage'],function () {
         currTable = layui.table
         moduleName = module;
         let laypage = layui.laypage;
         var form = layui.form;
+        //行内工具栏注册
         currTable.on('tool(tableList)',function (obj) {
         defaultTableToolEvent(currTable,obj);
         });
+        //头部工具栏注册
         currTable.on('toolbar(tableList)',function (obj) {
         defaultTableToolBarEvent(currTable,obj);
         });
@@ -40,6 +42,7 @@ function renderList(title,module,searchFilter,done) {
             icon: 'layui-icon-layer'
         })
 
+        //表格初始化
         currTable.init('tableList', {
         id: 'tableList',
         // skin: 'line', //行边框风格
@@ -51,6 +54,7 @@ function renderList(title,module,searchFilter,done) {
         limit: Number.MAX_VALUE,
         page: false,
         done: function () {
+            //表格初始化后得回调函数
             if(typeof done == 'function'){
                 done();
             }
@@ -58,6 +62,8 @@ function renderList(title,module,searchFilter,done) {
         });
 
         currTable.render();
+
+        //列表页查询
         searchFilter = (searchFilter == undefined || searchFilter == null || searchFilter.length == 0)?'search':searchFilter;
         form.on('submit('+searchFilter+')',function (data) {
             if (typeof beforeSearch == 'function') {
@@ -68,7 +74,7 @@ function renderList(title,module,searchFilter,done) {
             return true;
         });
 
-        //执行一个laypage实例
+        //分页插件注册
         laypage.render({
             elem: 'page', //注意，这里的 test1 是 ID，不用加 # 号
             count: $("#pageTotal").val(), //数据总数，从服务端得到
@@ -78,6 +84,7 @@ function renderList(title,module,searchFilter,done) {
             layout:['prev', 'page', 'next','limit'],
         });
 
+        //上一页
         if($(".layui-laypage-prev").length != 0 && !($(".layui-laypage-prev").hasClass("layui-disabled"))){
             $(".layui-laypage-prev").on('click',function () {
                 let prePage =  $(".layui-laypage-prev").attr("data-page") +1;
@@ -87,6 +94,7 @@ function renderList(title,module,searchFilter,done) {
             })
         }
 
+        //下一页
         if($(".layui-laypage-next").length != 0 && !($(".layui-laypage-next").hasClass("layui-disabled"))){
             $(".layui-laypage-next").on('click',function () {
                 let prePage =  $(".layui-laypage-next").attr("data-page") -1 ;
@@ -96,6 +104,7 @@ function renderList(title,module,searchFilter,done) {
             })
         }
 
+        //指定页
         $("#page").find("a").each(function (index,item) {
              if(!$(this).hasClass("layui-laypage-prev") && !$(this).hasClass("layui-laypage-next")){
                  $(this).on('click',function () {
@@ -108,6 +117,7 @@ function renderList(title,module,searchFilter,done) {
              }
         })
 
+        //分页选项
         $("#page").find(".layui-laypage-limits").find("select").on('change',function (item) {
             $("#pageSize").val($(this).val());
             $("#search").click();
@@ -115,6 +125,7 @@ function renderList(title,module,searchFilter,done) {
     });
 }
 
+//树形表单初始化
 function renderTree(title,module,searchFilter,treeUrl){
     let array = $("#dataForm").serializeArray();
     let value ={};
@@ -156,6 +167,8 @@ function renderTree(title,module,searchFilter,treeUrl){
                 html +=iteretor(item,headArray,0);
             }
             $("#tableList").find("tbody").html(html);
+
+            //表格初始化
             renderList(title,module,searchFilter,function () {
                 let treeCol = $("#tableList").attr("treeCol");
                 if(treeCol){
@@ -209,6 +222,8 @@ function renderTree(title,module,searchFilter,treeUrl){
             })
         }});
 }
+
+//表格数据迭代
 function iteretor(data,headArray,level) {
     let html = "";
     let children =  data.children;
@@ -222,7 +237,7 @@ function iteretor(data,headArray,level) {
     }
     return html;
 }
-
+//组装表格行
 function tdHtml(headArray,data,level,hasIcon) {
     let html = '<tr class="tree-node" node-level="'+level+'" ';
     html += (level ==0) ?'>':'class="node_close" >'
@@ -240,9 +255,10 @@ function tdHtml(headArray,data,level,hasIcon) {
     return html;
 }
 
+//获得倍数空白字符
 function getmultipartBlank(num) {
     let html = "";
-    if(num == 0){
+    if(num ==undefined || num == null || num < 1){
         return html;
     }
     for (let i = 0; i < num *4 ; i++) {
