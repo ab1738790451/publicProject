@@ -43,6 +43,9 @@ public class Menu extends BaseEntity<Integer> implements  BaseTreeNode<Menu> {
 
     private LocalDateTime updateTime;
 
+    @TableField(exist = false)
+    private Boolean checked;
+
     @Override
     public Integer getParent() {
         return this.parentId;

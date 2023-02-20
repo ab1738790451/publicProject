@@ -273,7 +273,7 @@ function defaultTableToolBarEvent(table,obj) {
     var data = table.checkStatus(obj.config.id).data;
     switch (obj.event) {
         case "add":
-            top.tabChange(tabFilter,moduleName + "-0",'新增',"/"+moduleName+"/toEdit?lastLayId="+currTabLayId);
+            top.tabAdd(tabFilter,moduleName + "-add",'新增',"/"+moduleName+"/toEdit?lastLayId="+currTabLayId);
             break;
         case "dels":
             if(data.length == 0){

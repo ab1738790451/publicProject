@@ -117,12 +117,12 @@
             })
         laydate.render(
             {
-                elem:'#endStartTime',
+                elem:'#updateStartTime',
                 type:'datetime'
             })
         laydate.render(
             {
-                elem:'#endEndTime',
+                elem:'#updateEndTime',
                 type:'datetime'
             })
         renderList("列表","app");
@@ -137,7 +137,7 @@
               top.tabAdd(tabFilter,"menu" + "-0",'菜单管理',"/menu/list?lastLayId="+currTabLayId+"&appId="+data.id);
               break;
           case 'role':
-              top.tabAdd(tabFilter,"role" + "-0",'菜单管理',"/role/list?lastLayId="+currTabLayId+"&appId="+data.id);
+              top.tabAdd(tabFilter,"role" + "-0",'角色管理',"/role/list?lastLayId="+currTabLayId+"&appId="+data.id);
               break;
        }
     }

@@ -19,7 +19,7 @@ import java.util.Locale;
  * @Author: liuhaibo
  * @Date: 2023/2/17 15:58
  * @Version: 1.0.0
- * @Description: 描述
+ * @Description: 异常统一处理、字符串参数统一处理
  */
 @ControllerAdvice
 public class BaseControllerAdvice {

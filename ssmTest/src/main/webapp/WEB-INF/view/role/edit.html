@@ -16,7 +16,8 @@
 </head>
 <body class="main-body">
 <form class="layui-form" action="/role/dosave" id="dataForm" >
-    <input type="hidden" name="id" th:value="${data?.id}">
+    <input id="id" type="hidden" name="id" th:value="${data?.id}">
+    <input id="appId" type="hidden" name="appId"   th:value="${data?.appId}" >
 
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
@@ -26,21 +27,18 @@
             </div>
         </div>
     </div>
-    <div class="layui-form-item query-form-item">
+   <!-- <div class="layui-form-item query-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">应用id</label>
             <div class="layui-input-inline" lay-verify="requried">
                 <input type="text" name="appId"   th:value="${data?.appId}" autocomplete="off" class="layui-input" >
             </div>
         </div>
-    </div>
+    </div>-->
 
     <div class="layui-form-item query-form-item">
-        <div class="layui-inline">
-            <label class="layui-form-label">菜单ids</label>
-            <div class="layui-input-inline" lay-verify="requried">
-                <input type="text" name="menuIds"   th:value="${data?.menuIds}" autocomplete="off" class="layui-input" >
-            </div>
+        <div class="layui-inline" style="margin-left: 100px">
+           <div id="tree"></div>
         </div>
     </div>
 
@@ -61,6 +59,49 @@
        renderEdit('save','[[${lastLayId}]]');
     });
 
+    var tree
+    $(function () {
+        ajaxUtil.get({url:"/role/loadRoleMenu",data:{pk:$("#id").val(),appId:$("#appId").val()},rollback:function(res) {
+                layui.use('tree', function(){
+                    tree = layui.tree;
+                    //渲染
+                    var inst1 = tree.render({
+                        elem: '#tree'  //绑定元素
+                        ,data: res.data.treeDatas,
+                        id:"role_menu",//树索引标识
+                        showCheckbox:true,
+                        //edit:['add','update', 'del']
+                        accordion:true,
+                        showLine:true,
+                        oncheck:function (obj) {//复选框选中时
+                            //console.log(obj.data); //得到当前点击的节点数据
+                            //console.log(obj.checked); //得到当前节点的展开状态：open、close、normal
+                            //console.log(obj.elem); //得到当前节点元素
+                        }
+                    });
+                });
 
+        }})
+
+    })
+
+    function beforeSubmit(data) {
+        //获得选中的节点
+       var checkData = tree.getChecked('role_menu')
+        let menuIds =[];
+        getMenuIds(checkData,menuIds);
+        let ids = menuIds.join(",")
+        data.field.menuIds = ids;
+        return true;
+    }
+
+    function getMenuIds(data,menuIds) {
+        for(let item of data){
+            menuIds.push(item.id);
+            if(item.children && item.children.length > 0){
+                getMenuIds(item.children,menuIds);
+            }
+        }
+    }
 </script>
 </html>
