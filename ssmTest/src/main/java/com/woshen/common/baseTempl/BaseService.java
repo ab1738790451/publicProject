@@ -3,7 +3,10 @@ package com.woshen.common.baseTempl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.woshen.common.webcommon.db.entity.BaseEntity;
+
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author liuhaibo
@@ -21,4 +24,6 @@ public interface BaseService<Pk extends Serializable,T extends BaseEntity<Pk>> e
     void del(Pk... pks);
 
     Integer dosave(T queryData);
+
+    List<T> selectList(T queryData);
 }

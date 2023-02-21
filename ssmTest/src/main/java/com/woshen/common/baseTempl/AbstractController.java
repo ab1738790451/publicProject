@@ -1,14 +1,18 @@
 package com.woshen.common.baseTempl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.woshen.common.webcommon.db.entity.BaseEntity;
+import com.woshen.common.webcommon.db.service.BaseService;
 import com.woshen.common.webcommon.model.ResponseResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * @Author: liuhaibo
@@ -16,7 +20,7 @@ import java.io.Serializable;
  * @Version: 1.0.0
  * @Description: 描述
  */
-public abstract class  AbstractController<PK extends Serializable,T extends BaseEntity<PK>> {
+public abstract class AbstractController<PK extends Serializable,T extends BaseEntity<PK>> {
 
     String module;
 
@@ -47,19 +51,32 @@ public abstract class  AbstractController<PK extends Serializable,T extends Base
     @RequestMapping("list")
     public ModelAndView list(HttpServletRequest request, HttpServletResponse response,T queryData){
         ModelAndView mav = new ModelAndView(getModule() + "/list");
-        mav.addObject("pageData",this.loadList(queryData));
+        Page<T> pageData = this.loadList(queryData);
+        mav.addObject("pageData",pageData);
         mav.addObject("queryData",queryData);
+        afterList(request,response,mav,queryData,pageData);
         return mav;
+    }
+
+    public void afterList(HttpServletRequest request, HttpServletResponse response,ModelAndView mav,T queryData,Page<T> pageData){
+
     }
 
     @RequestMapping("toEdit")
     public ModelAndView toedit(HttpServletRequest request, HttpServletResponse response,String lastLayId,PK pk){
         ModelAndView modelAndView = new ModelAndView(getModule() + "/edit");
         modelAndView.addObject("lastLayId",lastLayId);
+        T data = null;
         if(pk != null) {
-            modelAndView.addObject("data", getService().getById(pk));
+            data = getService().getById(pk);
         }
+        modelAndView.addObject("data", data);
+        modelAndView.addAllObjects(afterEdit(request,response,data));
         return  modelAndView;
+    }
+
+    public Map<String,?> afterEdit(HttpServletRequest request, HttpServletResponse response, T data){
+        return null;
     }
 
     @RequestMapping("del")

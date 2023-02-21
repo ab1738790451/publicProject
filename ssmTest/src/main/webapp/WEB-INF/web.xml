@@ -25,7 +25,7 @@
          </listener>
           <filter>
               <filter-name>HttpBodyRewriteFilter</filter-name>
-              <filter-class>com.woshen.common.springweb.filter.HttpBodyRewriteFilter</filter-class>
+              <filter-class>com.woshen.common.webcommon.filter.HttpBodyRewriteFilter</filter-class>
           </filter>
           <filter-mapping>
               <filter-name>HttpBodyRewriteFilter</filter-name>
@@ -48,7 +48,7 @@
 
           <filter>
             <filter-name>LoginAuthenticationFilter</filter-name>
-            <filter-class>com.woshen.common.springweb.filter.LoginAuthenticationFilter</filter-class>
+            <filter-class>com.woshen.common.webcommon.filter.LoginAuthenticationFilter</filter-class>
           </filter>
           <filter-mapping>
             <filter-name>LoginAuthenticationFilter</filter-name>

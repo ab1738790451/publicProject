@@ -1,6 +1,6 @@
 package com.woshen.common.interceptors;
 
-import com.woshen.common.springweb.filter.wapper.LoginAuthenticationWapper;
+import com.woshen.common.webcommon.filter.wapper.LoginAuthenticationWapper;
 import com.woshen.common.webcommon.handler.AuthenticationConfigrationHanlder;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.HandlerInterceptor;

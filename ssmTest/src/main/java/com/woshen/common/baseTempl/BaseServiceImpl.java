@@ -6,17 +6,20 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.woshen.common.base.utils.BeanUtils;
 import com.woshen.common.base.utils.StringUtils;
-import com.woshen.common.beanModel.BeanUtils;
-import com.woshen.common.beanModel.PageInfo;
-import com.woshen.common.constants.DataStatus;
 import com.woshen.common.webcommon.annotation.EnableEncryption;
 import com.woshen.common.webcommon.annotation.EncryptionField;
+import com.woshen.common.webcommon.db.entity.BaseEntity;
+import com.woshen.common.webcommon.db.service.BaseService;
+import com.woshen.common.webcommon.model.DataStatus;
+import com.woshen.common.webcommon.model.PageInfo;
 import com.woshen.common.webcommon.utils.EncryptionUtils;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,7 +29,7 @@ import java.util.Map;
 *@version 1.0
 *@description
 */
-public class BaseServiceImpl<Pk extends Serializable,E extends BaseMapper<T>,T extends BaseEntity<Pk>> extends ServiceImpl<E, T> implements BaseService<Pk,T>{
+public class BaseServiceImpl<Pk extends Serializable,E extends BaseMapper<T>,T extends BaseEntity<Pk>> extends ServiceImpl<E, T> implements BaseService<Pk,T> {
 
     @Override
     public QueryWrapper<T> getBaseWrapper(T queryData) {
@@ -97,5 +100,10 @@ public class BaseServiceImpl<Pk extends Serializable,E extends BaseMapper<T>,T e
             super.updateById(queryData);
         }
         return queryData.getPk();
+    }
+
+    @Override
+    public List<T> selectList(T queryData) {
+        return list(this.getBaseWrapper(queryData));
     }
 }
