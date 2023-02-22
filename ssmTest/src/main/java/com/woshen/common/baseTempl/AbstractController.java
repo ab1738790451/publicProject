@@ -1,8 +1,6 @@
 package com.woshen.common.baseTempl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.woshen.common.webcommon.db.entity.BaseEntity;
-import com.woshen.common.webcommon.db.service.BaseService;
 import com.woshen.common.webcommon.model.ResponseResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
