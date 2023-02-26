@@ -99,6 +99,16 @@
 
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
+            <label class="layui-form-label">应用</label>
+            <div class="layui-input-inline">
+                <input th:each="item:${apps}" type="checkbox" name="appIds" th:value="${item.id}" th:title="${item.appName}" >
+            </div>
+
+        </div>
+    </div>
+
+    <div class="layui-form-item query-form-item">
+        <div class="layui-inline">
             <button id="save" class="layui-btn layuiadmin-btn-list" lay-submit  lay-filter="save">保存</button>
         </div>
     </div>

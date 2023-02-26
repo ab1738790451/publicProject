@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import com.woshen.common.baseTempl.BaseEntity;
 import com.woshen.common.constants.UserType;
 import com.woshen.common.webcommon.annotation.EnableEncryption;
@@ -91,6 +93,9 @@ public class User extends BaseEntity<Integer> {
 
     @TableField(exist = false)
     private UserType userType;
+
+    @TableField(exist = false)
+    private String appIds;
 
     @Override
     public Integer getPk() {

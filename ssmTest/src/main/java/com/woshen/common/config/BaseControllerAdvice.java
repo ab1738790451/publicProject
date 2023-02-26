@@ -32,6 +32,7 @@ public class BaseControllerAdvice {
             response.getWriter().flush();
             response.getWriter().close();
         }
+        throw new RuntimeException(e);
     }
 
     @InitBinder

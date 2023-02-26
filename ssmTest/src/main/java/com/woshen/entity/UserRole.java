@@ -7,6 +7,7 @@ import com.woshen.common.baseTempl.BaseEntity;
 import com.woshen.common.constants.UserType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
  * @since 2023-02-12
  */
 @Data
+@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
 public class UserRole extends BaseEntity<Integer> {
 
@@ -51,6 +53,10 @@ public class UserRole extends BaseEntity<Integer> {
      */
     private LocalDateTime updateTime;
 
+    /**
+     * 应用id
+     */
+    private String appIds;
 
     @Override
     public Integer getPk() {

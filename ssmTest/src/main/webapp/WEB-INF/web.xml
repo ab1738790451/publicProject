@@ -23,14 +23,7 @@
          <listener>
              <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
          </listener>
-          <filter>
-              <filter-name>HttpBodyRewriteFilter</filter-name>
-              <filter-class>com.woshen.common.webcommon.filter.HttpBodyRewriteFilter</filter-class>
-          </filter>
-          <filter-mapping>
-              <filter-name>HttpBodyRewriteFilter</filter-name>
-              <url-pattern>/*</url-pattern>
-          </filter-mapping>
+
 
             <filter>
                 <filter-name>encodingFilter</filter-name>
@@ -46,6 +39,15 @@
                 <url-pattern>/*</url-pattern>
             </filter-mapping>
 
+            <filter>
+                <filter-name>HttpBodyRewriteFilter</filter-name>
+                <filter-class>com.woshen.common.webcommon.filter.HttpBodyRewriteFilter</filter-class>
+            </filter>
+            <filter-mapping>
+                <filter-name>HttpBodyRewriteFilter</filter-name>
+                <url-pattern>/*</url-pattern>
+            </filter-mapping>
+
           <filter>
             <filter-name>LoginAuthenticationFilter</filter-name>
             <filter-class>com.woshen.common.webcommon.filter.LoginAuthenticationFilter</filter-class>
@@ -55,7 +57,7 @@
             <url-pattern>/*</url-pattern>
           </filter-mapping>
 
-        <!--  <filter>
+       <!--   <filter>
               <filter-name>writeFilter</filter-name>
               <filter-class>com.woshen.common.config.WriteFilter</filter-class>
           </filter>
