@@ -51,6 +51,9 @@ public class App extends BaseEntity<Integer> {
     @TableField("update_time")
     private LocalDateTime updateTime;
 
+    @TableField(exist = false)
+    private Boolean checked;
+
 
     @Override
     public Integer getPk() {

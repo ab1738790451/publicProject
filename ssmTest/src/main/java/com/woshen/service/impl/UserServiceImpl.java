@@ -13,6 +13,7 @@ import com.woshen.service.IUserRoleService;
 import com.woshen.service.IUserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
@@ -70,16 +71,18 @@ public class UserServiceImpl extends BaseServiceImpl<Integer, UserMapper, User> 
         }
         queryData.setUpdateTime(now);
         Integer pk = super.dosave(queryData);
-        if(id == null){
-            UserRole userRole = new UserRole();
+        UserRole userRole = new UserRole();
+        if(id == null && queryData.getUserType() == null){
+            userRole.setUserType(UserType.ORDINARY);
+        }else{
             userRole.setUserType(queryData.getUserType());
-            userRoleServiceImpl.dosave(userRole);
-        }else if(queryData.getUserType() != null){
-            UserRole userRole = new UserRole();
-            userRole.setId(id);
-            userRole.setUserType(queryData.getUserType());
-            userRoleServiceImpl.dosave(userRole);
         }
+        userRole.setId(pk);
+        userRole.setUserType(queryData.getUserType());
+        if(!CollectionUtils.isEmpty(queryData.getAppIds())){
+            userRole.setAppIds(String.join(",",queryData.getAppIds()));
+        }
+        userRoleServiceImpl.dosave(userRole);
         return pk;
     }
 

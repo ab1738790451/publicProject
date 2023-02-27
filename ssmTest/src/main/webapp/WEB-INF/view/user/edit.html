@@ -101,7 +101,7 @@
         <div class="layui-inline">
             <label class="layui-form-label">应用</label>
             <div class="layui-input-inline">
-                <input th:each="item:${apps}" type="checkbox" name="appIds" th:value="${item.id}" th:title="${item.appName}" >
+                <input th:each="item:${apps}" lay-skin="primary" type="checkbox" name="appIds" th:value="${item.id}" th:title="${item.appName}" lay-filter="appIds" th:checked="${item.checked == true}?'checked'" >
             </div>
 
         </div>
@@ -116,14 +116,31 @@
 </form>
 </body>
 <script type="text/javascript">
+    let appids = '[[${data?.appIds}]]';
     layui.use(['form','laydate'],function () {
          /* var laydate = layui.laydate;*/
           var form = layui.form;
 
-
+          if(appids.length == 0){
+              appids = new Set();
+          }else{
+              appids = new Set(JSON.parse(appids));
+          }
        renderEdit('save','[[${lastLayId}]]');
+       form.on('checkbox(appIds)',function (data) {
+           //console.log(data.elem); //得到checkbox原始DOM对象
+           let value =  data.elem.value;
+           if(data.elem.checked){
+             appids.add(value);
+           }else{
+               appids.delete(value);
+           }
+       })
     });
 
-
+    function beforeSubmit(data){
+        data.field.appIds = Array.from(appids);
+        return true;
+    }
 </script>
 </html>
