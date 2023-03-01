@@ -19,15 +19,6 @@
     <input type="hidden" name="id" th:value="${data?.id}">
     <input type="hidden" name="parentId" th:value="${data?.parentId?:-1}">
     <input type="hidden" name="appId" th:value="${data?.appId?:1}">
-    <!--<div class="layui-form-item query-form-item">
-        <div class="layui-inline">
-            <label class="layui-form-label">应用id</label>
-            <div class="layui-input-inline" lay-verify="requried">
-                <input type="text" name="appId"   th:value="${data?.appId}" autocomplete="off" class="layui-input" >
-            </div>
-        </div>
-    </div>-->
-
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">标题</label>
@@ -50,27 +41,13 @@
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">菜单类型</label>
-            <div class="layui-input-inline">
-              <!--  <select name="isMenu" lay-verify="requried">
-                    <option>请选择</option>
-                    <option value="Y">是</option>
-                    <option value="N">否</option>
-                </select>-->
+            <div class="layui-input-inline" lay-verify="requried">
                 <input type="radio" name="isMenu" value="Y" title="菜单" th:checked="${data?.isMenu == null || data?.isMenu == 'Y'}">
                 <input type="radio" name="isMenu" value="N" title="功能" th:checked="${data?.isMenu == 'N'}">
             </div>
 
         </div>
     </div>
-
-  <!--  <div class="layui-form-item query-form-item">
-        <div class="layui-inline">
-            <label class="layui-form-label">父级id</label>
-            <div class="layui-input-inline" lay-verify="requried">
-                <input type="text" name="parentId"   th:value="${data?.parentId}" autocomplete="off" class="layui-input" oninput="this.value=this.value.replace(/[^\d-]/g,'')" onproperty="this.value=this.value.replace(/[^\d-]/g,'')" maxlength="11">
-            </div>
-        </div>
-    </div>-->
 
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">

@@ -44,31 +44,24 @@
                 </div>
             </div>
 
-           <!-- <div class="layui-inline">
-                <label class="layui-form-label">父菜单id</label>
-                <div class="layui-input-inline">
-                    <input type="text" th:name="parentId"   th:value="${queryData.parentId}" autocomplete="off" class="layui-input" >
-                </div>
-            </div>-->
-
         <div class="layui-inline">
             <label class="layui-form-label">创建时间</label>
             <div class="layui-input-inline">
-                <input type="text" name="startTime" id="createStartTime"  autocomplete="off"   th:value="${#temporals.format(queryData?.queryParam['createStartTime'],'yyyy-MM-dd  HH:mm:ss')}" class="layui-input" >
+                <input type="text" name="queryParam['createStartTime']" id="createStartTime"  autocomplete="off"   th:value="${queryData?.queryParam['createStartTime']}" class="layui-input" >
             </div>
             <div class="layui-form-mid">-</div>
             <div class="layui-input-inline">
-                <input type="text" name="endTime" id="createEndTime" th:value="${#temporals.format(queryData?.queryParam['createEndTime'],'yyyy-MM-dd HH:mm:ss')}"  autocomplete="off" class="layui-input" >
+                <input type="text" name="queryParam['createEndTime']" id="createEndTime" th:value="${queryData?.queryParam['createEndTime']}"  autocomplete="off" class="layui-input" >
             </div>
         </div>
             <div class="layui-inline">
                 <label class="layui-form-label">更新时间</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="startTime" id="updateStartTime"   th:value="${#temporals.format(queryData?.queryParam['updateStartTime'],'yyyy-MM-dd  HH:mm:ss')}" autocomplete="off" class="layui-input" >
+                    <input type="text" name="queryParam['updateStartTime']" id="updateStartTime"   th:value="${queryData?.queryParam['updateStartTime']}" autocomplete="off" class="layui-input" >
                 </div>
                 <div class="layui-form-mid">-</div>
                 <div class="layui-input-inline">
-                    <input type="text" name="endTime" id="updateEndTime"  th:value="${#temporals.format(queryData?.queryParam['updateEndTime'],'yyyy-MM-dd  HH:mm:ss')}" autocomplete="off" class="layui-input" >
+                    <input type="text" name="queryParam['updateEndTime']" id="updateEndTime"  th:value="${queryData?.queryParam['updateEndTime']}" autocomplete="off" class="layui-input" >
                 </div>
             </div>
         <div class="layui-inline">
@@ -89,23 +82,14 @@
         <th lay-data="{field:'id',hide:true}">ID</th>
         <th lay-data="{field:'title'}">名称</th>
         <th lay-data="{field:'url'}">url</th>
+        <th lay-data="{field:'isMenuStr'}">是否是菜单</th>
         <th lay-data="{field:'parentId',hide:true}">父菜单</th>
-        <th lay-data="{field:'createTime'}">创建时间</th>
-        <th lay-data="{field:'updateTime'}">创建时间</th>
+        <th lay-data="{field:'createTimeStr'}">创建时间</th>
+        <th lay-data="{field:'updateTimeStr'}">创建时间</th>
         <th lay-data="{fixed:'right',title:'操作', width:200, align:'center',toolbar: '#tool'}"></th>
     </tr>
     </thead>
     <tbody>
- <!--   <tr th:each="item:${pageData.records}">
-        <td></td>
-        <td th:text="${item.id}"></td>
-        <td th:text="${item.title}"></td>
-        <td th:text="${item.url}"></td>
-        <td th:text="${item.parentId}"></td>
-        <td th:text="${#temporals.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
-        <td th:text="${#temporals.format(item.updateTime,'yyyy-MM-dd HH:mm:ss')}"></td>
-        <td></td>
-    </tr>-->
     </tbody>
 </table>
 <div id="page"></div>
@@ -158,7 +142,7 @@
          let data =obj.data;
          switch (obj.event) {
             case 'add':
-                tabAdd(tabFilter,currTabLayId,"menu-0","菜单添加","/menu/toedit?pk="+data.id+"&parentId="+data.parentId+"&appId="+$("#appId").val())
+                top.tabAdd(tabFilter,moduleName+"-add",moduleName + "新增","/menu/toEdit?lastLayId="+currTabLayId+"&parentId="+data.parentId+"&appId="+$("#appId").val())
                 break;
          }
     }

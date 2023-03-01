@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.woshen.common.baseTempl.BaseEntity;
 import com.woshen.common.webcommon.model.DataStatus;
@@ -53,6 +54,9 @@ public class App extends BaseEntity<Integer> {
 
     @TableField(exist = false)
     private Boolean checked;
+
+    @TableField(exist = false)
+    private List<Role> roles;
 
 
     @Override

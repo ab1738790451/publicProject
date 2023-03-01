@@ -1,6 +1,7 @@
 package com.woshen.controller;
 
 import com.woshen.common.base.utils.TreeNodeUtil;
+import com.woshen.common.beanModel.Bool;
 import com.woshen.common.webcommon.model.ResponseResult;
 import com.woshen.entity.Menu;
 import com.woshen.service.IMenuService;
@@ -38,7 +39,7 @@ public class IndexController {
     public ResponseResult loadMenu(HttpServletRequest request, HttpServletResponse response){
         String header = request.getHeader("X-Requested-With");
         Menu menu = new Menu();
-        menu.setIsMenu("Y");
+        menu.setIsMenu(Bool.Y);
         return new ResponseResult(new TreeNodeUtil(menuServiceImpl.selectAll(menu)).getTreeDatas());
     }
 }

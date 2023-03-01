@@ -97,6 +97,9 @@ public class User extends BaseEntity<Integer> {
     @TableField(exist = false)
     private List<String> appIds;
 
+    @TableField(exist = false)
+    private List<String> roleIds;
+
     @Override
     public Integer getPk() {
         return id;

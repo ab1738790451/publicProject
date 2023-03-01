@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import com.woshen.common.base.model.BaseTreeNode;
 import com.woshen.common.baseTempl.BaseEntity;
+import com.woshen.common.beanModel.Bool;
 import com.woshen.common.webcommon.model.DataStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -33,7 +35,7 @@ public class Menu extends BaseEntity<Integer> implements  BaseTreeNode<Menu> {
 
     private String url;
 
-    private String isMenu;
+    private Bool isMenu;
 
     private Integer parentId;
 
@@ -66,6 +68,18 @@ public class Menu extends BaseEntity<Integer> implements  BaseTreeNode<Menu> {
     @Override
     public void setChildren(List<Menu> children) {
         this.children = children;
+    }
+
+    public String getIsMenuStr(){
+        return isMenu == null?null:isMenu.getDesc();
+    }
+
+    public String getCreateTimeStr(){
+        return createTime == null?null: createTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
+    public String getUpdateTimeStr(){
+        return updateTime == null?null: updateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     @Override

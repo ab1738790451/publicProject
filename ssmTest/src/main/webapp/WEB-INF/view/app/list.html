@@ -35,21 +35,21 @@
         <div class="layui-inline">
             <label class="layui-form-label">创建时间</label>
             <div class="layui-input-inline">
-                <input type="text" name="startTime" id="createStartTime"  autocomplete="off"   th:value="${#temporals.format(queryData?.queryParam['createStartTime'],'yyyy-MM-dd  HH:mm:ss')}" class="layui-input" >
+                <input type="text" name="startTime" id="queryParam['createStartTime']"  autocomplete="off"   th:value="${queryData?.queryParam['createStartTime']}" class="layui-input" >
             </div>
             <div class="layui-form-mid">-</div>
             <div class="layui-input-inline">
-                <input type="text" name="endTime" id="createEndTime" th:value="${#temporals.format(queryData?.queryParam['createEndTime'],'yyyy-MM-dd HH:mm:ss')}"  autocomplete="off" class="layui-input" >
+                <input type="text" name="endTime" id="queryParam['createEndTime']" th:value="${queryData?.queryParam['createEndTime']}"  autocomplete="off" class="layui-input" >
             </div>
         </div>
             <div class="layui-inline">
                 <label class="layui-form-label">更新时间</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="startTime" id="updateStartTime"   th:value="${#temporals.format(queryData?.queryParam['updateStartTime'],'yyyy-MM-dd  HH:mm:ss')}" autocomplete="off" class="layui-input" >
+                    <input type="text" name="startTime" id="queryParam['updateStartTime']"   th:value="${queryData?.queryParam['updateStartTime']}" autocomplete="off" class="layui-input" >
                 </div>
                 <div class="layui-form-mid">-</div>
                 <div class="layui-input-inline">
-                    <input type="text" name="endTime" id="updateEndTime"  th:value="${#temporals.format(queryData?.queryParam['updateEndTime'],'yyyy-MM-dd  HH:mm:ss')}" autocomplete="off" class="layui-input" >
+                    <input type="text" name="endTime" id="queryParam['updateEndTime']"  th:value="${queryData?.queryParam['updateEndTime']}" autocomplete="off" class="layui-input" >
                 </div>
             </div>
         <div class="layui-inline">
