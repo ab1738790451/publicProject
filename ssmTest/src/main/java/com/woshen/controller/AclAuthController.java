@@ -4,17 +4,18 @@ import com.woshen.common.base.utils.StringUtils;
 import com.woshen.common.constants.UserType;
 import com.woshen.common.webcommon.model.DataStatus;
 import com.woshen.common.webcommon.model.ResponseResult;
-import com.woshen.entity.User;
-import com.woshen.entity.UserRole;
-import com.woshen.service.IUserRoleService;
-import com.woshen.service.IUserService;
+import com.woshen.entity.*;
+import com.woshen.service.*;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: liuhaibo
@@ -32,8 +33,17 @@ public class AclAuthController {
     @Resource
     private IUserRoleService userRoleServiceImpl;
 
+    @Resource
+    private IAppService appServiceImpl;
 
-    @RequestMapping("/getUserType")
+    @Resource
+    private IRoleService roleServiceImpl;
+
+    @Resource
+    private IMenuService menuServiceImpl;
+
+
+    @RequestMapping("/getUser")
     public ResponseResult getUserType(@RequestParam("userId")Integer userId, @RequestParam("appId")Integer appId){
         User user = userServiceImpl.getById(userId);
         if(user == null || !DataStatus.NORMAL.equals(user.getStatus())){
@@ -51,5 +61,54 @@ public class AclAuthController {
             }
         }
         return new ResponseResult(userRole.getUserType());
+    }
+
+    @RequestMapping("getUrlAccessRoles")
+    public ResponseResult getUrlAccessRoles( @RequestParam("appId")Integer appId){
+        App app = appServiceImpl.getById(appId);
+        if(app == null || !DataStatus.NORMAL.equals(app.getStatus())){
+            return new ResponseResult(500,"应用不存在或已删除");
+        }
+        Menu menu = new Menu();
+        menu.setStatus(DataStatus.NORMAL);
+        menu.setAppId(appId);
+        List<Menu> menus = menuServiceImpl.selectList(menu);
+        if(CollectionUtils.isEmpty(menus)){
+            return new ResponseResult(500,"错误的uri");
+        }
+        Role role = new Role();
+        role.setAppId(appId);
+        role.setStatus(DataStatus.NORMAL);
+        List<Role> roles = roleServiceImpl.selectList(role);
+        Map<String,String> menuRoleMapping = new HashMap<>();
+        //建立菜单于角色的映射关系
+        for (Role item:roles
+             ) {
+            String menuIds = item.getMenuIds();
+            if(StringUtils.isBlank(menuIds)){
+                continue;
+            }
+            String[] split = menuIds.split(",");
+            for (String menuId:split
+                 ) {
+                String s = menuRoleMapping.get(menuId);
+                if(StringUtils.isBlank(s)){
+                    s = item.getId().toString();
+                }else {
+                    s += ","+item.getId().toString();
+                }
+                menuRoleMapping.put(menuId,s);
+            }
+        }
+        Map<String,String> uriRoleMapping = new HashMap<>();
+        menus.stream().forEach( t ->{
+            String roleIds = menuRoleMapping.get(t.getId().toString());
+            if(StringUtils.isNotBlank(roleIds)){
+                uriRoleMapping.put(t.getUrl(),roleIds);
+            }else{
+                uriRoleMapping.put(t.getUrl(),"0");
+            }
+        });
+       return new ResponseResult(uriRoleMapping);
     }
 }

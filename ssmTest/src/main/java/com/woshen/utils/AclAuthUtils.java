@@ -35,6 +35,11 @@ public class AclAuthUtils {
         restTemplate = new RestTemplate(simpleClientHttpRequestFactory);
     }
 
+    /**
+     * 验证当前用户是否有url访问权限
+     * @param url
+     * @return
+     */
     public static boolean authUrlAccess(String url){
         if(StringUtils.isBlank(url)){
             return false;
@@ -54,7 +59,7 @@ public class AclAuthUtils {
                 HashMap<String, String> queryParam = new HashMap<>();
                 queryParam.put("userId",userId);
                 queryParam.put("appId",appId);
-                ResponseResult result = restTemplate.getForObject(aclDomain + "/acl/getUserType?userId={userId}&appId={appId}", ResponseResult.class, queryParam);
+                ResponseResult result = restTemplate.getForObject(aclDomain + "/acl/getUser?userId={userId}&appId={appId}", ResponseResult.class, queryParam);
                 if(result.getCode() != 200){
                     return false;
                 }
@@ -73,10 +78,23 @@ public class AclAuthUtils {
             }
             String[] split = url.split("\\?");
             String uri = WebUtils.getUri(split[0]);
-            String roles = RedisUtil.hashExecutor().get(AclAuthKeyNs.ACL_URL_ACCESS_ROLES, namespace, uri);
+            String roles = RedisUtil.hashExecutor().get(AclAuthKeyNs.ACL_URL_ACCESS_ROLES, appId, uri);
             if(StringUtils.isBlank(roles)){
-                return false;
-            }else if("0".equals(roles)){//0 表示没有
+                boolean b = RedisUtil.hasKey(AclAuthKeyNs.ACL_URL_ACCESS_ROLES, appId);
+                if(b){
+                    return false;
+                }
+                HashMap<String, String> queryParam = new HashMap<>();
+                queryParam.put("appId",appId);
+                ResponseResult result = restTemplate.getForObject(aclDomain + "/acl/getUrlAccessRoles?appId={appId}", ResponseResult.class, queryParam);
+                if(result.getCode() != 200){
+                    return false;
+                }
+                Map<String,String> data = (Map<String,String>)result.getData();
+                RedisUtil.hashExecutor().putAll(AclAuthKeyNs.ACL_URL_ACCESS_ROLES, appId,data);
+                roles = data.get(uri);
+            }
+            if("0".equals(roles)){//0 表示没有角色
                 return false;
             }
             String[] roleIds = roles.split(",");
