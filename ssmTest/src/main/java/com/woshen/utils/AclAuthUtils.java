@@ -50,8 +50,7 @@ public class AclAuthUtils {
             if(StringUtils.isBlank(appId)){
                 return false;
             }
-            String namespace = appId + "-" + userId;
-            String s = RedisUtil.stringExecutor().get(AclAuthKeyNs.ACL_USER, namespace);
+            String s = RedisUtil.hashExecutor().get(AclAuthKeyNs.ACL_USER, userId,appId);
             Map<String,Object> userMap;
             if(StringUtils.isBlank(s)){
                 HashMap<String, String> queryParam = new HashMap<>();
@@ -62,7 +61,7 @@ public class AclAuthUtils {
                     return false;
                 }
                 userMap = (Map) result.getData();
-                RedisUtil.stringExecutor().set(AclAuthKeyNs.ACL_USER, namespace,JSONObject.toJSONString(userMap));
+                RedisUtil.hashExecutor().put(AclAuthKeyNs.ACL_USER, userId,appId,JSONObject.toJSONString(userMap));
             }else{
                 userMap = JSONObject.parseObject(s,Map.class);
             }

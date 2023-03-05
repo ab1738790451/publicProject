@@ -66,6 +66,10 @@ public class UserController extends AbstractController<Integer, User> {
     @Override
     public Page<User> loadList(User queryData) {
         queryData.setStatus(DataStatus.NORMAL);
+        DefaultUserModel user = ThreadWebLocalUtil.getUser();
+        if(user !=null){
+            queryData.addQueryParam("currId",user.getUserId());
+        }
         return super.loadList(queryData);
     }
 

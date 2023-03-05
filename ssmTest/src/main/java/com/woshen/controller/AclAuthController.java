@@ -1,7 +1,9 @@
 package com.woshen.controller;
 
 import com.woshen.common.base.utils.StringUtils;
+import com.woshen.common.constants.AclAuthKeyNs;
 import com.woshen.common.constants.UserType;
+import com.woshen.common.redis.utils.RedisUtil;
 import com.woshen.common.webcommon.model.DataStatus;
 import com.woshen.common.webcommon.model.ResponseResult;
 import com.woshen.entity.*;
@@ -119,5 +121,11 @@ public class AclAuthController {
             }
         });
        return new ResponseResult(uriRoleMapping);
+    }
+
+    @RequestMapping("delMenuRoleMappingCache")
+    public ResponseResult delMenuRoleMappingCache(@RequestParam("appId") Integer appId){
+       RedisUtil.delKey(AclAuthKeyNs.ACL_URL_ACCESS_ROLES, appId);
+       return new ResponseResult(200,"删除成功");
     }
 }

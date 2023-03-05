@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.woshen.common.base.utils.ByteUtil;
 import com.woshen.common.base.utils.StringUtils;
 import com.woshen.common.baseTempl.BaseServiceImpl;
+import com.woshen.common.constants.AclAuthKeyNs;
 import com.woshen.common.constants.UserType;
+import com.woshen.common.redis.utils.RedisUtil;
 import com.woshen.common.webcommon.model.DataStatus;
 import com.woshen.entity.User;
 import com.woshen.entity.UserRole;
@@ -54,6 +56,10 @@ public class UserServiceImpl extends BaseServiceImpl<Integer, UserMapper, User> 
         if(StringUtils.isNotBlank(updateEndTime)){
             baseWrapper.gt("update_time",updateEndTime);
         }
+        String currId = (String)queryData.getQueryParam("currId");
+        if(StringUtils.isNotBlank(currId)){
+            baseWrapper.ne("id",Integer.valueOf(currId));
+        }
         return baseWrapper;
     }
 
@@ -83,7 +89,20 @@ public class UserServiceImpl extends BaseServiceImpl<Integer, UserMapper, User> 
             userRole.setAppIds(String.join(",",queryData.getAppIds()));
         }
         userRoleServiceImpl.dosave(userRole);
+        if(id != null){
+            RedisUtil.delKey(AclAuthKeyNs.ACL_USER,id);
+        }
         return pk;
     }
 
+    @Override
+    public void del(Integer... pks) {
+        if(pks != null && pks.length >0){
+            for (Integer pk:pks
+                 ) {
+                RedisUtil.delKey(AclAuthKeyNs.ACL_USER,pk);
+            }
+        }
+        super.del(pks);
+    }
 }
