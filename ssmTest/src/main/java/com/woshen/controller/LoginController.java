@@ -1,17 +1,23 @@
 package com.woshen.controller;
 
+import com.woshen.common.base.utils.ByteUtil;
 import com.woshen.common.base.utils.RandomUtils;
+import com.woshen.common.base.utils.StringUtils;
 import com.woshen.common.base.utils.VerifyCodeUtil;
-import com.woshen.common.springweb.utils.LoginUtils;
 import com.woshen.common.webcommon.model.DefaultUserModel;
 import com.woshen.common.webcommon.model.ResponseResult;
+import com.woshen.common.webcommon.utils.DefaultLoginUtils;
 import com.woshen.common.webcommon.utils.LocalCahceUtil;
+import com.woshen.entity.User;
+import com.woshen.service.IUserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
@@ -31,6 +37,8 @@ import java.util.Map;
 @Controller
 public class LoginController {
 
+    @Resource
+    private IUserService userServiceImpl;
 
     @RequestMapping("login")
     public ModelAndView login(){
@@ -71,14 +79,30 @@ public class LoginController {
 
     @PostMapping("doLogin")
     @ResponseBody
-    public ResponseResult doLogin(HttpServletRequest request, HttpServletResponse response, String userName, String password, String sessionId, String code){
+    public ResponseResult doLogin(HttpServletRequest request, HttpServletResponse response, String loginId, String password, String sessionId, String code){
+
+        if(StringUtils.isBlank(sessionId) || StringUtils.isBlank(loginId) || StringUtils.isBlank(password)){
+            return new ResponseResult(500,"ERROR");
+        }
         String s = LocalCahceUtil.get(sessionId);
-        if(s != null){
-            if("admin".equals(userName) && "123456".equals(password) && s.equals(code)){
+        if(s == null){
+            return new ResponseResult(500,"ERROR");
+        }
+        String errorMsg;
+        if(!s.equals(code)){
+            errorMsg = "验证码错误！";
+        }else{
+            User user = new User();
+            user.setLoginId(loginId);
+            user.setPassword(ByteUtil.byteToHexadecimal(DigestUtils.md5Digest(password.getBytes())));
+            User us = userServiceImpl.getOne(userServiceImpl.getBaseWrapper(user));
+            if(us == null){
+                errorMsg = "账号或密码错误！";
+            }else{
                 DefaultUserModel defaultUserModel = new DefaultUserModel();
-                defaultUserModel.setLoginId("admin");
-                defaultUserModel.setUserId("admin");
-                LoginUtils.setTokenToCookie(response,LoginUtils.doLogin(request,defaultUserModel));
+                defaultUserModel.setLoginId(us.getLoginId());
+                defaultUserModel.setUserId(us.getId().toString());
+                DefaultLoginUtils.setTokenToCookie(response, DefaultLoginUtils.doLogin(request,defaultUserModel));
                 return new ResponseResult(200,"SUCCESS");
             }
         }
@@ -86,7 +110,7 @@ public class LoginController {
              String newCode = RandomUtils.getRandomByLowerCaseAndNum((byte) 5);
              ByteArrayOutputStream img = VerifyCodeUtil.createImg(newCode);
              LocalCahceUtil.setAndExtT(sessionId,newCode,2*60,true);
-             return new ResponseResult(400,"登录失败",Base64.getEncoder().encodeToString(img.toByteArray()));
+             return new ResponseResult(400,errorMsg,Base64.getEncoder().encodeToString(img.toByteArray()));
          }catch (Exception e){
              e.printStackTrace();
          }

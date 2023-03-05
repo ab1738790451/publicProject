@@ -21,7 +21,7 @@
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">应用id</label>
-            <div class="layui-input-inline" lay-verify="requried">
+            <div class="layui-input-inline" lay-verify="required">
                 <input type="text" th:name="appId"   th:value="${data?.appId}" autocomplete="off" class="layui-input" oninput="this.value=this.value.replace(/[^\d]/g,'')" onproperty="this.value=this.value.replace(/[^\d]/g,'')" maxlength="11" >
             </div>
         </div>
@@ -30,7 +30,7 @@
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">角色ids</label>
-            <div class="layui-input-inline" lay-verify="requried">
+            <div class="layui-input-inline" lay-verify="required">
                 <input type="text" th:name="roleIds"   th:value="${data?.roleIds}" autocomplete="off" class="layui-input" >
             </div>
         </div>
@@ -40,7 +40,7 @@
         <div class="layui-inline">
             <label class="layui-form-label">用户类型</label>
             <div class="layui-input-inline">
-                <select name="userType" lay-verify="requried">
+                <select name="userType" lay-verify="required">
                     <option>请选择</option>
                     <option value="SUPER_ADMIN">超级管理员</option>
                     <option value="ADMIN">普通管理员</option>

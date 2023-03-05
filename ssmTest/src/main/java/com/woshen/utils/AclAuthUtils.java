@@ -12,8 +12,6 @@ import com.woshen.common.webcommon.utils.WebUtils;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +43,7 @@ public class AclAuthUtils {
             return false;
         }
         DefaultUserModel user = ThreadWebLocalUtil.getUser();
-        if(url != null){
+        if(user != null){
             String aclDomain = BaseConfigUtils.getProperty("web.acl.domain", "43.140.209.247:18801");
             String userId = user.getUserId();
             String appId = BaseConfigUtils.getProperty("web.acl.appId");
@@ -94,7 +92,8 @@ public class AclAuthUtils {
                 RedisUtil.hashExecutor().putAll(AclAuthKeyNs.ACL_URL_ACCESS_ROLES, appId,data);
                 roles = data.get(uri);
             }
-            if("0".equals(roles)){//0 表示没有角色
+            //0 表示没有角色
+            if(StringUtils.isBlank(roles) || "0".equals(roles)){
                 return false;
             }
             String[] roleIds = roles.split(",");

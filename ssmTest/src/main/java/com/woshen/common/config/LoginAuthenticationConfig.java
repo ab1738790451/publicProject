@@ -17,11 +17,12 @@ public class LoginAuthenticationConfig {
     @Bean
     public AuthenticationConfig authenticationConfig(){
         AuthenticationConfig authenticationConfig = new AuthenticationConfig();
-        authenticationConfig.enableLoginAuthentication(false);
+        authenticationConfig.enableLoginAuthentication(true);
         authenticationConfig.setTokenName("ssm_token");
         authenticationConfig.setTokenCacheKey("ssm_token");
         authenticationConfig.enableLoginRedirect(true);
         authenticationConfig.setCookieTTl(60*60);
+        authenticationConfig.setExcludeUrls("/acl/**");
         return authenticationConfig;
     }
 }

@@ -157,13 +157,19 @@
         </property>
     </bean>
 
-   <!-- <mvc:interceptors>
+    <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <mvc:exclude-mapping path="/static/**" />
-            <bean id="loginAuthenticationInterceptor" class="com.woshen.common.interceptors.LoginAuthenticationInterceptor" />
+            <mvc:exclude-mapping path="/login" />
+            <mvc:exclude-mapping path="/doLogin" />
+            <mvc:exclude-mapping path="/loadCode" />
+            <mvc:exclude-mapping path="/acl/**" />
+            <mvc:exclude-mapping path="/index" />
+            <mvc:exclude-mapping path="/loadMenu" />
+            <bean id="aclAuthInterceptor" class="com.woshen.common.interceptors.AclAuthInterceptor" />
         </mvc:interceptor>
-    </mvc:interceptors>-->
+    </mvc:interceptors>
     <!--在所有的handlemapping之后生效，必须在<mvc:annotation-driven>之后-->
     <!--<mvc:default-servlet-handler />-->
 </beans>

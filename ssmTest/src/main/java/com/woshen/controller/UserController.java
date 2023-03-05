@@ -7,7 +7,9 @@ import com.woshen.common.base.utils.StringUtils;
 import com.woshen.common.baseTempl.AbstractController;
 import com.woshen.common.constants.UserType;
 import com.woshen.common.webcommon.model.DataStatus;
+import com.woshen.common.webcommon.model.DefaultUserModel;
 import com.woshen.common.webcommon.model.ResponseResult;
+import com.woshen.common.webcommon.utils.ThreadWebLocalUtil;
 import com.woshen.entity.App;
 import com.woshen.entity.Role;
 import com.woshen.entity.User;
@@ -86,6 +88,13 @@ public class UserController extends AbstractController<Integer, User> {
                     }
                 });
             }
+        }
+        DefaultUserModel userModel = ThreadWebLocalUtil.getUser();
+        if(userModel != null){
+            User user = userServiceImpl.getById(userModel.getUserId());
+            UserRole userRole = userRoleServiceImpl.getById(user.getId());
+            resultMap.put("currUserId",user.getId());
+            resultMap.put("currUserType",userRole.getUserType());
         }
         return resultMap;
     }

@@ -1,12 +1,10 @@
 package com.woshen.common.interceptors;
 
-import com.woshen.common.webcommon.filter.wapper.LoginAuthenticationWapper;
-import com.woshen.common.webcommon.handler.AuthenticationConfigrationHanlder;
-import com.woshen.common.webcommon.utils.ThreadWebLocalUtil;
-import org.springframework.http.HttpStatus;
+import com.woshen.common.webcommon.exception.BaseRuntimeException;
+import com.woshen.common.webcommon.utils.WebUtils;
+import com.woshen.utils.AclAuthUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,6 +19,14 @@ public class AclAuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        boolean canAccess = AclAuthUtils.authUrlAccess(request.getRequestURI());
+        if(!canAccess){
+            if(WebUtils.isAjax(request)){
+                throw new BaseRuntimeException("您没有该路径的访问权限，拒绝访问");
+            }else{
+                return false;
+            }
+        }
         return true;
     }
 

@@ -50,17 +50,26 @@ public class AclAuthController {
             return new ResponseResult(500,"用户不存在或已注销");
         }
         UserRole userRole = userRoleServiceImpl.getById(userId);
+        user.setUserType(userRole.getUserType());
         if(UserType.ADMIN.equals(userRole.getUserType())){
             String appIds = userRole.getAppIds();
             if(StringUtils.isBlank(appIds)){
-                return new ResponseResult(UserType.ORDINARY);
+                user.setUserType(UserType.ORDINARY);
+            }else{
+                List<String> apps = Arrays.asList(appIds.split(","));
+                if(!apps.contains(appId.toString())){
+                    user.setUserType(UserType.ORDINARY);
+                }
             }
-            List<String> apps = Arrays.asList(appIds.split(","));
-            if(!apps.contains(appId.toString())){
-                return new ResponseResult(UserType.ORDINARY);
-            }
+
         }
-        return new ResponseResult(userRole.getUserType());
+        if(StringUtils.isNotBlank(userRole.getRoleIds())){
+            user.setRoleIds(Arrays.asList(userRole.getRoleIds().split(",")));
+        }
+        if(StringUtils.isNotBlank(userRole.getAppIds())){
+            user.setAppIds(Arrays.asList(userRole.getAppIds().split(",")));
+        }
+        return new ResponseResult(user);
     }
 
     @RequestMapping("getUrlAccessRoles")

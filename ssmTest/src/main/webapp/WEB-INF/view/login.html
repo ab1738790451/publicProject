@@ -159,16 +159,18 @@
             return false;
         }
         $.ajax({
-            url:"/doLogin?sessionId="+$("input[name=sessionId]").val()+"&userName="+userName+"&password="+password+"&code="+code,
+            url:"/doLogin?sessionId="+$("input[name=sessionId]").val()+"&loginId="+userName+"&password="+password+"&code="+code,
             type:"post",
             //data:{sessionId:$("input[name=sessionId]").val(),userName:userName,password:password,code:code},
             dataType:"json",
             success:function (res) {
                 if(res.code == 200){
                     location.href = "/index";
+                }else if(res.code == 400){
+                    layer.msg(res.message,{icon:2,time:1000});
+                    $(".login-img").attr("src","data:image/jpg;base64,"+res.data);
                 }else{
                     layer.msg('登陆失败',{icon:2,time:1000});
-                    $(".login-img").attr("src","data:image/jpg;base64,"+res.data);
                 }
             },
             error:function (res) {

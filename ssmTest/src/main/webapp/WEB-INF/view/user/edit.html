@@ -21,7 +21,7 @@
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">用户名</label>
-            <div class="layui-input-inline" lay-verify="requried">
+            <div class="layui-input-inline" lay-verify="required">
                 <input type="text" th:name="name"   th:value="${data?.name}" autocomplete="off" class="layui-input" >
             </div>
         </div>
@@ -30,7 +30,7 @@
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">用户账号</label>
-            <div class="layui-input-inline" lay-verify="requried">
+            <div class="layui-input-inline" lay-verify="required">
                 <input type="text" th:name="loginId"   th:value="${data?.loginId}" autocomplete="off" class="layui-input" maxlength="16" oninput="this.value=this.value.replace(/[^\da-zA-Z]/g,'')" onproperty="this.value=this.value.replace(/[^\da-zA-Z]/g,'')">
             </div>
         </div>
@@ -39,7 +39,7 @@
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">手机号</label>
-            <div class="layui-input-inline" lay-verify="requried">
+            <div class="layui-input-inline" lay-verify="required">
                 <input type="text" th:name="mobilePhone"   th:value="${data?.mobilePhone}" autocomplete="off" class="layui-input" >
             </div>
         </div>
@@ -48,7 +48,7 @@
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">昵称</label>
-            <div class="layui-input-inline" lay-verify="requried">
+            <div class="layui-input-inline" lay-verify="required">
                 <input type="text" th:name="nickeName"   th:value="${data?.nickeName}" autocomplete="off" class="layui-input" >
             </div>
         </div>
@@ -58,7 +58,7 @@
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">电子邮件</label>
-            <div class="layui-input-inline" lay-verify="requried">
+            <div class="layui-input-inline" lay-verify="required">
                 <input type="text" th:name="email"   th:value="${data?.email}" autocomplete="off" class="layui-input" >
             </div>
         </div>
@@ -68,7 +68,7 @@
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">头像</label>
-            <div class="layui-input-inline" lay-verify="requried">
+            <div class="layui-input-inline" lay-verify="required">
                 <input type="text" th:name="headImg"   th:value="${data?.headImg}" autocomplete="off" class="layui-input" >
             </div>
         </div>
@@ -77,9 +77,14 @@
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">密码</label>
-            <div class="layui-input-inline" lay-verify="requried">
-                <input type="text" th:name="password"   autocomplete="off" class="layui-input" oninput="this.value=this.value.replace(/[^\d]/g,'')" onproperty="this.value=this.value.replace(/[^\d]/g,'')" maxlength="11">
+            <div class="layui-input-inline" th:lay-verify="${data?.id == null?required:'' }">
+                <input type="text" th:readOnly="${data?.id != null }" id="password" th:name="password"   autocomplete="off" class="layui-input" oninput="this.value=this.value.replace(/[^\w]/g,'')" onproperty="this.value=this.value.replace(/[^\w]/g,'')" maxlength="16">
+
             </div>
+            <div class="layui-input-inline" >
+                <button type="button" id="resetPassword" class="layui-btn layuiadmin-btn-list"  lay-filter="resetPassword">重置密码</button>
+            </div>
+
         </div>
     </div>
 
@@ -87,10 +92,10 @@
         <div class="layui-inline">
             <label class="layui-form-label">用户类型</label>
             <div class="layui-input-inline">
-                <select name="userType" lay-verify="requried">
-                    <option value="ORDINARY">普通用户</option>
-                    <option value="ADMIN">普通管理员</option>
-                    <option value="SUPER_ADMIN">超级管理员</option>
+                <select name="userType" lay-verify="required">
+                    <option value="ORDINARY" th:checked="${data?.userType?.value == 'ORDINARY'}">普通用户</option>
+                    <option th:if="${currUserType.value == 'ADMIN' || currUserType.value == 'SUPER_ADMIN'}" value="ADMIN" th:checked="${data?.userType?.value == 'ADMIN'}">普通管理员</option>
+                    <option th:if="${currUserId == 1}" value="SUPER_ADMIN" th:checked="${data?.userType?.value == 'SUPER_ADMIN'}">超级管理员</option>
                 </select>
             </div>
 
@@ -107,11 +112,11 @@
         </div>
     </div>
 
-    <div class="layui-form-item query-form-item">
-        <div class="layui-inline">
-            <button id="save" class="layui-btn layuiadmin-btn-list" lay-submit  lay-filter="save">保存</button>
-        </div>
-    </div>
+
+
+    <button id="save" type="button" class="layui-btn layuiadmin-btn-list"  lay-submit=""  lay-filter="save">保存</button>
+
+
 
 </form>
 </body>
@@ -138,9 +143,27 @@
        })
     });
 
+
     function beforeSubmit(data){
         data.field.appIds = Array.from(appids);
         return true;
     }
+    let numCharPool = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+    $(function () {
+        $("#resetPassword").click(function () {
+             let len = Math.round(Math.random()*8)+8;
+             let newPassWord = "";
+             for (let i =0;i<len;i++){
+                newPassWord +=  numCharPool[Math.floor(Math.random()*62)];
+             }
+            $("#password").val(newPassWord).change();
+        })
+
+        $("#password").on('change',function () {
+            document.execCommand('selectAll');
+            document.execCommand('copy');
+            layer.msg("密码已复制");
+        })
+    })
 </script>
 </html>

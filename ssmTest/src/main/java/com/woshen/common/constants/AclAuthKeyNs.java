@@ -11,7 +11,7 @@ import com.woshen.common.redis.core.RedisKeyNs;
  */
 public enum AclAuthKeyNs implements RedisKeyNs {
     ACL_USER(60*60,RedisKeyType.STRING,"acl用户信息"),
-    ACL_URL_ACCESS_ROLES(60*60,RedisKeyType.STRING,"拥有url访问权限的角色");
+    ACL_URL_ACCESS_ROLES(60*60,RedisKeyType.HASH,"拥有url访问权限的角色");
 
     private long expire;
 
