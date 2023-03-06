@@ -1,8 +1,8 @@
-package com.woshen.utils;
+package com.woshen.acl.common.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.woshen.common.base.utils.StringUtils;
-import com.woshen.common.constants.AclAuthKeyNs;
+import com.woshen.acl.common.constants.AclAuthKeyNs;
 import com.woshen.common.redis.utils.RedisUtil;
 import com.woshen.common.webcommon.model.DefaultUserModel;
 import com.woshen.common.webcommon.model.ResponseResult;
@@ -12,6 +12,7 @@ import com.woshen.common.webcommon.utils.WebUtils;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

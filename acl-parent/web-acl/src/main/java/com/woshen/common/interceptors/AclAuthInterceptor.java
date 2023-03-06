@@ -1,8 +1,8 @@
 package com.woshen.common.interceptors;
 
+import com.woshen.acl.common.utils.AclAuthUtils;
 import com.woshen.common.webcommon.exception.BaseRuntimeException;
 import com.woshen.common.webcommon.utils.WebUtils;
-import com.woshen.utils.AclAuthUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;

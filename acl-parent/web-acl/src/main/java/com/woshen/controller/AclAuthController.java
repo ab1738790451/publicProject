@@ -1,7 +1,7 @@
 package com.woshen.controller;
 
+import com.woshen.acl.common.constants.AclAuthKeyNs;
 import com.woshen.common.base.utils.StringUtils;
-import com.woshen.common.constants.AclAuthKeyNs;
 import com.woshen.common.constants.UserType;
 import com.woshen.common.redis.utils.RedisUtil;
 import com.woshen.common.webcommon.model.DataStatus;
@@ -9,10 +9,10 @@ import com.woshen.common.webcommon.model.ResponseResult;
 import com.woshen.entity.*;
 import com.woshen.service.*;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -74,7 +74,7 @@ public class AclAuthController {
         return new ResponseResult(user);
     }
 
-    @RequestMapping("getUrlAccessRoles")
+    @PostMapping("getUrlAccessRoles")
     public ResponseResult getUrlAccessRoles( @RequestParam("appId")Integer appId){
         App app = appServiceImpl.getById(appId);
         if(app == null || !DataStatus.NORMAL.equals(app.getStatus())){
@@ -123,7 +123,7 @@ public class AclAuthController {
        return new ResponseResult(uriRoleMapping);
     }
 
-    @RequestMapping("delMenuRoleMappingCache")
+    @PostMapping("delMenuRoleMappingCache")
     public ResponseResult delMenuRoleMappingCache(@RequestParam("appId") Integer appId){
        RedisUtil.delKey(AclAuthKeyNs.ACL_URL_ACCESS_ROLES, appId);
        return new ResponseResult(200,"删除成功");

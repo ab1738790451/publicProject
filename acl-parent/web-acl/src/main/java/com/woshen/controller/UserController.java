@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.woshen.common.base.utils.StringUtils;
 import com.woshen.common.baseTempl.AbstractController;
 import com.woshen.common.constants.UserType;
+import com.woshen.common.webcommon.exception.BaseRuntimeException;
 import com.woshen.common.webcommon.model.DataStatus;
 import com.woshen.common.webcommon.model.DefaultUserModel;
 import com.woshen.common.webcommon.model.ResponseResult;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -166,4 +166,38 @@ public class UserController extends AbstractController<Integer, User> {
         userRoleServiceImpl.dosave(userRole);
         return new ResponseResult(200,"SUCCESS");
      }
+
+    @Override
+    public ResponseResult dosave(User queryData) {
+        checkAuth(queryData);
+        return super.dosave(queryData);
+    }
+
+    private void checkAuth(User user){
+         UserType userType = user.getUserType();
+         if(userType != null && userType.equals(UserType.SUPER_ADMIN)){
+             DefaultUserModel user1 = ThreadWebLocalUtil.getUser();
+             if(user1 != null && !"1".equals(user1.getUserId())){
+                 throw new BaseRuntimeException("不允许设置用户为超级管理员");
+             }
+         }
+     }
+
+    @Override
+    public ResponseResult del(Integer... pks) {
+        if(pks != null && pks.length > 0){
+            DefaultUserModel user1 = ThreadWebLocalUtil.getUser();
+            if(user1 != null && !"1".equals(user1.getUserId())){
+                UserRole userRole = new UserRole();
+                userRole.setUserType(UserType.SUPER_ADMIN);
+                QueryWrapper<UserRole> baseWrapper = userRoleServiceImpl.getBaseWrapper(userRole);
+                baseWrapper.in("id",pks);
+                List<UserRole> list = userRoleServiceImpl.list(baseWrapper);
+                if(!CollectionUtils.isEmpty(list)){
+                    throw new BaseRuntimeException("不允许删除超级管理员");
+                }
+            }
+        }
+        return super.del(pks);
+    }
 }

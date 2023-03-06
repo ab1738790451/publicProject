@@ -52,12 +52,12 @@ public abstract class AbstractController<PK extends Serializable,T extends BaseE
         Page<T> pageData = this.loadList(queryData);
         mav.addObject("pageData",pageData);
         mav.addObject("queryData",queryData);
-        afterList(request,response,mav,queryData,pageData);
+        mav.addAllObjects(afterList(request,response,queryData,pageData));
         return mav;
     }
 
-    public void afterList(HttpServletRequest request, HttpServletResponse response,ModelAndView mav,T queryData,Page<T> pageData){
-
+    public Map<String,?> afterList(HttpServletRequest request, HttpServletResponse response,T queryData,Page<T> pageData){
+         return null;
     }
 
     @RequestMapping("toEdit")

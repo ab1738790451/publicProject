@@ -42,6 +42,10 @@ public class AppServiceImpl extends BaseServiceImpl<Integer,AppMapper,App>  impl
         if(StringUtils.isNotBlank(updateEndTime)){
             baseWrapper.gt("update_time",updateEndTime);
         }
+        Integer superAppId = (Integer) queryData.getQueryParam("superAppId");
+        if(superAppId != null){
+            baseWrapper.ne("id",superAppId);
+        }
         return baseWrapper;
     }
 
