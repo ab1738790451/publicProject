@@ -9,16 +9,11 @@ import com.woshen.common.constants.UserType;
 import com.woshen.common.redis.utils.RedisUtil;
 import com.woshen.common.webcommon.model.DataStatus;
 import com.woshen.entity.User;
-import com.woshen.entity.UserRole;
 import com.woshen.mapper.UserMapper;
-import com.woshen.service.IUserRoleService;
 import com.woshen.service.IUserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
-
-import javax.annotation.Resource;
 import java.time.LocalDateTime;
 
 /**
@@ -32,8 +27,6 @@ import java.time.LocalDateTime;
 @Service
 public class UserServiceImpl extends BaseServiceImpl<Integer, UserMapper, User> implements IUserService {
 
-    @Resource
-    private IUserRoleService userRoleServiceImpl;
 
     @Override
     public QueryWrapper<User> getBaseWrapper(User queryData) {
@@ -58,7 +51,11 @@ public class UserServiceImpl extends BaseServiceImpl<Integer, UserMapper, User> 
         }
         String currId = (String)queryData.getQueryParam("currId");
         if(StringUtils.isNotBlank(currId)){
-            baseWrapper.ne("id",Integer.valueOf(currId));
+            if(!"1".equals(currId)){
+                baseWrapper.apply("id not in(select id from user_role where user_type = 'SUPER_ADMIN')");
+            }else{
+                baseWrapper.ne("id",1);
+            }
         }
         return baseWrapper;
     }
@@ -76,19 +73,10 @@ public class UserServiceImpl extends BaseServiceImpl<Integer, UserMapper, User> 
            queryData.setPassword(ByteUtil.byteToHexadecimal(DigestUtils.md5Digest(queryData.getPassword().getBytes())));
         }
         queryData.setUpdateTime(now);
-        Integer pk = super.dosave(queryData);
-        UserRole userRole = new UserRole();
         if(id == null && queryData.getUserType() == null){
-            userRole.setUserType(UserType.ORDINARY);
-        }else{
-            userRole.setUserType(queryData.getUserType());
+            queryData.setUserType(UserType.ORDINARY);
         }
-        userRole.setId(pk);
-        userRole.setUserType(queryData.getUserType());
-        if(!CollectionUtils.isEmpty(queryData.getAppIds())){
-            userRole.setAppIds(String.join(",",queryData.getAppIds()));
-        }
-        userRoleServiceImpl.dosave(userRole);
+        Integer pk = super.dosave(queryData);
         if(id != null){
             RedisUtil.delKey(AclAuthKeyNs.ACL_USER,id);
         }

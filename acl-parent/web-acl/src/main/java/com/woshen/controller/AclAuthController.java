@@ -33,9 +33,6 @@ public class AclAuthController {
     private IUserService userServiceImpl;
 
     @Resource
-    private IUserRoleService userRoleServiceImpl;
-
-    @Resource
     private IAppService appServiceImpl;
 
     @Resource
@@ -51,10 +48,8 @@ public class AclAuthController {
         if(user == null || !DataStatus.NORMAL.equals(user.getStatus())){
             return new ResponseResult(500,"用户不存在或已注销");
         }
-        UserRole userRole = userRoleServiceImpl.getById(userId);
-        user.setUserType(userRole.getUserType());
-        if(UserType.ADMIN.equals(userRole.getUserType())){
-            String appIds = userRole.getAppIds();
+        if(UserType.ADMIN.equals(user.getUserType())){
+            String appIds = user.getAppIds();
             if(StringUtils.isBlank(appIds)){
                 user.setUserType(UserType.ORDINARY);
             }else{
@@ -64,12 +59,6 @@ public class AclAuthController {
                 }
             }
 
-        }
-        if(StringUtils.isNotBlank(userRole.getRoleIds())){
-            user.setRoleIds(Arrays.asList(userRole.getRoleIds().split(",")));
-        }
-        if(StringUtils.isNotBlank(userRole.getAppIds())){
-            user.setAppIds(Arrays.asList(userRole.getAppIds().split(",")));
         }
         return new ResponseResult(user);
     }
@@ -123,9 +112,9 @@ public class AclAuthController {
        return new ResponseResult(uriRoleMapping);
     }
 
-    @PostMapping("delMenuRoleMappingCache")
+    @RequestMapping("delMenuRoleMappingCache")
     public ResponseResult delMenuRoleMappingCache(@RequestParam("appId") Integer appId){
        RedisUtil.delKey(AclAuthKeyNs.ACL_URL_ACCESS_ROLES, appId);
-       return new ResponseResult(200,"删除成功");
+       return new ResponseResult(200,"刷新成功");
     }
 }

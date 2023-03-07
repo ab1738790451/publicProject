@@ -71,7 +71,7 @@
         <th lay-data="{field:'appName'}">应用名称</th>
         <th lay-data="{field:'createTime'}">创建时间</th>
         <th lay-data="{field:'updateTime'}">创建时间</th>
-        <th lay-data="{fixed:'right',title:'操作', width:300, align:'center',toolbar: '#tool'}"></th>
+        <th lay-data="{fixed:'right',title:'操作', width:350, align:'center',toolbar: '#tool'}"></th>
     </tr>
     </thead>
     <tbody>
@@ -95,6 +95,7 @@
     <a class="layui-btn layui-btn-xs " lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-xs " lay-event="menu">菜单管理</a>
     <a class="layui-btn layui-btn-xs " lay-event="role">角色管理</a>
+    <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="refresh">刷新缓存</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs " lay-event="del">删除</a>
 </script>
 
@@ -138,6 +139,9 @@
               break;
           case 'role':
               top.tabAdd(tabFilter,"role" + "-0",'角色管理',"/role/list?lastLayId="+currTabLayId+"&appId="+data.id);
+              break;
+          case 'refresh':
+              ajaxUtil.confirmRequest("/acl/delMenuRoleMappingCache",{appId:data.id},"刷新缓存","确定要刷新缓存？");
               break;
        }
     }

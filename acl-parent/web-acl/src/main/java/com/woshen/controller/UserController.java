@@ -14,10 +14,8 @@ import com.woshen.common.webcommon.utils.ThreadWebLocalUtil;
 import com.woshen.entity.App;
 import com.woshen.entity.Role;
 import com.woshen.entity.User;
-import com.woshen.entity.UserRole;
 import com.woshen.service.IAppService;
 import com.woshen.service.IRoleService;
-import com.woshen.service.IUserRoleService;
 import com.woshen.service.IUserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
@@ -53,9 +51,6 @@ public class UserController extends AbstractController<Integer, User> {
     private IAppService appServiceImpl;
 
     @Resource
-    private IUserRoleService userRoleServiceImpl;
-
-    @Resource
     private IRoleService roleServiceImpl;
 
     @Override
@@ -81,11 +76,9 @@ public class UserController extends AbstractController<Integer, User> {
         List<App> apps = appServiceImpl.selectList(app);
         resultMap.put("apps",apps);
         if(data != null){
-            UserRole userRole = userRoleServiceImpl.getById(data.getId());
-            data.setUserType(userRole.getUserType());
-            if(StringUtils.isNotBlank(userRole.getAppIds())){
-                List<String> list = Arrays.asList(userRole.getAppIds().split(","));
-                data.setAppIds(list);
+            if(StringUtils.isNotBlank(data.getAppIds())){
+                List<String> list = Arrays.asList(data.getAppIds().split(","));
+                data.setApps(list);
                 apps.stream().forEach( t -> {
                     if(list.contains(t.getId().toString())){
                         t.setChecked(true);
@@ -96,9 +89,8 @@ public class UserController extends AbstractController<Integer, User> {
         DefaultUserModel userModel = ThreadWebLocalUtil.getUser();
         if(userModel != null){
             User user = userServiceImpl.getById(userModel.getUserId());
-            UserRole userRole = userRoleServiceImpl.getById(user.getId());
             resultMap.put("currUserId",user.getId());
-            resultMap.put("currUserType",userRole.getUserType());
+            resultMap.put("currUserType",user.getUserType());
         }
         return resultMap;
     }
@@ -111,9 +103,8 @@ public class UserController extends AbstractController<Integer, User> {
          app.setStatus(DataStatus.NORMAL);
          QueryWrapper<App> baseWrapper = appServiceImpl.getBaseWrapper(app);
          User user = userServiceImpl.getById(userId);
-         UserRole userRole = userRoleServiceImpl.getById(userId);
-         if(UserType.ADMIN.equals(userRole.getUserType())){
-             String appIds = userRole.getAppIds();
+         if(UserType.ADMIN.equals(user.getUserType())){
+             String appIds = user.getAppIds();
              if(StringUtils.isNotBlank(appIds)){
                  String[] split = appIds.split(",");
                  baseWrapper.notIn("id",split);
@@ -128,7 +119,7 @@ public class UserController extends AbstractController<Integer, User> {
          roleQueryWrapper.in("app_id",ids);
          List<Role> list = roleServiceImpl.list(roleQueryWrapper);
          if(!CollectionUtils.isEmpty(list)){
-             String roleIds = userRole.getRoleIds();
+             String roleIds = user.getRoleIds();
              if(StringUtils.isNotBlank(roleIds)){
                  List<String> roles = Arrays.asList(roleIds.split(","));
                  list.stream().forEach( t ->{
@@ -153,22 +144,15 @@ public class UserController extends AbstractController<Integer, User> {
          if(userId == null || userId < 1){
             return new ResponseResult(400,"参数错误");
         }
-         List<String> roleIds = user.getRoleIds();
-         UserRole userRole = new UserRole();
-        userRole.setId(userId);
-         String join;
-         if(CollectionUtils.isEmpty(roleIds)){
-            join = "";
-        }else{
-             join = String.join(",", roleIds);
-         }
-        userRole.setRoleIds(join);
-        userRoleServiceImpl.dosave(userRole);
+         if(StringUtils.isBlank(user.getRoleIds())){
+            user.setRoleIds("");
+        }
+        userServiceImpl.dosave(user);
         return new ResponseResult(200,"SUCCESS");
      }
 
     @Override
-    public ResponseResult dosave(User queryData) {
+    public Integer dosave(User queryData) {
         checkAuth(queryData);
         return super.dosave(queryData);
     }
@@ -188,11 +172,11 @@ public class UserController extends AbstractController<Integer, User> {
         if(pks != null && pks.length > 0){
             DefaultUserModel user1 = ThreadWebLocalUtil.getUser();
             if(user1 != null && !"1".equals(user1.getUserId())){
-                UserRole userRole = new UserRole();
-                userRole.setUserType(UserType.SUPER_ADMIN);
-                QueryWrapper<UserRole> baseWrapper = userRoleServiceImpl.getBaseWrapper(userRole);
+                User user = new User();
+                user.setUserType(UserType.SUPER_ADMIN);
+                QueryWrapper<User> baseWrapper = userServiceImpl.getBaseWrapper(user);
                 baseWrapper.in("id",pks);
-                List<UserRole> list = userRoleServiceImpl.list(baseWrapper);
+                List<User> list = userServiceImpl.list(baseWrapper);
                 if(!CollectionUtils.isEmpty(list)){
                     throw new BaseRuntimeException("不允许删除超级管理员");
                 }

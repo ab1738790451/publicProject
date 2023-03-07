@@ -91,14 +91,28 @@ public class User extends BaseEntity<Integer> {
     @TableField("update_time")
     private LocalDateTime updateTime;
 
-    @TableField(exist = false)
+    /**
+     * 角色类型 超级管理员 、普通管理员 、普通用户
+     */
+    @TableField("user_type")
     private UserType userType;
 
-    @TableField(exist = false)
-    private List<String> appIds;
+    /**
+     * 用户角色id
+     */
+    @TableField("role_ids")
+    private String roleIds;
+
+    /**
+     * 应用id
+     */
+    private String appIds;
 
     @TableField(exist = false)
-    private List<String> roleIds;
+    private List<String> apps;
+
+   /* @TableField(exist = false)
+    private List<String> roles;*/
 
     @Override
     public Integer getPk() {

@@ -24,4 +24,6 @@ public interface BaseService<Pk extends Serializable,T extends BaseEntity<Pk>> e
     Integer dosave(T queryData);
 
     List<T> selectList(T queryData);
+
+    Integer insert(T queryData);
 }

@@ -86,11 +86,17 @@ public abstract class AbstractController<PK extends Serializable,T extends BaseE
 
     @RequestMapping("dosave")
     @ResponseBody
-    public ResponseResult dosave(@RequestBody T queryData){
-        Integer pk = getService().dosave(queryData);
+    public ResponseResult save(@RequestBody T queryData){
+        Integer pk = dosave(queryData);
         int i = pk == null ? 500 : 200;
         return new ResponseResult(i,i==200?"SUCCESS":"ERROR");
     }
+
+    public Integer dosave(T queryData){
+        return getService().dosave(queryData);
+    }
+
+
     public Page<T> loadList(T queryData){
         Integer pageSize = queryData.getPageInfo().getPageSize();
         if(pageSize > 100){

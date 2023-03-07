@@ -4,6 +4,7 @@ import com.woshen.common.base.utils.ByteUtil;
 import com.woshen.common.base.utils.RandomUtils;
 import com.woshen.common.base.utils.StringUtils;
 import com.woshen.common.base.utils.VerifyCodeUtil;
+import com.woshen.common.springweb.utils.LoginUtils;
 import com.woshen.common.webcommon.model.DefaultUserModel;
 import com.woshen.common.webcommon.model.ResponseResult;
 import com.woshen.common.webcommon.utils.DefaultLoginUtils;
@@ -102,7 +103,7 @@ public class LoginController {
                 DefaultUserModel defaultUserModel = new DefaultUserModel();
                 defaultUserModel.setLoginId(us.getLoginId());
                 defaultUserModel.setUserId(us.getId().toString());
-                DefaultLoginUtils.setTokenToCookie(response, DefaultLoginUtils.doLogin(request,defaultUserModel));
+                DefaultLoginUtils.setTokenToCookie(response, LoginUtils.doLogin(request,defaultUserModel));
                 return new ResponseResult(200,"SUCCESS");
             }
         }

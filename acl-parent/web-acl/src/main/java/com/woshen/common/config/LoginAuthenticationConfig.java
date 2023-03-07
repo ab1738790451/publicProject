@@ -1,5 +1,6 @@
 package com.woshen.common.config;
 
+import com.woshen.common.springweb.handler.AuthenticationHandle;
 import com.woshen.common.webcommon.config.AuthenticationConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -19,10 +20,15 @@ public class LoginAuthenticationConfig {
         AuthenticationConfig authenticationConfig = new AuthenticationConfig();
         authenticationConfig.enableLoginAuthentication(true);
         authenticationConfig.setTokenName("ssm_token");
-        authenticationConfig.setTokenCacheKey("ssm_token");
+        authenticationConfig.setTokenCacheKey("acl_token");
         authenticationConfig.enableLoginRedirect(true);
         authenticationConfig.setCookieTTl(60*60);
         authenticationConfig.setExcludeUrls("/acl/**");
         return authenticationConfig;
+    }
+
+    @Bean
+    public AuthenticationHandle authenticationHandle(AuthenticationConfig authenticationConfig){
+          return new AuthenticationHandle(authenticationConfig);
     }
 }

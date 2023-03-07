@@ -119,4 +119,9 @@ public class BaseServiceImpl<Pk extends Serializable,E extends BaseMapper<T>,T e
     public List<T> selectList(T queryData) {
         return list(this.getBaseWrapper(queryData));
     }
+
+    @Override
+    public Integer insert(T queryData) {
+        return this.getBaseMapper().insert(queryData);
+    }
 }

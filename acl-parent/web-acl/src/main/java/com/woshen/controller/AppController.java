@@ -36,7 +36,6 @@ public class AppController extends AbstractController<Integer, App> {
     @Override
     public Page<App> loadList(App queryData) {
         queryData.setStatus(DataStatus.NORMAL);
-        queryData.addQueryParam("superAppId",1);
         return super.loadList(queryData);
     }
 }
