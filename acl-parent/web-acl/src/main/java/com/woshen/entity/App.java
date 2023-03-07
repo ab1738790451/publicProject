@@ -52,6 +52,11 @@ public class App extends BaseEntity<Integer> {
     @TableField("update_time")
     private LocalDateTime updateTime;
 
+    /**
+     * url
+     */
+    private String url;
+
     @TableField(exist = false)
     private Boolean checked;
 

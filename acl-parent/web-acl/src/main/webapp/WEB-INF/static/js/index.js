@@ -164,6 +164,9 @@ function tabAdd(filter,layId,title,url){
 var menuUtils = new (function() {
     let object = {};
     object.treeMenu = function treeMenu(el,data,template) {
+        if(!data){
+            return;
+        }
         let html = "";
         if(template){
             if(!template.title){
@@ -189,7 +192,7 @@ var menuUtils = new (function() {
         for(let item of data){
             html += temp(item,template);
         }
-        $("#"+el).html(html);
+        $("#"+el).append(html);
         element.render();
     };
 
@@ -257,12 +260,15 @@ var navUtil = new (function () {
 
     //加载菜单
     object.loadTreeNav = ((el,data,template) =>{
+        if(!data){
+            return;
+        }
         let html = "";
         template =  checkTemplate(template);
         for(let item of data){
             html += temp(item,template);
         }
-        $("#"+el).html(html);
+        $("#"+el).append(html);
         element.render();
     })
 

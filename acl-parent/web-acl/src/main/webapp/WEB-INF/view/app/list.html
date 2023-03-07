@@ -69,6 +69,7 @@
         <th lay-data="{field:'left',type:'checkbox',algin:'center'}"></th>
         <th lay-data="{field:'id'}">ID</th>
         <th lay-data="{field:'appName'}">应用名称</th>
+        <th lay-data="{field:'url'}">应用地址</th>
         <th lay-data="{field:'createTime'}">创建时间</th>
         <th lay-data="{field:'updateTime'}">创建时间</th>
         <th lay-data="{fixed:'right',title:'操作', width:350, align:'center',toolbar: '#tool'}"></th>
@@ -79,6 +80,7 @@
         <td></td>
         <td th:text="${item.id}"></td>
         <td th:text="${item.appName}"></td>
+        <td th:text="${item.url}"></td>
         <td th:text="${#temporals.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
         <td th:text="${#temporals.format(item.updateTime,'yyyy-MM-dd HH:mm:ss')}"></td>
         <td></td>

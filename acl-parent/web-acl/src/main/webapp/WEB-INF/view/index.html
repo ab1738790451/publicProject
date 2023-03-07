@@ -115,6 +115,32 @@
             padding:0;
             background-color: transparent!important;
         }
+        .fix-tab .layui-icon{
+           display: none !important;
+        }
+        .layui-col-md3{
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+        .layui-panel{
+            height: 150px;
+        }
+        .layui-panel a{
+            border: 1px solid #d2d2d2;
+            width: 150px;
+            display: inline-block;
+            margin-top: 10px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .layui-col-md{
+            width: 250px;
+            position: relative;
+            display: block;
+            box-sizing: border-box;
+            float: left;
+        }
     </style>
 </head>
 <body class="main-body">
@@ -126,21 +152,35 @@
         </div>
         <div class="head-col-right">
                 <ul class="layui-nav" lay-filter="headr-nav"  id="header-nav">
-                    <li class="layui-nav-item">
-                        <a href="javascript:;" isParent data-url="" lay-id='0'>首页</a>
-                    </li>
                 </ul>
         </div>
     </div>
     <div class="body-row">
         <div class="body-col-left">
             <ul class="layui-nav layui-nav-tree " lay-shrink="all" lay-filter="system-menu" id="tree-menu">
+                <li class="layui-nav-item layui-this">
+                    <a href="javascript:;" isParent data-url="" lay-id='0'>首页</a>
+                </li>
             </ul>
         </div>
         <div class="layui-tab body-col-right" lay-allowClose="true" lay-filter="headrTab">
             <ul class="layui-tab-title">
+                <li lay-id="0" class="layui-this fix-tab">首页</li>
             </ul>
             <div class="layui-tab-content ">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-row layui-col-space15" style="margin-top: 20px">
+                        <div th:each="item:${apps}" class="layui-col-md" style="margin-left: 20px">
+                            <div class="layui-panel layui-bg-gray">
+                                <div align="center">
+                                    <i class="layui-icon layui-icon-home" style="font-size: 50px;display: block;margin-top: 20px"></i>
+                                    <a  th:href="${item.url}"  th:text="${item.appName}" target="_blank"></a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -154,10 +194,15 @@
 
     $(function(){
            ajaxUtil.syncGet({url:"/loadMenu",rollback:function (res) {
-                  menuUtils.treeMenu("tree-menu",res.data,{ title:"title",
-                      dataUrl:"url",
-                      layId:"id",
-                      children:"children"});
+               if(res.code == 200){
+                   menuUtils.treeMenu("tree-menu",res.data,{ title:"title",
+                       dataUrl:"url",
+                       layId:"id",
+                       children:"children"});
+               }else{
+                   layer.msg(res.message,{icon:2});
+               }
+
            }});
 
             ajaxUtil.syncGet({url:"/loadMenu",rollback:function (res) {
