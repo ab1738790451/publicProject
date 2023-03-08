@@ -42,7 +42,7 @@ public class TestController {
     @RequestMapping(value = "/three1",method = RequestMethod.GET)
     public String test3(HttpServletRequest request, HttpServletResponse response, Model model){
         model.addAttribute("id",request.getParameter("id"));
-        return "testFour";
+        return "index";
     }
 
     @RequestMapping(value = "/three",method = RequestMethod.GET)

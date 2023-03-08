@@ -25,7 +25,7 @@ public class ThymeleafConfig {
     private void initThymelaefConfig(){
         if(thymeleafViewResolver != null){
             Map<String,Object> map = new HashMap<>();
-            map.put("serviceName","测试玩");
+            map.put("ADMIN_DOMAIN","/acl");
             thymeleafViewResolver.setStaticVariables(map);
         }
     }

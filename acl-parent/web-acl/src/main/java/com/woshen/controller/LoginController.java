@@ -14,10 +14,7 @@ import com.woshen.entity.User;
 import com.woshen.service.IUserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -65,8 +62,6 @@ public class LoginController {
     @ResponseBody
     public ResponseResult loadCode(String sessionId){
         try{
-            /*LocalCahceUtil.deleted(sessionId);
-            String sessionId2 = "session-"+ RandomUtils.getRandomByCase((byte) 6) + LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();*/
             String code = RandomUtils.getRandomByLowerCaseAndNum((byte) 5);
             ByteArrayOutputStream img = VerifyCodeUtil.createImg(code);
             LocalCahceUtil.setAndExtT(sessionId, code,2*60,true);
@@ -134,9 +129,14 @@ public class LoginController {
         return new ModelAndView("modifyPassword");
     }
 
-    @PostMapping("doModifyPassword")
+    @RequestMapping("doModifyPassword")
     @ResponseBody
-    public ResponseResult doModifyPassword(@RequestParam("oldPassword") String oldPassword,@RequestParam("password") String password){
+    public ResponseResult doModifyPassword(@RequestBody()Map<String,Object> params){
+        String oldPassword = (String) params.get("oldPassword");
+        String password = (String) params.get("password");
+        if(StringUtils.isBlank(oldPassword) || StringUtils.isBlank(password)){
+            return new ResponseResult(500,"参数错误");
+        }
         DefaultUserModel userModel = ThreadWebLocalUtil.getUser();
         String userId = userModel.getUserId();
         User user = userServiceImpl.getById(Integer.valueOf(userId));
@@ -147,5 +147,13 @@ public class LoginController {
         user.setPassword(ByteUtil.byteToHexadecimal(DigestUtils.md5Digest(password.getBytes())));
         userServiceImpl.dosave(user);
         return new ResponseResult(null);
+    }
+
+
+    @RequestMapping("getPassword")
+    @ResponseBody
+    public ResponseResult getPassword(){
+       ;
+        return new ResponseResult(ByteUtil.byteToHexadecimal(DigestUtils.md5Digest("123456".getBytes())));
     }
 }

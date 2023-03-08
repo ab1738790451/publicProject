@@ -138,7 +138,7 @@
         <property name="defaultEncoding" value="UTF-8"/>
     </bean>-->
     <!--freemarker 配置-->
-    <bean id="freeMarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+    <!--<bean id="freeMarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
         <property name="templateLoaderPaths" >
             <list>
                 <value>/WEB-INF/view/</value>
@@ -150,12 +150,12 @@
             <props>
                 <prop key="template_update_delay">10</prop>
                 <prop key="locale">zh_CN</prop>
-                <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop><!-- 时间格式化 -->
+                <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>&lt;!&ndash; 时间格式化 &ndash;&gt;
                 <prop key="date_format">yyyy-MM-dd</prop>
                 <prop key="number_format">#.##</prop>
             </props>
         </property>
-    </bean>
+    </bean>-->
 
     <mvc:interceptors>
         <mvc:interceptor>
@@ -167,6 +167,7 @@
             <mvc:exclude-mapping path="/acl/**" />
             <mvc:exclude-mapping path="/index" />
             <mvc:exclude-mapping path="/loadMenu" />
+            <mvc:exclude-mapping path="/getPassword" />
             <bean id="aclAuthInterceptor" class="com.woshen.common.interceptors.AclAuthInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors>

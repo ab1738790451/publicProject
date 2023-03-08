@@ -7,7 +7,7 @@
     <script src="/static/js/index.js" type="text/javascript"></script>
     <script src="/static/js/publicUtils.js" type="text/javascript"></script>
     <link href="/static/layui/css/layui.css" rel="stylesheet">
-    <title th:text="${serviceName}"></title>
+    <title th:text="${ADMIN_DOMAIN}"></title>
     <style>
         html, body{ height: 100%; }
         .mian-row{
@@ -202,7 +202,7 @@
                             <div class="layui-panel layui-bg-gray" style="height: 150px">
                                 <div align="center">
                                     <p  th:text="${item.appName}"></p>
-                                    <a class="layui-panel-a" th:href="${item.url}"   target="_blank">点击进入</a>
+                                    <a class="layui-panel-a" th:href="|${ADMIN_DOMAIN?:''}+'/'+${item.url}|"   target="_blank">点击进入</a>
                                 </div>
                             </div>
                         </div>
