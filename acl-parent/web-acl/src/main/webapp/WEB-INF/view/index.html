@@ -122,18 +122,28 @@
             padding-left: 15px;
             padding-right: 15px;
         }
-        .layui-panel{
-            height: 150px;
-        }
-        .layui-panel a{
-            border: 1px solid #d2d2d2;
+        .layui-panel-a{
+            border: 1px solid #5FB878;
             width: 150px;
             display: inline-block;
-            margin-top: 10px;
+            margin-top: 30px;
             padding-top: 10px;
             padding-bottom: 10px;
+            color: #5FB878;
         }
 
+        .layui-panel-a:hover{
+               background-color: #01AAED;
+        }
+
+        .layui-panel p{
+            font-size: 24px;
+            display: block;
+            margin-top: 20px;
+            white-space: normal;
+            word-break: break-all;
+            color: #393D49;
+        }
         .layui-col-md{
             width: 250px;
             position: relative;
@@ -152,6 +162,24 @@
         </div>
         <div class="head-col-right">
                 <ul class="layui-nav" lay-filter="headr-nav"  id="header-nav">
+                    <li class="layui-nav-item">
+                        <a class="layui-menu-body-title" href="javascript:;">
+                            <img src="//t.cn/RCzsdCq" class="layui-nav-img">
+                            社区
+                            <i class="layui-icon layui-icon-down layui-nav-more"></i>
+                        </a>
+                        <dl class="layui-nav-child layui-anim layui-anim-upbit">
+                            <dd lay-options="{id: 0}">
+                                <a class="layui-menu-body-title" href="javascript:;" data-url="/modifyPassword" lay-id="nav-0">修改密码</a>
+                            </dd>
+                            <dd lay-options="{id: 1}">
+                                <a class="layui-menu-body-title" href="javascript:;" onclick="loginOut()" >退出登录</a>
+                            </dd>
+                        </dl>
+                    </li>
+                </ul>
+                <ul class="layui-nav" lay-filter="changed-headr-nav"  id="changed-headr-nav">
+
                 </ul>
         </div>
     </div>
@@ -171,10 +199,10 @@
                 <div class="layui-tab-item layui-show">
                     <div class="layui-row layui-col-space15" style="margin-top: 20px">
                         <div th:each="item:${apps}" class="layui-col-md" style="margin-left: 20px">
-                            <div class="layui-panel layui-bg-gray">
+                            <div class="layui-panel layui-bg-gray" style="height: 150px">
                                 <div align="center">
-                                    <i class="layui-icon layui-icon-home" style="font-size: 50px;display: block;margin-top: 20px"></i>
-                                    <a  th:href="${item.url}"  th:text="${item.appName}" target="_blank"></a>
+                                    <p  th:text="${item.appName}"></p>
+                                    <a class="layui-panel-a" th:href="${item.url}"   target="_blank">点击进入</a>
                                 </div>
                             </div>
                         </div>
@@ -205,28 +233,42 @@
 
            }});
 
-            ajaxUtil.syncGet({url:"/loadMenu",rollback:function (res) {
-                    navUtil.mergeNavData(res.data,[{
-                        hasImg:true,
-                        img:'//t.cn/RCzsdCq',
-                        title:'社区',
-                        children:[{
-                            title:'登录',
-                            url:"/test/three",
-                            target:'_self'
-                        },{
-                            title:'退出',
-                            url:"/test/three",
-                            target:'_self'
-                        }]
-                    }])
-                    navUtil.loadTreeNav("header-nav",res.data,{ title:"title",
-                        dataUrl:"url",
-                        layId:"id",
-                        children:"children"});
-            }});
+                     let resData = []
+          //ajaxUtil.syncGet({url:"/loadMenu",rollback:function (res) {
+                 /* navUtil.mergeNavData(resData, [{
+                      hasImg: true,
+                      img: '//t.cn/RCzsdCq',
+                      title: '社区',
+                      children: [{
+                          title: '修改密码',
+                          url: "/test/three",
+                          target: '_self',
+                          id: "nav-0"
+                      }, {
+                          title: '退出',
+                          url: "/test/three",
+                          target: '_self',
+                          id: "nav-1"
+                      }]
+                  }])
+                  navUtil.loadTreeNav("changed-headr-nav","changed-headr-nav", resData, {
+                      title: "title",
+                      dataUrl: "url",
+                      layId: "id",
+                      children: "children"
+                  });*/
+
+             // }});
+
     })
 
+    function loginOut() {
+      ajaxUtil.post("/loginOut",null,function (res) {
+             if(res.code == 200){
+                 location.href = "/login";
+             }
+      })
+    }
 
 </script>
 </html>

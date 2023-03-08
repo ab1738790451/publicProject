@@ -3,6 +3,7 @@ var tabIsAdd = false;
 let manualDeleted = false;
 var menuFilter = "system-menu";
 var tabFilter = "headrTab";
+var navFilter = "headr-nav";
 var table;
 var currTabLayId;
 //注意：导航 依赖 element 模块，否则无法进行功能性操作
@@ -55,6 +56,18 @@ layui.use(['element','table'], function(){
         }
 
     });
+
+    //触发导航点击
+    element.on('nav('+navFilter+')', function(elem){
+        let layId =  this.getAttribute('lay-id');
+        let title = this.innerText;
+        let url = this.getAttribute('data-url');
+        if(layId){
+            tabChange(tabFilter,layId,title,url);
+        }
+
+    });
+
 
     //触发折叠面板
     element.on('collapse('+menuFilter+')', function(data){
@@ -259,7 +272,7 @@ var navUtil = new (function () {
     })
 
     //加载菜单
-    object.loadTreeNav = ((el,data,template) =>{
+    object.loadTreeNav = ((el,filter,data,template) =>{
         if(!data){
             return;
         }
@@ -268,8 +281,8 @@ var navUtil = new (function () {
         for(let item of data){
             html += temp(item,template);
         }
-        $("#"+el).append(html);
-        element.render();
+        $("#"+el).html(html);
+        element.init('nav', filter)
     })
 
     //模板处理
@@ -293,6 +306,9 @@ var navUtil = new (function () {
             if(!template.img){
                 template.img = "img";
             }
+            if(!template.layId){
+                template.layId = "layId";
+            }
         }else{
             template = {
                 title:"title",
@@ -300,7 +316,8 @@ var navUtil = new (function () {
                 children:"children",
                 target:"target",
                 hasImg:"hasImg",
-                img:"img"
+                img:"img",
+                layId:"layId",
             }
         }
         return template;

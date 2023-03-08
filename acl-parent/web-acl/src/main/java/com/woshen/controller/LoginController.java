@@ -9,12 +9,14 @@ import com.woshen.common.webcommon.model.DefaultUserModel;
 import com.woshen.common.webcommon.model.ResponseResult;
 import com.woshen.common.webcommon.utils.DefaultLoginUtils;
 import com.woshen.common.webcommon.utils.LocalCahceUtil;
+import com.woshen.common.webcommon.utils.ThreadWebLocalUtil;
 import com.woshen.entity.User;
 import com.woshen.service.IUserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -90,7 +92,7 @@ public class LoginController {
             return new ResponseResult(500,"ERROR");
         }
         String errorMsg;
-        if(!s.equals(code)){
+        if(!s.equals(code.toLowerCase())){
             errorMsg = "验证码错误！";
         }else{
             User user = new User();
@@ -116,5 +118,34 @@ public class LoginController {
              e.printStackTrace();
          }
         return new ResponseResult(500,"ERROR");
+    }
+
+    @PostMapping("loginOut")
+    @ResponseBody
+    public ResponseResult loginOut(HttpServletRequest request, HttpServletResponse response){
+        DefaultUserModel user = ThreadWebLocalUtil.getUser();
+        String userId = user.getUserId();
+        LoginUtils.tickOut(userId,null);
+        return new ResponseResult(null);
+    }
+
+    @RequestMapping("modifyPassword")
+    public ModelAndView modifyPassword(){
+        return new ModelAndView("modifyPassword");
+    }
+
+    @PostMapping("doModifyPassword")
+    @ResponseBody
+    public ResponseResult doModifyPassword(@RequestParam("oldPassword") String oldPassword,@RequestParam("password") String password){
+        DefaultUserModel userModel = ThreadWebLocalUtil.getUser();
+        String userId = userModel.getUserId();
+        User user = userServiceImpl.getById(Integer.valueOf(userId));
+        String oldSecret = ByteUtil.byteToHexadecimal(DigestUtils.md5Digest(oldPassword.getBytes()));
+        if(!user.getPassword().equals(oldSecret)){
+            return new ResponseResult(500,"您输入的旧密码有误，请重新输入");
+        }
+        user.setPassword(ByteUtil.byteToHexadecimal(DigestUtils.md5Digest(password.getBytes())));
+        userServiceImpl.dosave(user);
+        return new ResponseResult(null);
     }
 }
