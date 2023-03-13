@@ -168,6 +168,7 @@
             <mvc:exclude-mapping path="/index" />
             <mvc:exclude-mapping path="/loadMenu" />
             <mvc:exclude-mapping path="/getPassword" />
+            <mvc:exclude-mapping path="/error"/>
             <bean id="aclAuthInterceptor" class="com.woshen.common.interceptors.AclAuthInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors>

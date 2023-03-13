@@ -96,4 +96,16 @@ public class IndexController {
         menu.setAppId(-1);
         return new ResponseResult(new TreeNodeUtil(menuServiceImpl.selectAll(menu)).getTreeDatas());
     }
+
+    @RequestMapping("error")
+    public ModelAndView error(String errorMsg){
+        ModelAndView modelAndView = new ModelAndView("/error");
+        modelAndView.addObject("errorMsg",StringUtils.isBlank(errorMsg)?"系统错误！":errorMsg);
+        return modelAndView;
+    }
+
+    @RequestMapping("error2")
+    public String error(){
+        return "error2";
+    }
 }
