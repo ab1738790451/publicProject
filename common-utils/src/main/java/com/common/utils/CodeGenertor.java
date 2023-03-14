@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import com.woshen.common.webcommon.db.action.AbstractController;
+import com.woshen.common.webcommon.db.entity.BaseEntity;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -23,8 +25,9 @@ public class CodeGenertor {
 
     public static void main(String[] args) throws IOException {
         String projectPath = System.getProperty("user.dir");
+        String resourcePath = projectPath + "/src/main/resources/";
         Properties properties = new Properties();
-        properties.load(new FileInputStream(projectPath + "/src/main/resources/" +propertiesPath));
+        properties.load(new FileInputStream(resourcePath +propertiesPath));
         // 数据源配置
         DataSourceConfig dataSourceConfig = new  DataSourceConfig.Builder(properties.getProperty("datasource.url"),properties.getProperty("datasource.username"),properties.getProperty("datasource.password")).build();
         AutoGenerator mpg = new AutoGenerator(dataSourceConfig);
@@ -60,6 +63,10 @@ public class CodeGenertor {
         //sc.controllerBuilder().superClass()
         sc.addInclude(properties.getProperty("table"));
         mpg.strategy(sc.build());
+
+        TemplateConfig.Builder templateConfig = new TemplateConfig.Builder();
+        templateConfig.entity("/entity");
+        mpg.template(templateConfig.build());
         // 生成代码
         mpg.execute(new FreemarkerTemplateEngine());
     }
