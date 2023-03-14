@@ -38,7 +38,7 @@
      <context:annotation-config></context:annotation-config>
 
      <!--扫描controller bean-->
-     <context:component-scan base-package="com.woshen.controller"  use-default-filters="false" scoped-proxy="targetClass">
+     <context:component-scan base-package="com.woshen.acl.controller" use-default-filters="false" scoped-proxy="targetClass">
          <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
      </context:component-scan>
 <!--
@@ -169,7 +169,8 @@
             <mvc:exclude-mapping path="/loadMenu" />
             <mvc:exclude-mapping path="/getPassword" />
             <mvc:exclude-mapping path="/error"/>
-            <bean id="aclAuthInterceptor" class="com.woshen.common.interceptors.AclAuthInterceptor" />
+            <mvc:exclude-mapping path="/unAuth"/>
+            <bean id="aclAuthInterceptor" class="com.woshen.acl.common.interceptors.AclAuthInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors>
     <!--在所有的handlemapping之后生效，必须在<mvc:annotation-driven>之后-->

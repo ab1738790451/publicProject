@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.woshen.mapper.AppMapper">
+<mapper namespace="com.woshen.acl.mapper.AppMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.woshen.entity.App">
+    <resultMap id="BaseResultMap" type="com.woshen.acl.entity.App">
         <id column="id" property="id" />
         <result column="app_name" property="appName" />
         <result column="status" property="status" />
