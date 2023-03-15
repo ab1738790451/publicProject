@@ -4,10 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
-import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
-import com.woshen.common.webcommon.db.action.AbstractController;
-import com.woshen.common.webcommon.db.entity.BaseEntity;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -66,9 +62,17 @@ public class CodeGenertor {
 
         TemplateConfig.Builder templateConfig = new TemplateConfig.Builder();
         templateConfig.entity("/entity");
+        templateConfig.controller("/controller");
+        templateConfig.service("/service","/serviceImpl");
+        templateConfig.mapper("/mapper");
+       /* templateConfig.disable(TemplateType.ENTITY);
+        templateConfig.disable(TemplateType.CONTROLLER);
+        templateConfig.disable(TemplateType.MAPPER);
+        templateConfig.disable(TemplateType.XML);
+        templateConfig.disable(TemplateType.SERVICE);*/
         mpg.template(templateConfig.build());
         // 生成代码
-        mpg.execute(new FreemarkerTemplateEngine());
+        mpg.execute(new CustomFreemarkerTemplateEngine());
     }
 
 }
