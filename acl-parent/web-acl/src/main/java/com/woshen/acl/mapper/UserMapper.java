@@ -2,7 +2,7 @@ package com.woshen.acl.mapper;
 
 import com.woshen.acl.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * <p>
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  * @author liuhaibo
  * @since 2023-02-12
  */
-@Repository
+@Mapper
 public interface UserMapper extends BaseMapper<User> {
 
 }

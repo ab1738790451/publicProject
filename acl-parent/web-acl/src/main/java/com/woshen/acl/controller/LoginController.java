@@ -48,7 +48,7 @@ public class LoginController {
             ByteArrayOutputStream img = VerifyCodeUtil.createImg(code);
             modelAndView.addObject("codeImg",Base64.getEncoder().encodeToString(img.toByteArray()));
             String sessionId = "session-" + RandomUtils.getRandomByCase((byte) 6) + LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
-            LocalCahceUtil.set(sessionId,code,5*60);
+            LocalCahceUtil.set(sessionId,code,2*60);
             modelAndView.addObject("sessionId",sessionId);
         }catch (Exception e){
             e.printStackTrace();
@@ -153,7 +153,6 @@ public class LoginController {
     @RequestMapping("getPassword")
     @ResponseBody
     public ResponseResult getPassword(){
-       ;
         return new ResponseResult(ByteUtil.byteToHexadecimal(DigestUtils.md5Digest("123456".getBytes())));
     }
 }

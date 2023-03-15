@@ -19,7 +19,7 @@ public class LoginAuthenticationConfig {
     public AuthenticationConfig authenticationConfig(){
         AuthenticationConfig authenticationConfig = new AuthenticationConfig();
         authenticationConfig.enableLoginAuthentication(true);
-        authenticationConfig.setTokenName("ssm_token");
+        authenticationConfig.setTokenName("acl_token");
         authenticationConfig.setTokenCacheKey("acl_token");
         authenticationConfig.enableLoginRedirect(true);
         authenticationConfig.setCookieTTl(60*60);

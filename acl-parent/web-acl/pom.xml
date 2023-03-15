@@ -137,7 +137,7 @@
                 <version>9.4.8.v20180619</version>
                 <configuration>
                     <httpConnector>
-                        <port>80</port>
+                        <port>8080</port>
                         <host>localhost</host>
                     </httpConnector>
                 </configuration>

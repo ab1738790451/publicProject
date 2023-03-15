@@ -2,8 +2,7 @@ package com.woshen.acl.mapper;
 
 import com.woshen.acl.entity.Role;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.springframework.stereotype.Repository;
-
+import org.apache.ibatis.annotations.Mapper;
 /**
  * <p>
  *  Mapper 接口
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Repository;
  * @author liuhaibo
  * @since 2023-02-12
  */
-@Repository
+@Mapper
 public interface RoleMapper extends BaseMapper<Role> {
 
 }
