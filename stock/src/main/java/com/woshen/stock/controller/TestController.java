@@ -1,16 +1,10 @@
 package com.woshen.stock.controller;
 
-import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
 import com.launchdarkly.eventsource.EventSource;
-import com.woshen.common.config.SpringUtils;
 import com.woshen.stock.core.EventSourceFactory;
-import com.woshen.stock.entity.StockDayInformation;
 import com.woshen.stock.handler.StockDetailsHandler;
-import com.woshen.stock.handler.StockTimeSharingHandler;
 import com.woshen.stock.handler.StockZixuanHandler;
 import com.woshen.stock.server.MenuService;
-import com.woshen.stock.server.impl.StockTimeSharingServiceImpl;
-import com.woshen.stock.utils.StockUtils;
 import com.woshen.stock.xxljob.StockDayImformationJob;
 import com.woshen.stock.xxljob.StockRedJob;
 import com.woshen.stock.xxljob.StockTrendsJob;
@@ -20,12 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: liuhaibo

@@ -3,7 +3,7 @@ package com.woshen.stock.handler;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.launchdarkly.eventsource.MessageEvent;
-import com.woshen.common.config.SpringUtils;
+import com.woshen.common.webcommon.utils.SpringUtils;
 import com.woshen.stock.core.DfcfZixuanModel;
 import com.woshen.stock.core.EventSourceEextension;
 import com.woshen.stock.entity.Stock;
