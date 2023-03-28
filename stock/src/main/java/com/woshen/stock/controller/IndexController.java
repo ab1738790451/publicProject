@@ -29,6 +29,9 @@ public class IndexController {
     public ModelAndView index(){
         ModelAndView mav = new ModelAndView("/index");
         DefaultUserModel user = ThreadWebLocalUtil.getUser();
+        if(user != null){
+            mav.addObject("user",user);
+        }
         return mav;
     }
 
