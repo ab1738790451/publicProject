@@ -100,6 +100,11 @@ public class LoginController {
                 DefaultUserModel defaultUserModel = new DefaultUserModel();
                 defaultUserModel.setLoginId(us.getLoginId());
                 defaultUserModel.setUserId(us.getId().toString());
+                defaultUserModel.setUserName(us.getName());
+                defaultUserModel.setHeadImg(us.getHeadImg());
+                defaultUserModel.setMobilePhone(us.getMobilePhone());
+                defaultUserModel.setNickeName(us.getNickeName());
+                defaultUserModel.setEmail(us.getEmail());
                 DefaultLoginUtils.setTokenToCookie(response, LoginUtils.doLogin(request,defaultUserModel));
                 return new ResponseResult(200,"SUCCESS");
             }

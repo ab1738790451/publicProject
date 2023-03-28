@@ -54,6 +54,7 @@ public class IndexController {
         if(user != null){
             String userId = user.getUserId();
             User user1 = userServiceImpl.getById(Integer.valueOf(userId));
+            mav.addObject("user",user1);
             List<App> apps;
             if(UserType.SUPER_ADMIN.equals(user1.getUserType())){
                 App app = new App();
