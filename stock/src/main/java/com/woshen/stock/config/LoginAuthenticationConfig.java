@@ -7,8 +7,6 @@ import com.woshen.common.webcommon.utils.BaseConfigUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.FilterConfig;
-
 /**
 *@company woshen
 *@author liuhaibo

@@ -1,10 +1,12 @@
 package com.woshen.stock.controller;
 
+import com.woshen.acl.common.utils.AclAuthUtils;
 import com.woshen.common.base.utils.StringUtils;
 import com.woshen.common.base.utils.TreeNodeUtil;
 import com.woshen.common.webcommon.model.Bool;
 import com.woshen.common.webcommon.model.DefaultUserModel;
 import com.woshen.common.webcommon.model.ResponseResult;
+import com.woshen.common.webcommon.utils.BaseConfigUtils;
 import com.woshen.common.webcommon.utils.ThreadWebLocalUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,11 +38,10 @@ public class IndexController {
     }
 
 
-   /* @RequestMapping(value = "loadMenu",method = RequestMethod.GET)
+    @RequestMapping(value = "loadMenu",method = RequestMethod.GET)
     @ResponseBody
     public ResponseResult loadMenu(HttpServletRequest request, HttpServletResponse response){
-
-        return new ResponseResult(new TreeNodeUtil(menuServiceImpl.selectAll(menu)).getTreeDatas());
-    }*/
+        return new ResponseResult(AclAuthUtils.loadMenu(Integer.valueOf(BaseConfigUtils.getProperty("web.acl.appId","2"))));
+    }
 
 }
