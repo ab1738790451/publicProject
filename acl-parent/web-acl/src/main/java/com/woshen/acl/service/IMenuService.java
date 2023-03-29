@@ -13,6 +13,4 @@ import java.util.List;
  * @since 2023-02-12
  */
 public interface IMenuService extends BaseService<Integer, Menu> {
-
-    List<Menu> selectAll(Menu menu);
 }

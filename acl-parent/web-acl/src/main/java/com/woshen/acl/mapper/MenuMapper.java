@@ -17,6 +17,4 @@ import java.util.List;
 @Mapper
 public interface MenuMapper extends BaseMapper<Menu> {
 
-    @Select("select * from menu where status ='NORMAL' and is_menu = 'Y'")
-    public List<Menu> selectAll(Menu menu);
 }

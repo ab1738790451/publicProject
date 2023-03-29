@@ -1,23 +1,30 @@
 package com.woshen.acl.controller;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.woshen.acl.common.constants.AclAuthKeyNs;
-import com.woshen.common.base.utils.StringUtils;
 import com.woshen.acl.constants.UserType;
+import com.woshen.acl.entity.App;
+import com.woshen.acl.entity.Menu;
+import com.woshen.acl.entity.Role;
+import com.woshen.acl.entity.User;
+import com.woshen.acl.service.IAppService;
+import com.woshen.acl.service.IMenuService;
+import com.woshen.acl.service.IRoleService;
+import com.woshen.acl.service.IUserService;
+import com.woshen.common.base.utils.StringUtils;
+import com.woshen.common.base.utils.TreeNodeUtil;
 import com.woshen.common.redis.utils.RedisUtil;
+import com.woshen.common.webcommon.model.Bool;
 import com.woshen.common.webcommon.model.DataStatus;
 import com.woshen.common.webcommon.model.ResponseResult;
-import com.woshen.acl.entity.*;
-import com.woshen.acl.service.*;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @Author: liuhaibo
@@ -115,6 +122,80 @@ public class AclAuthController {
     @RequestMapping("delMenuRoleMappingCache")
     public ResponseResult delMenuRoleMappingCache(@RequestParam("appId") Integer appId){
        RedisUtil.delKey(AclAuthKeyNs.ACL_URL_ACCESS_ROLES, appId);
-       return new ResponseResult(200,"刷新成功");
+        List<User> list = userServiceImpl.lambdaQuery().eq(User::getStatus, DataStatus.NORMAL).apply("(user_type = 'SUPER_ADMIN' or find_in_set('" + appId + "',app_ids) )").list();
+        if(!CollectionUtils.isEmpty(list)){
+            list.stream().forEach(t -> {
+                RedisUtil.delKey(AclAuthKeyNs.ACL_USER_MENU, appId + "-" + t.getId());
+            });
+        }
+        return new ResponseResult(200,"刷新成功");
     }
+
+
+    @RequestMapping(value = "loadMenu",method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult loadMenu(@RequestParam("appId")Integer appId,@RequestParam("userId")Integer userId){
+
+        List treeDatas = null;
+        String key = appId + "-" + userId;
+        String s = RedisUtil.stringExecutor().get(AclAuthKeyNs.ACL_USER_MENU, key);
+        if(StringUtils.isNotBlank(s)){
+            treeDatas = JSONArray.parseArray(s,Menu.class);
+            return new ResponseResult(treeDatas);
+        }
+        User user = userServiceImpl.getById(Integer.valueOf(userId));
+        UserType userType = user.getUserType();
+        if(UserType.ADMIN.equals(userType)){
+            String appIds = user.getAppIds();
+            if(StringUtils.isNotBlank(appIds)){
+                String[] split = appIds.split(",");
+                if(Arrays.asList(split).contains(appId.toString())){
+                    userType = UserType.SUPER_ADMIN;
+                }
+            }
+        }
+
+        if(UserType.SUPER_ADMIN.equals(userType)){
+            Menu menu = new Menu();
+            menu.setIsMenu(Bool.Y);
+            menu.setAppId(appId);
+            menu.setStatus(DataStatus.NORMAL);
+            treeDatas = new TreeNodeUtil(menuServiceImpl.selectList(menu)).getTreeDatas();
+        }else{
+            String roleIds = user.getRoleIds();
+            if(StringUtils.isNotBlank(roleIds)){
+                String[] split = roleIds.split(",");
+                Role role = new Role();
+                role.setStatus(DataStatus.NORMAL);
+                role.setAppId(appId);
+                QueryWrapper<Role> baseWrapper = roleServiceImpl.getBaseWrapper(role);
+                baseWrapper.in("id",split);
+                List<Role> list = roleServiceImpl.list(baseWrapper);
+                Set<Integer> mIds = new HashSet<>();
+                list.stream().forEach(t->{
+                    String menuIdstr = t.getMenuIds();
+                    if(StringUtils.isNotBlank(menuIdstr)){
+                        String[] menuIds = menuIdstr.split(",");
+                        List<Integer> collect = Arrays.asList(menuIds).stream().map(item -> Integer.valueOf(item)).collect(Collectors.toList());
+                        mIds.addAll(collect);
+                    }
+                });
+                if(!CollectionUtils.isEmpty(mIds)){
+                    Menu menu = new Menu();
+                    menu.setIsMenu(Bool.Y);
+                    menu.setAppId(appId);
+                    menu.setStatus(DataStatus.NORMAL);
+                    QueryWrapper<Menu> menuQueryWrapper = menuServiceImpl.getBaseWrapper(menu);
+                    menuQueryWrapper.in("id",mIds);
+                    List<Menu> list1 = menuServiceImpl.list(menuQueryWrapper);
+                    treeDatas = new TreeNodeUtil(list1).getTreeDatas();
+                }
+            }
+        }
+        if(!CollectionUtils.isEmpty(treeDatas)){
+            RedisUtil.stringExecutor().set(AclAuthKeyNs.ACL_USER_MENU,key,JSONObject.toJSONString(treeDatas));
+        }
+        return new ResponseResult(treeDatas);
+    }
+
 }

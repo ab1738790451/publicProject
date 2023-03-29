@@ -1,16 +1,15 @@
 package com.woshen.acl.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.woshen.common.base.utils.StringUtils;
-import com.woshen.common.webcommon.db.service.impl.BaseServiceImpl;
-import com.woshen.common.webcommon.model.DataStatus;
 import com.woshen.acl.entity.Menu;
 import com.woshen.acl.mapper.MenuMapper;
 import com.woshen.acl.service.IMenuService;
+import com.woshen.common.base.utils.StringUtils;
+import com.woshen.common.webcommon.db.service.impl.BaseServiceImpl;
+import com.woshen.common.webcommon.model.DataStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * <p>
@@ -58,8 +57,4 @@ public class MenuServiceImpl extends BaseServiceImpl<Integer, MenuMapper, Menu> 
         return super.dosave(queryData);
     }
 
-    @Override
-    public List<Menu> selectAll(Menu menu) {
-        return this.getBaseMapper().selectAll(menu);
-    }
 }

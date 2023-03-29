@@ -86,7 +86,8 @@ public class IndexController {
                 Menu menu = new Menu();
                 menu.setIsMenu(Bool.Y);
                 menu.setAppId(-1);
-                return new ResponseResult(new TreeNodeUtil(menuServiceImpl.selectAll(menu)).getTreeDatas());
+                menu.setStatus(DataStatus.NORMAL);
+                return new ResponseResult(new TreeNodeUtil(menuServiceImpl.selectList(menu)).getTreeDatas());
             }else{
                 return new ResponseResult(null);
             }
@@ -94,7 +95,7 @@ public class IndexController {
         Menu menu = new Menu();
         menu.setIsMenu(Bool.Y);
         menu.setAppId(-1);
-        return new ResponseResult(new TreeNodeUtil(menuServiceImpl.selectAll(menu)).getTreeDatas());
+        return new ResponseResult(new TreeNodeUtil(menuServiceImpl.selectList(menu)).getTreeDatas());
     }
 
     @RequestMapping("/error")

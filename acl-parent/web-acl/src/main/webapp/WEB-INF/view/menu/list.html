@@ -94,12 +94,12 @@
 </table>
 <div id="page"></div>
 <script type="text/html" id="toolbar">
-    <a class="layui-btn layui-btn-xs " lay-event="add">新增</a>
+    <a class="layui-btn layui-btn-xs " lay-event="addOne">新增</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="dels">删除</a>
 </script>
 
 <script type="text/html" id="tool">
-    <a class="layui-btn layui-btn-xs " lay-event="add">新增</a>
+    <a class="layui-btn layui-btn-xs " lay-event="addOne">新增</a>
     <a class="layui-btn layui-btn-xs " lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs " lay-event="del">删除</a>
 </script>
@@ -141,14 +141,19 @@
     function tableToolEvent(table,obj) {
          let data =obj.data;
          switch (obj.event) {
-            case 'add':
-                top.tabAdd(tabFilter,moduleName+"-add",moduleName + "新增","/menu/toEdit?lastLayId="+currTabLayId+"&parentId="+data.parentId+"&appId="+$("#appId").val())
+            case 'addOne':
+                top.tabAdd(tabFilter,moduleName+"-add",moduleName + "新增","/menu/toEdit?lastLayId="+currTabLayId+"&parentId="+data.id+"&appId="+$("#appId").val())
                 break;
          }
     }
 
     function tableToolBarEvent(table,obj) {
-
+        var data = table.checkStatus(obj.config.id).data;
+        switch (obj.event) {
+            case 'addOne':
+                top.tabAdd(tabFilter,moduleName+"-add",moduleName + "新增","/menu/toEdit?lastLayId="+currTabLayId+"&appId="+$("#appId").val())
+                break;
+        }
     }
 </script>
 </html>

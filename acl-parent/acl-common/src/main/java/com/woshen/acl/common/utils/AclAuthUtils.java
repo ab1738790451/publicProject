@@ -1,8 +1,8 @@
 package com.woshen.acl.common.utils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.woshen.common.base.utils.StringUtils;
 import com.woshen.acl.common.constants.AclAuthKeyNs;
+import com.woshen.common.base.utils.StringUtils;
 import com.woshen.common.redis.utils.RedisUtil;
 import com.woshen.common.webcommon.model.DefaultUserModel;
 import com.woshen.common.webcommon.model.ResponseResult;
@@ -105,5 +105,26 @@ public class AclAuthUtils {
             }
         }
         return false;
+    }
+
+    /**
+     * 获取当前用户的菜单
+     * @param appId
+     * @return
+     */
+    public static List<Map<String,Object>> loadMenu(Integer appId){
+        DefaultUserModel user = ThreadWebLocalUtil.getUser();
+        if(user != null){
+            String userId = user.getUserId();
+            HashMap<String, String> queryParam = new HashMap<>();
+            queryParam.put("userId",userId);
+            queryParam.put("appId",appId.toString());
+            String aclDomain = BaseConfigUtils.getProperty("web.acl.domain", "43.140.209.247:18801");
+            ResponseResult result = restTemplate.getForObject(aclDomain + "/acl/loadMenu?userId={userId}&appId={appId}", ResponseResult.class, queryParam);
+            if(result.getCode() == 200){
+                return (List<Map<String,Object>>) result.getData();
+            }
+        }
+        return null;
     }
 }
