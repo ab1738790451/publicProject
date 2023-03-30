@@ -46,6 +46,9 @@ public class AclAuthUtils {
         DefaultUserModel user = ThreadWebLocalUtil.getUser();
         if(user != null){
             String aclDomain = BaseConfigUtils.getProperty("web.acl.domain", "43.140.209.247:18801");
+            if(!aclDomain.trim().startsWith("http")){
+                aclDomain = "http://" + aclDomain;
+            }
             String userId = user.getUserId();
             String appId = BaseConfigUtils.getProperty("web.acl.appId");
             if(StringUtils.isBlank(appId)){
@@ -120,6 +123,9 @@ public class AclAuthUtils {
             queryParam.put("userId",userId);
             queryParam.put("appId",appId.toString());
             String aclDomain = BaseConfigUtils.getProperty("web.acl.domain", "43.140.209.247:18801");
+            if(!aclDomain.trim().startsWith("http")){
+                aclDomain = "http://" + aclDomain;
+            }
             ResponseResult result = restTemplate.getForObject(aclDomain + "/acl/loadMenu?userId={userId}&appId={appId}", ResponseResult.class, queryParam);
             if(result.getCode() == 200){
                 return (List<Map<String,Object>>) result.getData();
