@@ -1,23 +1,22 @@
 package com.woshen.acl.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.woshen.common.base.utils.StringUtils;
-import com.woshen.common.base.utils.TreeNodeUtil;
 import com.woshen.acl.constants.UserType;
-import com.woshen.common.webcommon.model.Bool;
-import com.woshen.common.webcommon.model.DataStatus;
-import com.woshen.common.webcommon.model.DefaultUserModel;
-import com.woshen.common.webcommon.model.ResponseResult;
-import com.woshen.common.webcommon.utils.ThreadWebLocalUtil;
 import com.woshen.acl.entity.App;
 import com.woshen.acl.entity.Menu;
 import com.woshen.acl.entity.User;
 import com.woshen.acl.service.IAppService;
 import com.woshen.acl.service.IMenuService;
 import com.woshen.acl.service.IUserService;
+import com.woshen.common.base.utils.StringUtils;
+import com.woshen.common.base.utils.TreeNodeUtil;
+import com.woshen.common.webcommon.model.Bool;
+import com.woshen.common.webcommon.model.DataStatus;
+import com.woshen.common.webcommon.model.DefaultUserModel;
+import com.woshen.common.webcommon.model.ResponseResult;
+import com.woshen.common.webcommon.utils.ThreadWebLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -49,7 +48,7 @@ public class IndexController {
 
     @RequestMapping("index")
     public ModelAndView index(){
-        ModelAndView mav = new ModelAndView("/index");
+        ModelAndView mav = new ModelAndView("index");
         DefaultUserModel user = ThreadWebLocalUtil.getUser();
         if(user != null){
             String userId = user.getUserId();
@@ -100,7 +99,7 @@ public class IndexController {
 
     @RequestMapping("/error")
     public ModelAndView error(String errorMsg){
-        ModelAndView modelAndView = new ModelAndView("/error");
+        ModelAndView modelAndView = new ModelAndView("error");
         modelAndView.addObject("errorMsg",StringUtils.isBlank(errorMsg)?"系统错误！":errorMsg);
         return modelAndView;
     }

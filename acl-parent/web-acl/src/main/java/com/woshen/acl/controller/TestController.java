@@ -35,7 +35,7 @@ public class TestController {
         System.err.println("borwserType:"+WebUtils.getBrowserType(request));
         System.err.println("borwserName:"+WebUtils.getBrowserName(request));
         System.err.println("ip:"+WebUtils.getIpAddress(request));
-        return new ModelAndView("/index");
+        return new ModelAndView("index");
     }
 
 
@@ -55,7 +55,7 @@ public class TestController {
 
     @RequestMapping(value = "four",method = RequestMethod.GET)
     public ModelAndView test4(HttpServletRequest request,HttpServletResponse response){
-        ModelAndView mav = new ModelAndView("/test");
+        ModelAndView mav = new ModelAndView("test");
        /* File resourceAsFile = Resources.getResourceAsFile("d/ff");
         Resources.getResourceAsStream("555");
         SqlSessionFactory build = new SqlSessionFactoryBuilder().build(new FileInputStream(resourceAsFile));*/
@@ -84,7 +84,7 @@ public class TestController {
     @RequestMapping("toEdit")
     @ResponseBody
     public ModelAndView toEdit(HttpServletRequest request,HttpServletResponse response,Integer lastLayId,Integer id){
-        ModelAndView modelAndView = new ModelAndView("/testFour");
+        ModelAndView modelAndView = new ModelAndView("testFour");
         modelAndView.addObject("lastLayId",lastLayId);
         modelAndView.addObject("id",id);
         return  modelAndView;

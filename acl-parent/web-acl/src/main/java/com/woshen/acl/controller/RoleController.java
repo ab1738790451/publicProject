@@ -31,7 +31,7 @@ import java.util.List;
  * @since 2023-02-12
  */
 @Controller
-@RequestMapping("/role")
+@RequestMapping("role")
 public class RoleController extends AbstractController<Integer, Role> {
 
     @Resource

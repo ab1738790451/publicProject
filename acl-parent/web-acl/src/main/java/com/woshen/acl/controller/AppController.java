@@ -19,7 +19,7 @@ import javax.annotation.Resource;
  * @since 2023-02-12
  */
 @Controller
-@RequestMapping("/app")
+@RequestMapping("app")
 public class AppController extends AbstractController<Integer, App> {
 
     @Resource

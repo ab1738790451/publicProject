@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
  * @since 2023-02-12
  */
 @Controller
-@RequestMapping("/user")
+@RequestMapping("user")
 public class UserController extends AbstractController<Integer, User> {
 
     @Resource

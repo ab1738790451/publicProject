@@ -96,9 +96,17 @@
         <property name="contentType" value="text/html;charset=UTF-8"/>
     </bean>-->
 
-    <!-- thymeleaf模板解析器  -->
-    <bean id="templateResolver" class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
+    <!-- thymeleaf模板解析器 旧 -->
+ <!--   <bean id="templateResolver" class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
         <constructor-arg ref="servletContext"/>
+        <property name="prefix" value="/WEB-INF/view/" />
+        <property name="suffix" value=".html" />
+        <property name="templateMode" value="HTML5" />
+        <property name="cacheable" value="false" />
+        <property name="characterEncoding" value="UTF-8"/>
+    </bean>-->
+    <!-- thymeleaf模板解析器 新 -->
+    <bean id="templateResolver" class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
         <property name="prefix" value="/WEB-INF/view/" />
         <property name="suffix" value=".html" />
         <property name="templateMode" value="HTML5" />
@@ -116,10 +124,15 @@
     </bean>
 
     <!--thymeleaf视图解析器-->
-    <bean id="thymeleafViewResolver" class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
+   <!-- <bean id="thymeleafViewResolver" class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
         <property name="templateEngine" ref="templateEngine" />
         <property name="characterEncoding"  value="UTF-8" />
-    </bean>
+        <property name="staticVariables" >
+            <props>
+                <prop key="BASE_ADMIN_DOMAIN">www-test.acl.woshen.com</prop>
+            </props>
+        </property>
+    </bean>-->
 
     <!--文件上传必须-->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
