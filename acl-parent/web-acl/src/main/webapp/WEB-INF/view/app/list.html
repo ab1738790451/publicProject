@@ -35,21 +35,21 @@
         <div class="layui-inline">
             <label class="layui-form-label">创建时间</label>
             <div class="layui-input-inline">
-                <input type="text" name="startTime" id="queryParam['createStartTime']"  autocomplete="off"   th:value="${queryData?.queryParam['createStartTime']}" class="layui-input" >
+                <input type="text" name="queryParam['createStartTime']" id="createStartTime"  autocomplete="off"   th:value="${queryData?.queryParam['createStartTime']}" class="layui-input" >
             </div>
             <div class="layui-form-mid">-</div>
             <div class="layui-input-inline">
-                <input type="text" name="endTime" id="queryParam['createEndTime']" th:value="${queryData?.queryParam['createEndTime']}"  autocomplete="off" class="layui-input" >
+                <input type="text" name="queryParam['createEndTime']" id="createEndTime" th:value="${queryData?.queryParam['createEndTime']}"  autocomplete="off" class="layui-input" >
             </div>
         </div>
             <div class="layui-inline">
                 <label class="layui-form-label">更新时间</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="startTime" id="queryParam['updateStartTime']"   th:value="${queryData?.queryParam['updateStartTime']}" autocomplete="off" class="layui-input" >
+                    <input type="text" name="queryParam['updateStartTime']" id="updateStartTime"   th:value="${queryData?.queryParam['updateStartTime']}" autocomplete="off" class="layui-input" >
                 </div>
                 <div class="layui-form-mid">-</div>
                 <div class="layui-input-inline">
-                    <input type="text" name="endTime" id="queryParam['updateEndTime']"  th:value="${queryData?.queryParam['updateEndTime']}" autocomplete="off" class="layui-input" >
+                    <input type="text" name="queryParam['updateEndTime']" id="updateEndTime"  th:value="${queryData?.queryParam['updateEndTime']}" autocomplete="off" class="layui-input" >
                 </div>
             </div>
         <div class="layui-inline">
@@ -73,7 +73,7 @@
         <th lay-data="{field:'appName'}">应用名称</th>
         <th lay-data="{field:'url'}">应用地址</th>
         <th lay-data="{field:'createTime'}">创建时间</th>
-        <th lay-data="{field:'updateTime'}">创建时间</th>
+        <th lay-data="{field:'updateTime'}">更新时间</th>
         <th lay-data="{fixed:'right',title:'操作', width:350, align:'center',toolbar: '#tool'}"></th>
     </tr>
     </thead>

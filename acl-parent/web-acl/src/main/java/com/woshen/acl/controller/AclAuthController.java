@@ -168,6 +168,7 @@ public class AclAuthController {
             menu.setIsMenu(Bool.Y);
             menu.setAppId(appId);
             menu.setStatus(DataStatus.NORMAL);
+            menu.setOrderBy("id.asc,priority.desc");
             treeDatas = new TreeNodeUtil(menuServiceImpl.selectList(menu)).getTreeDatas();
         }else{
             String roleIds = user.getRoleIds();
@@ -204,6 +205,11 @@ public class AclAuthController {
         }
         if(!CollectionUtils.isEmpty(treeDatas)){
             List<Menu> collect = treeDatas.stream().filter(t -> t.getParent() == -1).collect(Collectors.toList());
+            collect.sort((o1,o2)->{
+                int  calibration =o1.getId() - o2.getId() > 0?1:-1;
+                int result = o1.getPriority()  - o2.getPriority();
+                return result == 0 ? calibration:(result > 0?1:-1);
+            });
             RedisUtil.stringExecutor().set(AclAuthKeyNs.ACL_USER_MENU,key,JSONObject.toJSONString(collect));
         }
         return new ResponseResult(treeDatas);
