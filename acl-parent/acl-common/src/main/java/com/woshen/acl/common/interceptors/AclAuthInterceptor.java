@@ -1,6 +1,7 @@
 package com.woshen.acl.common.interceptors;
 
 import com.woshen.acl.common.utils.AclAuthUtils;
+import com.woshen.common.base.utils.StringUtils;
 import com.woshen.common.webcommon.exception.BaseRuntimeException;
 import com.woshen.common.webcommon.utils.BaseConfigUtils;
 import com.woshen.common.webcommon.utils.WebUtils;
@@ -27,7 +28,11 @@ public class AclAuthInterceptor implements HandlerInterceptor {
                 throw new BaseRuntimeException("您没有该路径的访问权限，拒绝访问");
             }else{
                 response.setCharacterEncoding("UTF-8");
-                response.sendRedirect(BaseConfigUtils.getProperty("acl.domain","") + "/unAuth");
+                String domain = BaseConfigUtils.getProperty("web.acl.domain", "");
+                if(StringUtils.isNotBlank(domain) && !domain.trim().startsWith("http")){
+                    domain = "http://" + domain;
+                }
+                response.sendRedirect( domain + "/unAuth");
                 return false;
             }
         }

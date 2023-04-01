@@ -226,12 +226,15 @@ var menuUtils = new (function() {
     function temp(data,template) {
         let layId = template.layId;
         let url = data[template.dataUrl]?data[template.dataUrl]:"";
+        if(url.length > 0){
+           url = url.split(",")[0];
+        }
         let html = '<li class="layui-nav-item">' ;
         if(data[template.children] && data[template.children].length > 0){
             html +='<a href="javascript:;" isParent data-url="'+url+'" lay-id='+data[layId]+'>'+data[template.title]+'</a>';
             html += childrenMenuTemp(data[template.children],template);
         }else{
-            html +='<a href="javascript:;" data-url="'+data[template.dataUrl]+'" lay-id='+data[layId]+'>'+data[template.title]+'</a>';
+            html +='<a href="javascript:;" data-url="'+url+'" lay-id='+data[layId]+'>'+data[template.title]+'</a>';
         }
         html += '</li>';
         return html;
@@ -242,11 +245,14 @@ var menuUtils = new (function() {
         for(let item of data){
             let layId = template.layId;
             let url = data[template.dataUrl]?data[template.dataUrl]:"";
+            if(url.length > 0){
+                url = url.split(",")[0];
+            }
             if(item[template.children] && item[template.children].length > 0){
                 html += '<dd><a href="javascript:;" isParent data-url="'+url+'" lay-id='+item[layId]+'>'+item[template.title]+'</a>';
                 html += childrenMenuTemp(item[template.children],template);
             }else{
-                html += '<dd><a href="javascript:;" data-url="'+item[template.dataUrl]+'" lay-id='+item[layId]+'>'+item[template.title]+'</a>';
+                html += '<dd><a href="javascript:;" data-url="'+url+'" lay-id='+item[layId]+'>'+item[template.title]+'</a>';
             }
             html += '</dd>';
         }

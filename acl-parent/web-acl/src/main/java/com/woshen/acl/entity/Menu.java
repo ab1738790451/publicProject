@@ -39,6 +39,8 @@ public class Menu extends BaseEntity<Integer> implements  BaseTreeNode<Menu> {
 
     private Integer parentId;
 
+    private Integer priority;
+
     private DataStatus status;
 
     private LocalDateTime createTime;

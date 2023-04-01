@@ -8,14 +8,17 @@
         <result column="title" property="title" />
         <result column="url" property="url" />
         <result column="parent_id" property="parentId" />
+        <result column="priority" property="priority" />
         <result column="status" property="status" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
+        <result column="app_id" property="appId" />
+        <result column="is_menu" property="isMenu" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, title, url, parent_id, status, create_time, update_time
+        id, title, url, parent_id, priority, status, create_time, update_time, app_id, is_menu
     </sql>
 
 </mapper>

@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author: liuhaibo
@@ -86,7 +87,9 @@ public class IndexController {
                 menu.setIsMenu(Bool.Y);
                 menu.setAppId(-1);
                 menu.setStatus(DataStatus.NORMAL);
-                return new ResponseResult(new TreeNodeUtil(menuServiceImpl.selectList(menu)).getTreeDatas());
+                menu.setOrderBy("priority.desc,id.asc");
+                List<Menu> treeDatas = new TreeNodeUtil<Menu>(menuServiceImpl.selectList(menu)).getTreeDatas();
+                return new ResponseResult(treeDatas.stream().filter(t->t.getParent() == -1).collect(Collectors.toList()));
             }else{
                 return new ResponseResult(null);
             }

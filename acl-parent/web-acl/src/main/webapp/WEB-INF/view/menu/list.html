@@ -24,12 +24,6 @@
     <input id="pageTotal"  th:value="${pageData.total}" type="hidden">
     <input id="appId" name="appId" th:value="${queryData.appId}" type="hidden">
     <div class="layui-form-item query-form-item">
-   <!--     <div class="layui-inline">
-            <label class="layui-form-label">ID</label>
-            <div class="layui-input-inline">
-                <input type="text" th:name="id"   th:value="${queryData.id}" autocomplete="off" class="layui-input" oninput="this.value=this.value.replace(/[^\d]/g,'')" onproperty="this.value=this.value.replace(/[^\d]/g,'')" maxlength="11">
-            </div>
-        </div>-->
             <div class="layui-inline">
                 <label class="layui-form-label">title</label>
                 <div class="layui-input-inline">
@@ -65,8 +59,10 @@
                 </div>
             </div>
         <div class="layui-inline">
-            <button id="search" class="layui-btn layuiadmin-btn-list" lay-submit lay-filter="search" >
+            <div id="searchPrefix"  class="layui-btn layuiadmin-btn-list" >
                 <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+            </div>
+            <button id="search" style="display: none" class="layui-btn layuiadmin-btn-list" lay-submit  lay-filter="search">
             </button>
         </div>
         </div>

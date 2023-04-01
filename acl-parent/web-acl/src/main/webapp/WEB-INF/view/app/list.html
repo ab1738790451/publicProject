@@ -53,8 +53,10 @@
                 </div>
             </div>
         <div class="layui-inline">
-            <button id="search" class="layui-btn layuiadmin-btn-list" lay-submit >
+            <div id="searchPrefix"  class="layui-btn layuiadmin-btn-list" >
                 <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+            </div>
+            <button id="search" style="display: none" class="layui-btn layuiadmin-btn-list" lay-submit  lay-filter="search">
             </button>
         </div>
         </div>

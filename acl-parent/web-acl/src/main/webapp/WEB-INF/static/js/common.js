@@ -242,13 +242,17 @@ function tdHtml(headArray,data,level,hasIcon) {
     let html = '<tr class="tree-node" node-level="'+level+'" ';
     html += (level ==0) ?'>':'class="node_close" >'
     for (let item of headArray){
+        let val = data[item.field];
+        if(val == undefined || val == null || val.length == 0){
+            val = "";
+        }
         if(item.parentNode == -1){
             html += '<td></td>';
         }else if(item.parentNode == 1 && hasIcon){
             html += '<td class="parent_node_colse">';
-            html +=data[item.field]+'</td>'
+            html += val+'</td>'
         }else{
-            html += '<td>'+data[item.field]+'</td>'
+            html += '<td>'+val+'</td>'
         }
     }
     html += '</tr>';
@@ -321,5 +325,11 @@ function defaultTableToolEvent(table,obj) {
     }
 }
 
+$(function () {
+    $("#searchPrefix").on('click',function () {
+        $("#pageIndex").val(1);
+        $("#search").click();
+    })
+})
 
 

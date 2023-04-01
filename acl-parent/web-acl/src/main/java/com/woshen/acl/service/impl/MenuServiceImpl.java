@@ -51,6 +51,9 @@ public class MenuServiceImpl extends BaseServiceImpl<Integer, MenuMapper, Menu> 
         LocalDateTime now = LocalDateTime.now();
         if(queryData.getId() == null){
             queryData.setCreateTime(now);
+            if(queryData.getPriority() == null){
+                queryData.setPriority(50);
+            }
             queryData.setStatus(DataStatus.NORMAL);
         }
         queryData.setUpdateTime(now);

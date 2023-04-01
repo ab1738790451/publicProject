@@ -110,11 +110,19 @@ public class AclAuthController {
         Map<String,String> uriRoleMapping = new HashMap<>();
         menus.stream().forEach( t ->{
             String roleIds = menuRoleMapping.get(t.getId().toString());
-            if(StringUtils.isNotBlank(roleIds)){
-                uriRoleMapping.put(t.getUrl(),roleIds);
-            }else{
-                uriRoleMapping.put(t.getUrl(),"0");
+            String url = t.getUrl();
+            if(StringUtils.isNotBlank(url)){
+                String[] urls = url.split(",");
+                for (String u:urls
+                     ) {
+                    if(StringUtils.isNotBlank(roleIds)){
+                        uriRoleMapping.put(u,roleIds);
+                    }else{
+                        uriRoleMapping.put(u,"0");
+                    }
+                }
             }
+
         });
        return new ResponseResult(uriRoleMapping);
     }
@@ -136,7 +144,7 @@ public class AclAuthController {
     @ResponseBody
     public ResponseResult loadMenu(@RequestParam("appId")Integer appId,@RequestParam("userId")Integer userId){
 
-        List treeDatas = null;
+        List<Menu> treeDatas = null;
         String key = appId + "-" + userId;
         String s = RedisUtil.stringExecutor().get(AclAuthKeyNs.ACL_USER_MENU, key);
         if(StringUtils.isNotBlank(s)){
@@ -187,13 +195,16 @@ public class AclAuthController {
                     menu.setStatus(DataStatus.NORMAL);
                     QueryWrapper<Menu> menuQueryWrapper = menuServiceImpl.getBaseWrapper(menu);
                     menuQueryWrapper.in("id",mIds);
+                    menuQueryWrapper.orderByAsc("id");
+                    menuQueryWrapper.orderByDesc("priority");
                     List<Menu> list1 = menuServiceImpl.list(menuQueryWrapper);
                     treeDatas = new TreeNodeUtil(list1).getTreeDatas();
                 }
             }
         }
         if(!CollectionUtils.isEmpty(treeDatas)){
-            RedisUtil.stringExecutor().set(AclAuthKeyNs.ACL_USER_MENU,key,JSONObject.toJSONString(treeDatas));
+            List<Menu> collect = treeDatas.stream().filter(t -> t.getParent() == -1).collect(Collectors.toList());
+            RedisUtil.stringExecutor().set(AclAuthKeyNs.ACL_USER_MENU,key,JSONObject.toJSONString(collect));
         }
         return new ResponseResult(treeDatas);
     }
