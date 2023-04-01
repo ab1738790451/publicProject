@@ -36,10 +36,6 @@ public class AclAuthInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        if(modelAndView != null){
-            modelAndView.addObject("ADMIN_DOMAIN", BaseConfigUtils.getProperty("acl.domain","localhost"));
-            modelAndView.addObject("ADMIN_URL_PREFIX", BaseConfigUtils.getProperty("acl.url.prefix","localhost"));
-        }
     }
 
     @Override
