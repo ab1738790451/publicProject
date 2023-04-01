@@ -2,4 +2,47 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.woshen.stock.mapper.StockDayInformationMapper">
 
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.woshen.stock.entity.StockDayInformation">
+        <id column="id" property="id" />
+        <result column="code" property="code" />
+        <result column="transaction_date" property="transactionDate" />
+        <result column="close" property="close" />
+        <result column="open" property="open" />
+        <result column="today_close" property="todayClose" />
+        <result column="high" property="high" />
+        <result column="low" property="low" />
+        <result column="average" property="average" />
+        <result column="price_change" property="priceChange" />
+        <result column="volume" property="volume" />
+        <result column="turnover" property="turnover" />
+        <result column="turnover_rate" property="turnoverRate" />
+        <result column="total_worth" property="totalWorth" />
+        <result column="circulation_worth" property="circulationWorth" />
+        <result column="pb" property="pb" />
+        <result column="spe" property="spe" />
+        <result column="pe" property="pe" />
+        <result column="super_inflow" property="superInflow" />
+        <result column="super_outflow" property="superOutflow" />
+        <result column="max_inflow" property="maxInflow" />
+        <result column="max_outflow" property="maxOutflow" />
+        <result column="middle_inflow" property="middleInflow" />
+        <result column="middle_outflow" property="middleOutflow" />
+        <result column="min_inflow" property="minInflow" />
+        <result column="min_outflow" property="minOutflow" />
+        <result column="total_capital_stock" property="totalCapitalStock" />
+        <result column="total_revenue" property="totalRevenue" />
+        <result column="circulation_capital_stock" property="circulationCapitalStock" />
+        <result column="interest_rate" property="interestRate" />
+        <result column="net_interest_rate" property="netInterestRate" />
+        <result column="debt_ratio" property="debtRatio" />
+        <result column="bonus" property="bonus" />
+        <result column="graphic" property="graphic" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, code, transaction_date, close, open, today_close, high, low, average, price_change, volume, turnover, turnover_rate, total_worth, circulation_worth, pb, spe, pe, super_inflow, super_outflow, max_inflow, max_outflow, middle_inflow, middle_outflow, min_inflow, min_outflow, total_capital_stock, total_revenue, circulation_capital_stock, interest_rate, net_interest_rate, debt_ratio, bonus, graphic
+    </sql>
+
 </mapper>

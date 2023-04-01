@@ -3,8 +3,8 @@ package com.woshen.stock.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
 import java.time.LocalDate;
+import com.woshen.common.webcommon.db.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -14,11 +14,11 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author liuhaibo
- * @since 2023-01-27
+ * @since 2023-04-01
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class StockTimeSharing implements Serializable {
+public class StockTimeSharing extends BaseEntity<Integer> {
 
 
     /**
@@ -47,6 +47,17 @@ public class StockTimeSharing implements Serializable {
      * 日期
      */
     private LocalDate date;
+
+    /**
+     * 股票名称
+     */
+    @TableField(exist = false)
+    private String name;
+
+    @Override
+    public Integer getPk() {
+    return this.id;
+    }
 
 
 }

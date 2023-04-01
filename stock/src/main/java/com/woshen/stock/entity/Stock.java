@@ -3,24 +3,23 @@ package com.woshen.stock.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import com.woshen.common.webcommon.db.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-
 /**
  * <p>
- * 
+ * 股票表
  * </p>
  *
  * @author liuhaibo
- * @since 2023-01-27
+ * @since 2023-04-01
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Stock implements Serializable {
+public class Stock extends BaseEntity<Integer> {
 
 
     /**
@@ -71,6 +70,11 @@ public class Stock implements Serializable {
      * 板块
      */
     private String plate;
+
+    @Override
+    public Integer getPk() {
+    return this.id;
+    }
 
 
 }

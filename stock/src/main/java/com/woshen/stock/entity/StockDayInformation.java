@@ -3,23 +3,23 @@ package com.woshen.stock.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import com.woshen.common.webcommon.db.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 
+ * 股票每日数据表
  * </p>
  *
  * @author liuhaibo
- * @since 2023-01-27
+ * @since 2023-04-01
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class StockDayInformation implements Serializable {
+public class StockDayInformation extends BaseEntity<Integer> {
 
 
     /**
@@ -71,6 +71,12 @@ public class StockDayInformation implements Serializable {
     private BigDecimal average;
 
     /**
+     * 涨跌幅
+     */
+    @TableField("price_change")
+    private BigDecimal priceChange;
+
+    /**
      * 成交量
      */
     private Integer volume;
@@ -112,17 +118,6 @@ public class StockDayInformation implements Serializable {
      * 市盈率
      */
     private BigDecimal pe;
-
-    /**
-     * 涨跌幅
-     */
-    @TableField("price_change")
-    private BigDecimal priceChange;
-
-    /**
-     * 图解
-     */
-    private String graphic;
 
     /**
      * 超大单流入
@@ -212,6 +207,22 @@ public class StockDayInformation implements Serializable {
      * 每股未分配利润
      */
     private BigDecimal bonus;
+
+    /**
+     * 图解
+     */
+    private String graphic;
+
+    /**
+     * 股票名称
+     */
+    @TableField(exist = false)
+    private String name;
+
+    @Override
+    public Integer getPk() {
+    return this.id;
+    }
 
 
 }

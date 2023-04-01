@@ -2,4 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.woshen.stock.mapper.StockMapper">
 
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.woshen.stock.entity.Stock">
+        <id column="id" property="id" />
+        <result column="code" property="code" />
+        <result column="name" property="name" />
+        <result column="type" property="type" />
+        <result column="his_high" property="hisHigh" />
+        <result column="his_low" property="hisLow" />
+        <result column="sh_date" property="shDate" />
+        <result column="industry" property="industry" />
+        <result column="plate" property="plate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, code, name, type, his_high, his_low, sh_date, industry, plate
+    </sql>
+
 </mapper>

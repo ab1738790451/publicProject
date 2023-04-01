@@ -1,7 +1,8 @@
 package com.woshen.stock.mapper;
 
-import com.woshen.stock.entity.StockTimeSharing;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.woshen.stock.entity.StockTimeSharing;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * <p>
@@ -9,8 +10,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author liuhaibo
- * @since 2023-01-27
+ * @since 2023-04-01
  */
+@Mapper
 public interface StockTimeSharingMapper extends BaseMapper<StockTimeSharing> {
 
 }

@@ -4,7 +4,6 @@ import com.launchdarkly.eventsource.EventSource;
 import com.woshen.stock.core.EventSourceFactory;
 import com.woshen.stock.handler.StockDetailsHandler;
 import com.woshen.stock.handler.StockZixuanHandler;
-import com.woshen.stock.server.MenuService;
 import com.woshen.stock.xxljob.StockDayImformationJob;
 import com.woshen.stock.xxljob.StockRedJob;
 import com.woshen.stock.xxljob.StockTrendsJob;
@@ -12,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @Author: liuhaibo
@@ -29,9 +25,6 @@ import java.util.Map;
 public class TestController {
 
     @Autowired
-    private MenuService menuServiceImpl;
-
-    @Autowired
     private StockTrendsJob stockTrendsJob;
 
     @Autowired
@@ -40,13 +33,6 @@ public class TestController {
     @Autowired
     private StockRedJob stockRedJob;
 
-    @RequestMapping("loadMenus")
-    @ResponseBody
-    public Map<String,Object> loadMenus(){
-        Map<String,Object> map = new HashMap<>();
-        map.put("data",menuServiceImpl.selectAll());
-        return map;
-    }
 
 
     @RequestMapping("stockTrend")

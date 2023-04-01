@@ -30,16 +30,36 @@ layui.use(['element','table'], function(){
         let index = data.index;
         let tab = data.elem;
         let lis = $(tab).find("li");
+        let layId;
         if(lis.length > 0 && index > 0){
             let node = lis[index-1];
-            let layId =  $(node).attr("lay-id");
-            let  url =  $(node).attr("data-url");
-            menuChange(layId,url);
+            layId =  $(node).attr("lay-id");
             currTabLayId = layId;
         }else{
-            menuChange(-1);
-            currTabLayId = -1;
+            layId = -1;
         }
+        currTabLayId = layId;
+        menuChange(currTabLayId);
+        //没有打开的选项卡，不再为菜单添加状态
+        if(layId){
+            //为选项卡对应的菜单赋予选中状态
+            $(".body-col-left a").each(function (index,item) {
+                let currentLayId =  $(this).attr("lay-id");
+                if(currentLayId == layId){
+                    let isParent =  $(this).attr("isParent");
+                    //父菜单添加到自己身上，子菜单添加到父节点上
+                    if(isParent != null && isParent != undefined){
+                        $(this).addClass("layui-this");
+                    }else{
+                        let parentNode =  this.parentNode;
+                        $(parentNode).addClass("layui-this");
+                    }
+                    $(this).closest("li").addClass("layui-nav-itemed");
+                }
+            })
+        }
+
+
     });
 
 
@@ -49,8 +69,12 @@ layui.use(['element','table'], function(){
         let title = this.innerText;
         let url = this.getAttribute('data-url');
         if(layId){
+            let sourceNode = $(".body-col-left .layui-this");
+            if (sourceNode.length > 0) {
+                sourceNode.removeClass("layui-this");
+            }
             tabChange(tabFilter,layId,title,url);
-            if(url){
+            if(url || layId <=0 ){
                 $(this).addClass("layui-this");
             }
         }
@@ -63,6 +87,16 @@ layui.use(['element','table'], function(){
         let title = this.innerText;
         let url = this.getAttribute('data-url');
         if(layId){
+            //清空所有菜单的选中状态
+            let sourceNode =  $(".body-col-left .layui-this");
+            if(sourceNode.length > 0){
+                sourceNode.removeClass("layui-this");
+            }
+            //清空所有菜单的打开状态
+            let sourceParentNode = $(".body-col-left .layui-nav-itemed");
+            if(sourceParentNode.length > 0){
+                sourceParentNode.removeClass("layui-nav-itemed");
+            }
             tabChange(tabFilter,layId,title,url);
         }
 
@@ -92,37 +126,17 @@ $(function () {
 })
 
 //菜单切换
-function menuChange(layId,url) {
+function menuChange() {
     //清空所有菜单的选中状态
-    let sourceNode =  $(".body-col-left .layui-this");
-    if(sourceNode.length > 0){
+    let sourceNode = $(".body-col-left .layui-this");
+    if (sourceNode.length > 0) {
         sourceNode.removeClass("layui-this");
     }
     //清空所有菜单的打开状态
     let sourceParentNode = $(".body-col-left .layui-nav-itemed");
-    if(sourceParentNode.length > 0){
+    if (sourceParentNode.length > 0) {
         sourceParentNode.removeClass("layui-nav-itemed");
     }
-    //没有打开的选项卡，不再为菜单添加状态
-    if(layId < 0){
-        return;
-    }
-    //为选项卡对应的菜单赋予选中状态
-    $(".body-col-left a").each(function (index,item) {
-        let currentLayId =  $(this).attr("lay-id");
-        if(currentLayId == layId){
-            let isParent =  $(this).attr("isParent");
-            //父菜单添加到自己身上，子菜单添加到父节点上
-            if(isParent != null && isParent != undefined){
-                $(this).addClass("layui-this");
-            }else{
-                let parentNode =  this.parentNode;
-                $(parentNode).addClass("layui-this");
-            }
-            $(this).closest("li").addClass("layui-nav-itemed");
-        }
-    })
-
 }
 
 //子页面删除
@@ -212,12 +226,15 @@ var menuUtils = new (function() {
     function temp(data,template) {
         let layId = template.layId;
         let url = data[template.dataUrl]?data[template.dataUrl]:"";
+        if(url.length > 0){
+            url = url.split(",")[0];
+        }
         let html = '<li class="layui-nav-item">' ;
         if(data[template.children] && data[template.children].length > 0){
             html +='<a href="javascript:;" isParent data-url="'+url+'" lay-id='+data[layId]+'>'+data[template.title]+'</a>';
             html += childrenMenuTemp(data[template.children],template);
         }else{
-            html +='<a href="javascript:;" data-url="'+data[template.dataUrl]+'" lay-id='+data[layId]+'>'+data[template.title]+'</a>';
+            html +='<a href="javascript:;" data-url="'+url+'" lay-id='+data[layId]+'>'+data[template.title]+'</a>';
         }
         html += '</li>';
         return html;
@@ -227,12 +244,15 @@ var menuUtils = new (function() {
         let html ='<dl class="layui-nav-child">';
         for(let item of data){
             let layId = template.layId;
-            let url = data[template.dataUrl]?data[template.dataUrl]:"";
+            let url = item[template.dataUrl]?item[template.dataUrl]:"";
+            if(url.length > 0){
+                url = url.split(",")[0];
+            }
             if(item[template.children] && item[template.children].length > 0){
                 html += '<dd><a href="javascript:;" isParent data-url="'+url+'" lay-id='+item[layId]+'>'+item[template.title]+'</a>';
                 html += childrenMenuTemp(item[template.children],template);
             }else{
-                html += '<dd><a href="javascript:;" data-url="'+item[template.dataUrl]+'" lay-id='+item[layId]+'>'+item[template.title]+'</a>';
+                html += '<dd><a href="javascript:;" data-url="'+url+'" lay-id='+item[layId]+'>'+item[template.title]+'</a>';
             }
             html += '</dd>';
         }

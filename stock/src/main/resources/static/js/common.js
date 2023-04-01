@@ -28,11 +28,11 @@ function renderList(title,module,searchFilter,done) {
         var form = layui.form;
         //行内工具栏注册
         currTable.on('tool(tableList)',function (obj) {
-        defaultTableToolEvent(currTable,obj);
+            defaultTableToolEvent(currTable,obj);
         });
         //头部工具栏注册
         currTable.on('toolbar(tableList)',function (obj) {
-        defaultTableToolBarEvent(currTable,obj);
+            defaultTableToolBarEvent(currTable,obj);
         });
 
         var defaultToolbar=['filter'];
@@ -44,21 +44,21 @@ function renderList(title,module,searchFilter,done) {
 
         //表格初始化
         currTable.init('tableList', {
-        id: 'tableList',
-        // skin: 'line', //行边框风格
-        even: true, //开启隔行背景
-        // size: 'lg', //小尺寸的表格
-        toolbar: '#toolbar', //开启头部工具栏，并为其绑定左侧模板
-        defaultToolbar: defaultToolbar,
-        title: title,
-        limit: Number.MAX_VALUE,
-        page: false,
-        done: function () {
-            //表格初始化后得回调函数
-            if(typeof done == 'function'){
-                done();
+            id: 'tableList',
+            // skin: 'line', //行边框风格
+            even: true, //开启隔行背景
+            // size: 'lg', //小尺寸的表格
+            toolbar: '#toolbar', //开启头部工具栏，并为其绑定左侧模板
+            defaultToolbar: defaultToolbar,
+            title: title,
+            limit: Number.MAX_VALUE,
+            page: false,
+            done: function () {
+                //表格初始化后得回调函数
+                if(typeof done == 'function'){
+                    done();
+                }
             }
-        }
         });
 
         currTable.render();
@@ -106,19 +106,20 @@ function renderList(title,module,searchFilter,done) {
 
         //指定页
         $("#page").find("a").each(function (index,item) {
-             if(!$(this).hasClass("layui-laypage-prev") && !$(this).hasClass("layui-laypage-next")){
-                 $(this).on('click',function () {
-                     let dataPage =  $(this).attr("data-page");
-                     $("#pageIndex").val(dataPage);
-                     $("#pageSize").val($(".layui-laypage-limits").find("select").val());
-                     $("#search").click();
-                 })
+            if(!$(this).hasClass("layui-laypage-prev") && !$(this).hasClass("layui-laypage-next")){
+                $(this).on('click',function () {
+                    let dataPage =  $(this).attr("data-page");
+                    $("#pageIndex").val(dataPage);
+                    $("#pageSize").val($(".layui-laypage-limits").find("select").val());
+                    $("#search").click();
+                })
 
-             }
+            }
         })
 
         //分页选项
         $("#page").find(".layui-laypage-limits").find("select").on('change',function (item) {
+            $("#pageIndex").val(1);
             $("#pageSize").val($(this).val());
             $("#search").click();
         });
@@ -242,13 +243,17 @@ function tdHtml(headArray,data,level,hasIcon) {
     let html = '<tr class="tree-node" node-level="'+level+'" ';
     html += (level ==0) ?'>':'class="node_close" >'
     for (let item of headArray){
+        let val = data[item.field];
+        if(val == undefined || val == null || val.length == 0){
+            val = "";
+        }
         if(item.parentNode == -1){
             html += '<td></td>';
         }else if(item.parentNode == 1 && hasIcon){
             html += '<td class="parent_node_colse">';
-            html +=data[item.field]+'</td>'
+            html += val+'</td>'
         }else{
-            html += '<td>'+data[item.field]+'</td>'
+            html += '<td>'+val+'</td>'
         }
     }
     html += '</tr>';
@@ -317,9 +322,15 @@ function defaultTableToolEvent(table,obj) {
             break;
     }
     if(typeof tableToolEvent == 'function'){
-           tableToolEvent(table,obj);
+        tableToolEvent(table,obj);
     }
 }
 
+$(function () {
+    $("#searchPrefix").on('click',function () {
+        $("#pageIndex").val(1);
+        $("#search").click();
+    })
+})
 
 

@@ -1,7 +1,7 @@
 package com.woshen.stock.server;
 
+import com.woshen.common.webcommon.db.service.BaseService;
 import com.woshen.stock.entity.StockTimeSharing;
-import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author liuhaibo
- * @since 2023-01-27
+ * @since 2023-04-01
  */
-public interface IStockTimeSharingService extends IService<StockTimeSharing> {
+public interface IStockTimeSharingService extends BaseService<Integer, StockTimeSharing> {
 
 }

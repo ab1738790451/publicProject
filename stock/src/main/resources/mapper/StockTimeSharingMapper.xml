@@ -2,4 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.woshen.stock.mapper.StockTimeSharingMapper">
 
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.woshen.stock.entity.StockTimeSharing">
+        <id column="id" property="id" />
+        <result column="code" property="code" />
+        <result column="trends_total" property="trendsTotal" />
+        <result column="trends" property="trends" />
+        <result column="date" property="date" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, code, trends_total, trends, date
+    </sql>
+
 </mapper>

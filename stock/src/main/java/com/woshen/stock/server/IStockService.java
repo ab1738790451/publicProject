@@ -1,16 +1,16 @@
 package com.woshen.stock.server;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.woshen.common.webcommon.db.service.BaseService;
 import com.woshen.stock.entity.Stock;
 
 /**
  * <p>
- *  服务类
+ * 股票表 服务类
  * </p>
  *
  * @author liuhaibo
- * @since 2023-01-27
+ * @since 2023-04-01
  */
-public interface IStockService extends IService<Stock> {
+public interface IStockService extends BaseService<Integer, Stock> {
 
 }
