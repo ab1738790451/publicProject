@@ -40,13 +40,13 @@ public class ${table.controllerName} extends ${superControllerClass} {
 public class ${table.controllerName} extends AbstractController<${keyPropertyType},${table.entityName}> {
 </#if>
 
- @Resource
- private ${table.serviceName} ${table.serviceImplName?uncap_first};
+    @Resource
+    private ${table.serviceName} ${table.serviceImplName?uncap_first};
 
- @Override
- public ${table.serviceName} getService() {
- return ${table.serviceImplName?uncap_first};
- }
+    @Override
+    public ${table.serviceName} getService() {
+    return ${table.serviceImplName?uncap_first};
+    }
 
 }
 </#if>

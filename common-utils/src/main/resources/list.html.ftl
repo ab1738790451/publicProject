@@ -33,21 +33,21 @@
         <div class="layui-inline">
             <label class="layui-form-label">创建时间</label>
             <div class="layui-input-inline">
-                <input type="text" name="startTime" id="queryParam['createStartTime']"  autocomplete="off"   th:value="${strPrefix!}queryData?.queryParam['createStartTime']${strSuffix!}" class="layui-input" >
+                <input type="text" name="queryParam['createStartTime']" id="createStartTime"  autocomplete="off"   th:value="${strPrefix!}queryData?.queryParam['createStartTime']${strSuffix!}" class="layui-input" >
             </div>
             <div class="layui-form-mid">-</div>
             <div class="layui-input-inline">
-                <input type="text" name="endTime" id="queryParam['createEndTime']" th:value="${strPrefix!}queryData?.queryParam['createEndTime']${strSuffix!}"  autocomplete="off" class="layui-input" >
+                <input type="text" name="queryParam['createEndTime']" id="createEndTime" th:value="${strPrefix!}queryData?.queryParam['createEndTime']${strSuffix!}"  autocomplete="off" class="layui-input" >
             </div>
         </div>
         <div class="layui-inline">
             <label class="layui-form-label">更新时间</label>
             <div class="layui-input-inline">
-                <input type="text" name="startTime" id="queryParam['updateStartTime']"   th:value="${strPrefix!}queryData?.queryParam['updateStartTime']${strSuffix!}" autocomplete="off" class="layui-input" >
+                <input type="text" name="queryParam['updateStartTime']" id="updateStartTime"   th:value="${strPrefix!}queryData?.queryParam['updateStartTime']${strSuffix!}" autocomplete="off" class="layui-input" >
             </div>
             <div class="layui-form-mid">-</div>
             <div class="layui-input-inline">
-                <input type="text" name="endTime" id="queryParam['updateEndTime']"  th:value="${strPrefix!}queryData?.queryParam['updateEndTime']${strSuffix!}" autocomplete="off" class="layui-input" >
+                <input type="text" name="queryParam['updateEndTime']" id="updateEndTime"  th:value="${strPrefix!}queryData?.queryParam['updateEndTime']${strSuffix!}" autocomplete="off" class="layui-input" >
             </div>
         </div>
         <div class="layui-inline">
@@ -70,6 +70,7 @@
         <#list table.fields as field>
         <th lay-data="{field:'${field.propertyName}'}">${field.comment}</th>
         </#list>
+        <th lay-data="{fixed:'right',title:'操作', width:200, align:'center',toolbar: '#tool'}"></th>
     </tr>
     </thead>
     <tbody>
