@@ -19,7 +19,7 @@ interface ${table.serviceName} : ${superServiceClass}<${entity}>
    <#assign keyPropertyType= field.propertyType />
   </#if>
  </#list>
-public interface ${table.serviceName} extends extends BaseService<${keyPropertyType},${table.entityName}>  {
+public interface ${table.serviceName} extends BaseService<${keyPropertyType},${table.entityName}>  {
 
 }
 </#if>

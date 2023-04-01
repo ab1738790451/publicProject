@@ -15,11 +15,10 @@
     </style>
 </head>
 <body class="main-body">
-<form class="layui-form" action="/app/dosave" id="dataForm" >
-    <#assign strPrefix = "${" />
+<#assign strPrefix = "${" />
     <#assign strSuffix = "}" />
+<form class="layui-form" th:action="${strPrefix!}ADMIN_URL_PREFIX${strSuffix!} +'/${moduleName!}/dosave'" id="dataForm" >
     <input type="hidden" name="id" th:value="${strPrefix!}data?.id${strSuffix!}">
-
     <div class="layui-form-item query-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">应用名称</label>

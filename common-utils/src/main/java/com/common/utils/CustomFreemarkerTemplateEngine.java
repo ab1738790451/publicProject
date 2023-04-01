@@ -1,12 +1,12 @@
 package com.common.utils;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.generator.config.GlobalConfig;
+import com.baomidou.mybatisplus.generator.config.PackageConfig;
 import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.engine.AbstractTemplateEngine;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
-import com.sun.istack.internal.NotNull;
-
 import java.io.File;
 import java.util.List;
 import java.util.Map;
@@ -20,15 +20,17 @@ import java.util.Optional;
  */
 public class CustomFreemarkerTemplateEngine extends FreemarkerTemplateEngine {
 
-    protected void outputListHtml(@NotNull TableInfo tableInfo, @NotNull Map<String, Object> objectMap) {
+    protected void outputListHtml( TableInfo tableInfo, Map<String, Object> objectMap) {
+        ConfigBuilder config = (ConfigBuilder) objectMap.get("config");
+        GlobalConfig globalConfig = config.getGlobalConfig();
+        PackageConfig packageConfig = config.getPackageConfig();
         String entityName = tableInfo.getEntityName();
+        String moduleName = entityName.substring(0,1).toLowerCase() + entityName.substring(1);
         String fileName = "list";
-        String path = this.getPathInfo("xml_path");
+        String parent = packageConfig.getParent();
+        String path = globalConfig.getOutputDir() + "/" + parent.replace(".","/") +"/" + moduleName;
         if (StringUtils.isNotBlank(entityName) && StringUtils.isNotBlank(path)) {
-            if(entityName.length() >1){
-               String moduleName = entityName.substring(0,1).toLowerCase() + entityName.substring(1);
-               objectMap.put("moduleName",moduleName);
-            }
+            objectMap.put("moduleName",moduleName);
             this.getTemplateFilePath((template) -> {
                 return "/list.html";
             }).ifPresent((entity) -> {
@@ -39,15 +41,17 @@ public class CustomFreemarkerTemplateEngine extends FreemarkerTemplateEngine {
 
     }
 
-    protected void outputEditHtml(@NotNull TableInfo tableInfo, @NotNull Map<String, Object> objectMap) {
+    protected void outputEditHtml( TableInfo tableInfo,  Map<String, Object> objectMap) {
+        ConfigBuilder config = (ConfigBuilder) objectMap.get("config");
+        GlobalConfig globalConfig = config.getGlobalConfig();
+        PackageConfig packageConfig = config.getPackageConfig();
         String entityName = tableInfo.getEntityName();
         String fileName = "edit";
-        String path = this.getPathInfo("xml_path");
+        String parent = packageConfig.getParent();
+        String moduleName = entityName.substring(0,1).toLowerCase() + entityName.substring(1);
+        String path = globalConfig.getOutputDir() + "/" + parent.replace(".","/") +"/"+ moduleName;
         if (StringUtils.isNotBlank(entityName) && StringUtils.isNotBlank(path)) {
-            if(entityName.length() >1){
-                String moduleName = entityName.substring(0,1).toLowerCase() + entityName.substring(1);
-                objectMap.put("moduleName",moduleName);
-            }
+            objectMap.put("moduleName",moduleName);
             this.getTemplateFilePath((template) -> {
                 return "/edit.html";
             }).ifPresent((entity) -> {

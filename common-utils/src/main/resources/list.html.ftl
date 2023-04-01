@@ -15,9 +15,9 @@
     </style>
 </head>
 <body class="main-body">
-<form class="layui-form" action="/app/list" id="dataForm" >
-    <#assign strPrefix = "${" />
+<#assign strPrefix = "${" />
     <#assign strSuffix = "}" />
+<form class="layui-form" th:action="${strPrefix!}ADMIN_URL_PREFIX${strSuffix!} + '/${moduleName!}/list'" id="dataForm" >
     <input id="pageIndex" name="pageInfo.pageIndex" th:value="${strPrefix!}queryData?.pageInfo?.pageIndex${strSuffix!}" type="hidden">
     <input id="pageSize" name="pageInfo.pageSize" th:value="${strPrefix!}queryData?.pageInfo?.pageSize${strSuffix!}" type="hidden">
     <input id="pageTotal"  th:value="${strPrefix!}pageData.total${strSuffix!}" type="hidden">
@@ -51,8 +51,10 @@
             </div>
         </div>
         <div class="layui-inline">
-            <button id="search" class="layui-btn layuiadmin-btn-list" lay-submit >
+            <div id="searchPrefix"  class="layui-btn layuiadmin-btn-list" >
                 <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+            </div>
+            <button id="search" style="display: none" class="layui-btn layuiadmin-btn-list" lay-submit  lay-filter="search">
             </button>
         </div>
     </div>
