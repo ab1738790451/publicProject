@@ -4,6 +4,7 @@ package com.woshen.stock.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.woshen.common.webcommon.db.action.AbstractController;
+import com.woshen.stock.constant.MainSubRate;
 import com.woshen.stock.entity.Stock;
 import com.woshen.stock.entity.StockDayInformation;
 import com.woshen.stock.server.IStockDayInformationService;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -50,7 +52,59 @@ public class StockDayInformationController extends AbstractController<Integer, S
       baseWrapper.in("code",collect);
       List<Stock> list = stockServiceImpl.list(baseWrapper);
       Map<String, String> map = list.stream().collect(Collectors.toMap(Stock::getCode, Stock::getName));
-      records.stream().forEach(t-> t.setName(map.get(t.getCode())));
+      records.stream().forEach(t-> {
+          t.setName(map.get(t.getCode()));
+          BigDecimal average = t.getAverage();
+          BigDecimal superInflowAmount = average.multiply(BigDecimal.valueOf(t.getSuperInflow()));
+          t.setSuperInflowAmount(superInflowAmount);
+          BigDecimal superOutflowAmount = average.multiply(BigDecimal.valueOf(t.getSuperOutflow()));
+          t.setSuperOutflowAmount(superOutflowAmount);
+
+          BigDecimal maxInflowAmount = average.multiply(BigDecimal.valueOf(t.getMaxInflow()));
+          t.setMaxInflowAmount(maxInflowAmount);
+          BigDecimal maxOutflowAmount = average.multiply(BigDecimal.valueOf(t.getMaxOutflow()));
+          t.setMaxOutflowAmount(maxOutflowAmount);
+
+          BigDecimal middleInflowAmount = average.multiply(BigDecimal.valueOf(t.getMiddleInflow()));
+          t.setMiddleInflowAmount(middleInflowAmount);
+          BigDecimal middleOutflowAmount = average.multiply(BigDecimal.valueOf(t.getMiddleOutflow()));
+          t.setMiddleOutflowAmount(middleOutflowAmount);
+
+          BigDecimal minInflowAmount = average.multiply(BigDecimal.valueOf(t.getMinInflow()));
+          t.setMinInflowAmount(minInflowAmount);
+          BigDecimal minOutflowAmount = average.multiply(BigDecimal.valueOf(t.getMinOutflow()));
+          t.setMinOutflowAmount(minOutflowAmount);
+
+          if(queryData.getQueryParam("mainSubRate") != null){
+              if(MainSubRate.NIE_EIGHT_TWO_ONE.name().equals(queryData.getQueryParam("mainSubRate"))){
+                Double mainInflow =  t.getSuperInflow()*0.9 + t.getMaxInflow()*0.8 + t.getMiddleInflow()*0.2 + t.getMinInflow()*0.1;
+                t.setMainInflow(mainInflow.longValue());
+                t.setMainInflowAmount(average.multiply(BigDecimal.valueOf(t.getMainInflow())));
+                Double mainOutflow =  t.getSuperOutflow()*0.9 + t.getMaxOutflow()*0.8 + t.getMiddleOutflow()*0.2 + t.getMinOutflow()*0.1;
+                t.setMainOutflow(mainOutflow.longValue());
+              }else{
+                Double mainInflow =  t.getSuperInflow()*0.8 + t.getMaxInflow()*0.8 + t.getMiddleInflow()*0.2 + t.getMinInflow()*0.2;
+                t.setMainInflow(mainInflow.longValue());
+                t.setMainInflowAmount(average.multiply(BigDecimal.valueOf(t.getMainInflow())));
+                Double mainOutflow =  t.getSuperOutflow()*0.8 + t.getMaxOutflow()*0.8 + t.getMiddleOutflow()*0.2 + t.getMinOutflow()*0.2;
+                t.setMainOutflow(mainOutflow.longValue());
+              }
+
+          }else{
+              Long mainInflow =  t.getSuperInflow() + t.getMaxInflow() + t.getMiddleInflow() + t.getMinInflow();
+              t.setMainInflow(mainInflow);
+              t.setMainInflowAmount(average.multiply(BigDecimal.valueOf(t.getMainInflow())));
+              Long mainOutflow =  t.getSuperOutflow() + t.getMaxOutflow() + t.getMiddleOutflow() + t.getMinOutflow();
+              t.setMainOutflow(mainOutflow);
+          }
+          t.setMainOutflowAmount(average.multiply(BigDecimal.valueOf(t.getMainOutflow())));
+          Long subInflow = t.getSuperInflow() + t.getMaxInflow() + t.getMiddleInflow() + t.getMinInflow() - t.getMainInflow();
+          t.setSubInflow(subInflow);
+          t.setSubInflowAmount(average.multiply(BigDecimal.valueOf(subInflow)));
+          Long subOutflow = t.getSuperOutflow() + t.getMaxOutflow() + t.getMiddleOutflow() + t.getMinOutflow() - t.getMainOutflow();
+          t.setSubOutflow(subOutflow);
+          t.setSubOutflowAmount(average.multiply(BigDecimal.valueOf(subOutflow)));
+      });
      }
      return super.afterList(request, response, queryData, pageData);
     }

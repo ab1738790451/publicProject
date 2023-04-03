@@ -1,6 +1,7 @@
 package com.woshen.stock.xxljob;
 
 import com.launchdarkly.eventsource.EventSource;
+import com.woshen.common.webcommon.utils.BaseConfigUtils;
 import com.woshen.stock.core.EventSourceFactory;
 import com.woshen.stock.handler.StockZixuanHandler;
 import com.xxl.job.core.handler.annotation.XxlJob;
@@ -35,8 +36,11 @@ public class StockRedJob {
             String[] split = text.split("\\)");
             String code = split[0].replace("(", "");
             //创业板股票不收录
-            if(code.startsWith("3")){
-                continue;
+            String recordCYB = BaseConfigUtils.getProperty("global.config.recordCYB", "N");
+            if("N".equals(recordCYB)){
+                if(code.startsWith("3")){
+                    continue;
+                }
             }
             code = code.startsWith("6")?("1."+code):("0."+code);
             //String stockName = split[1].replace("吧", "");

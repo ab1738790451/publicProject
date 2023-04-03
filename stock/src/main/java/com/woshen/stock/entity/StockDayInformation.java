@@ -126,10 +126,22 @@ public class StockDayInformation extends BaseEntity<Integer> {
     private Long superInflow;
 
     /**
+     * 超大单流入金额
+     */
+    @TableField(exist = false)
+    private BigDecimal superInflowAmount;
+
+    /**
      * 超大单流出
      */
     @TableField("super_outflow")
     private Long superOutflow;
+
+    /**
+     * 超大单流出金额
+     */
+    @TableField(exist = false)
+    private BigDecimal superOutflowAmount;
 
     /**
      * 大单流入
@@ -138,10 +150,22 @@ public class StockDayInformation extends BaseEntity<Integer> {
     private Long maxInflow;
 
     /**
+     * 大单流入金额
+     */
+    @TableField(exist = false)
+    private BigDecimal maxInflowAmount;
+
+    /**
      * 大单流出
      */
     @TableField("max_outflow")
     private Long maxOutflow;
+
+    /**
+     * 大单流出金额
+     */
+    @TableField(exist = false)
+    private BigDecimal maxOutflowAmount;
 
     /**
      * 中单流入
@@ -150,10 +174,22 @@ public class StockDayInformation extends BaseEntity<Integer> {
     private Long middleInflow;
 
     /**
+     * 中单流入金额
+     */
+    @TableField(exist = false)
+    private BigDecimal middleInflowAmount;
+
+    /**
      * 中单流出
      */
     @TableField("middle_outflow")
     private Long middleOutflow;
+
+    /**
+     * 超大单流出金额
+     */
+    @TableField(exist = false)
+    private BigDecimal middleOutflowAmount;
 
     /**
      * 小单流入
@@ -162,10 +198,22 @@ public class StockDayInformation extends BaseEntity<Integer> {
     private Long minInflow;
 
     /**
+     * 小单流入金额
+     */
+    @TableField(exist = false)
+    private BigDecimal minInflowAmount;
+
+    /**
      * 小单流出
      */
     @TableField("min_outflow")
     private Long minOutflow;
+
+    /**
+     * 小单流出金额
+     */
+    @TableField(exist = false)
+    private BigDecimal minOutflowAmount;
 
     /**
      * 总股本
@@ -218,6 +266,53 @@ public class StockDayInformation extends BaseEntity<Integer> {
      */
     @TableField(exist = false)
     private String name;
+
+    /**
+     * 主力流入
+     */
+    @TableField(exist = false)
+    private Long mainInflow;
+
+    /**
+     * 主力流入金额
+     */
+    @TableField(exist = false)
+    private BigDecimal mainInflowAmount;
+
+    /**
+     * 主力流出
+     */
+    @TableField(exist = false)
+    private Long mainOutflow;
+
+    /**
+     * 主力流出金额
+     */
+    @TableField(exist = false)
+    private BigDecimal mainOutflowAmount;
+
+    /**
+     * 散户流入
+     */
+    @TableField(exist = false)
+    private Long subInflow;
+
+    /**
+     * 散户流入金额
+     */
+    @TableField(exist = false)
+    private BigDecimal subInflowAmount;
+    /**
+     * 散户流出
+     */
+    @TableField(exist = false)
+    private Long subOutflow;
+
+    /**
+     * 散户流出金额
+     */
+    @TableField(exist = false)
+    private BigDecimal subOutflowAmount;
 
     @Override
     public Integer getPk() {

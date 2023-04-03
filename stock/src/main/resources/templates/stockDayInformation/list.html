@@ -36,6 +36,17 @@
                 <input type="text" name="name"   th:value="${queryData.name}" autocomplete="off" class="layui-input" >
             </div>
         </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">主散权重算法</label>
+            <div class="layui-input-inline">
+                <select name="queryParam['mainSubRate']">
+                    <option value="">请选择</option>
+                    <option th:each="item:${mainSubRates}"  th:value="${item.value}" th:text="${item.desc}"></option>
+                </select>
+            </div>
+        </div>
+
         <div class="layui-inline">
             <label class="layui-form-label">交易日期</label>
             <div class="layui-input-inline">
@@ -72,6 +83,8 @@
         <th lay-data="{field:'volume',width:200}">成交</th>
         <th lay-data="{field:'totalWorth',width:230}">市值/股本</th>
         <th lay-data="{field:'pb',width:160}">市盈率</th>
+        <th lay-data="{field:'mainInflow',width:200}">主力</th>
+        <th lay-data="{field:'subInflow',width:200}">散户</th>
         <th lay-data="{field:'superInflow',width:200}">超大单</th>
         <th lay-data="{field:'maxInflow',width:200}">大单</th>
         <th lay-data="{field:'middleInflow',width:200}">中单</th>
@@ -132,24 +145,58 @@
             静态市盈率：[[${item.spe}]]
         </td>
         <td >
+            主力流入：[[${item.mainInflow}]]
+            <br>
+            主力流出：[[${item.mainOutflow}]]
+            <br>
+            主力流入金额：[[${item.mainInflowAmount}]]
+            <br>
+            主力流出金额：[[${item.mainOutflowAmount}]]
+        </td>
+        <td >
+            散户流入：[[${item.subInflow}]]
+            <br>
+            散户流出：[[${item.subOutflow}]]
+            <br>
+            散户流入金额：[[${item.subInflowAmount}]]
+            <br>
+            散户流出金额：[[${item.subOutflowAmount}]]
+        </td>
+        <td >
             超大单流入：[[${item.superInflow}]]
             <br>
             超大单流出：[[${item.superOutflow}]]
+            <br>
+            超大单流入金额：[[${item.superInflowAmount}]]
+            <br>
+            超大单流出金额：[[${item.superOutflowAmount}]]
         </td>
         <td >
             大单流入：[[${item.maxInflow}]]
             <br>
             大单流出：[[${item.maxOutflow}]]
+            <br>
+            大单流入金额：[[${item.maxInflowAmount}]]
+            <br>
+            大单流出金额：[[${item.maxOutflowAmount}]]
         </td>
         <td >
             中单流入：[[${item.middleInflow}]]
             <br>
             中单流出：[[${item.middleOutflow}]]
+            <br>
+            中单流入金额：[[${item.middleInflowAmount}]]
+            <br>
+            中单流出金额：[[${item.middleOutflowAmount}]]
         </td>
         <td >
             小单流入：[[${item.minInflow}]]
             <br>
             小单流出：[[${item.minOutflow}]]
+            <br>
+            小单流入金额：[[${item.minInflowAmount}]]
+            <br>
+            小单流出金额：[[${item.minOutflowAmount}]]
         </td>
         <td >
             总营收：[[${item.totalRevenue}]]
