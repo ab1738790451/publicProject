@@ -81,14 +81,14 @@
         <th lay-data="{field:'high',width:140}">价格</th>
         <th lay-data="{field:'priceChange',width:130}">涨幅/换手</th>
         <th lay-data="{field:'volume',width:200}">成交</th>
-        <th lay-data="{field:'totalWorth',width:230}">市值/股本</th>
-        <th lay-data="{field:'pb',width:160}">市盈率</th>
         <th lay-data="{field:'mainInflow',width:200}">主力</th>
         <th lay-data="{field:'subInflow',width:200}">散户</th>
         <th lay-data="{field:'superInflow',width:200}">超大单</th>
         <th lay-data="{field:'maxInflow',width:200}">大单</th>
         <th lay-data="{field:'middleInflow',width:200}">中单</th>
         <th lay-data="{field:'minInflow',width:200}">小单</th>
+        <th lay-data="{field:'totalWorth',width:230}">市值/股本</th>
+        <th lay-data="{field:'pb',width:160}">市盈率</th>
         <th lay-data="{field:'totalRevenue',width:200}">营收/利率</th>
         <th lay-data="{field:'graphic'}">图解</th>
         <th lay-data="{fixed:'right',title:'操作', width:150, align:'center',toolbar: '#tool'}"></th>
@@ -127,22 +127,6 @@
             成交量：[[${item.volume}]]
             <br>
             成交额：[[${item.turnover}]]
-        </td>
-        <td >
-            总市值：[[${item.totalWorth}]]
-            <br>
-            流通市值：[[${item.circulationWorth}]]
-            <br>
-            总股本：[[${item.totalCapitalStock}]]
-            <br>
-            流通股：[[${item.circulationCapitalStock}]]
-        </td>
-        <td >
-            市净率：[[${item.pb}]]
-            <br>
-            市盈率：[[${item.pe}]]
-            <br>
-            静态市盈率：[[${item.spe}]]
         </td>
         <td >
             主力流入：[[${item.mainInflow}]]
@@ -208,6 +192,22 @@
             负债率：[[${item.debtRatio}]]
             <br>
             每股未分配利润:[[${item.bonus}]]
+        </td>
+        <td >
+            总市值：[[${item.totalWorth}]]
+            <br>
+            流通市值：[[${item.circulationWorth}]]
+            <br>
+            总股本：[[${item.totalCapitalStock}]]
+            <br>
+            流通股：[[${item.circulationCapitalStock}]]
+        </td>
+        <td >
+            市净率：[[${item.pb}]]
+            <br>
+            市盈率：[[${item.pe}]]
+            <br>
+            静态市盈率：[[${item.spe}]]
         </td>
         <td th:text="${item.graphic}"></td>
         <td></td>
