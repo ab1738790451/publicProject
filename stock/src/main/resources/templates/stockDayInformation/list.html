@@ -91,7 +91,7 @@
         <th lay-data="{field:'pb',width:160}">市盈率</th>
         <th lay-data="{field:'totalRevenue',width:200}">营收/利率</th>
         <th lay-data="{field:'graphic'}">图解</th>
-        <th lay-data="{fixed:'right',title:'操作', width:150, align:'center',toolbar: '#tool'}"></th>
+       <!-- <th lay-data="{fixed:'right',title:'操作', width:150, align:'center',toolbar: '#tool'}"></th>-->
     </tr>
     </thead>
     <tbody>
@@ -127,6 +127,8 @@
             成交量：[[${item.volume}]]
             <br>
             成交额：[[${item.turnover}]]
+            <br>
+            净流入：[[${item.inflowTotal}]]
         </td>
         <td >
             主力流入：[[${item.mainInflow}]]
@@ -210,19 +212,19 @@
             静态市盈率：[[${item.spe}]]
         </td>
         <td th:text="${item.graphic}"></td>
-        <td></td>
+       <!-- <td></td>-->
     </tr>
     </tbody>
 </table>
 <div id="page"></div>
 <script type="text/html" id="toolbar">
-    <a class="layui-btn layui-btn-xs " lay-event="add">新增</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="dels">删除</a>
+   <!-- <a class="layui-btn layui-btn-xs " lay-event="add">新增</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="dels">删除</a>-->
 </script>
 
 <script type="text/html" id="tool">
-    <a class="layui-btn layui-btn-xs " lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs " lay-event="del">删除</a>
+   <!-- <a class="layui-btn layui-btn-xs " lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs " lay-event="del">删除</a>-->
 </script>
 
 

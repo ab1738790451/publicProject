@@ -314,6 +314,12 @@ public class StockDayInformation extends BaseEntity<Integer> {
     @TableField(exist = false)
     private BigDecimal subOutflowAmount;
 
+    /**
+     * 日总流入
+     */
+    @TableField(exist = false)
+    private BigDecimal inflowTotal;
+
     @Override
     public Integer getPk() {
     return this.id;

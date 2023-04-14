@@ -71,7 +71,7 @@
        <!-- <th lay-data="{field:'trendsTotal'}">总走势</th>-->
         <th lay-data="{field:'trends'}">走势详情</th>
         <th lay-data="{field:'date'}">日期</th>
-        <th lay-data="{fixed:'right',title:'操作', width:150, align:'center',toolbar: '#tool'}"></th>
+       <!-- <th lay-data="{fixed:'right',title:'操作', width:150, align:'center',toolbar: '#tool'}"></th>-->
     </tr>
     </thead>
     <tbody>
@@ -81,21 +81,23 @@
         <td th:text="${item.code}"></td>
         <td th:text="${item.name}"></td>
        <!-- <td th:text="${item.trendsTotal}"></td>-->
-        <td th:text="${item.trends}"></td>
+        <td>
+            <span class="td-tends"  th:text="${item.trends}"></span>
+        </td>
         <td th:text="${#temporals.format(item.date,'yyyy-MM-dd')}"></td>
-        <td></td>
+       <!-- <td></td>-->
     </tr>
     </tbody>
 </table>
 <div id="page"></div>
 <script type="text/html" id="toolbar">
-    <a class="layui-btn layui-btn-xs " lay-event="add">新增</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="dels">删除</a>
+    <!--<a class="layui-btn layui-btn-xs " lay-event="add">新增</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="dels">删除</a>-->
 </script>
 
 <script type="text/html" id="tool">
-    <a class="layui-btn layui-btn-xs " lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs " lay-event="del">删除</a>
+    <!--<a class="layui-btn layui-btn-xs " lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs " lay-event="del">删除</a>-->
 </script>
 
 
@@ -119,7 +121,32 @@
     });
 
 
+    function analysis() {
+        $(".td-tends").each(function (index,item) {
+            let text = $(this).text();
+            let trends =  JSON.parse(text);
+            let datas = [];
+            for(let item of trends){
+                let arrays = item.split(",");
+                let data = {}
+                data['time'] = arrays[0];
+                data['start'] = arrays[1];
+                data['end'] = arrays[2];
+                data['high'] = arrays[3];
+                data['low'] = arrays[4];
+                data['volume'] = arrays[5];
+                data['turnover'] = arrays[6];
+                data['average'] = arrays[7];
+                datas.push(data);
+                setHtml(item,datas);
+            }
+        })
+    }
 
+    function setHtml(obj,datas) {
+
+    }
+    
     function tableToolEvent(table,obj) {
     }
 

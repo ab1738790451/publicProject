@@ -55,26 +55,38 @@ public class StockDayInformationController extends AbstractController<Integer, S
       records.stream().forEach(t-> {
           t.setName(map.get(t.getCode()));
           BigDecimal average = t.getAverage();
+          Long inflow =  t.getSuperInflow() + t.getMaxInflow() + t.getMiddleInflow() + t.getMinInflow();
+          Long outflow =  t.getSuperOutflow() + t.getMaxOutflow() + t.getMiddleOutflow() + t.getMinOutflow();
+          long l = inflow - outflow;
+          //总流入
+          BigDecimal inflowTotal = BigDecimal.valueOf(l).multiply(average);
+          t.setInflowTotal(inflowTotal);
+
+          //超大单
           BigDecimal superInflowAmount = average.multiply(BigDecimal.valueOf(t.getSuperInflow()));
           t.setSuperInflowAmount(superInflowAmount);
           BigDecimal superOutflowAmount = average.multiply(BigDecimal.valueOf(t.getSuperOutflow()));
           t.setSuperOutflowAmount(superOutflowAmount);
 
+          //大单
           BigDecimal maxInflowAmount = average.multiply(BigDecimal.valueOf(t.getMaxInflow()));
           t.setMaxInflowAmount(maxInflowAmount);
           BigDecimal maxOutflowAmount = average.multiply(BigDecimal.valueOf(t.getMaxOutflow()));
           t.setMaxOutflowAmount(maxOutflowAmount);
 
+          //中单
           BigDecimal middleInflowAmount = average.multiply(BigDecimal.valueOf(t.getMiddleInflow()));
           t.setMiddleInflowAmount(middleInflowAmount);
           BigDecimal middleOutflowAmount = average.multiply(BigDecimal.valueOf(t.getMiddleOutflow()));
           t.setMiddleOutflowAmount(middleOutflowAmount);
 
+          //小单
           BigDecimal minInflowAmount = average.multiply(BigDecimal.valueOf(t.getMinInflow()));
           t.setMinInflowAmount(minInflowAmount);
           BigDecimal minOutflowAmount = average.multiply(BigDecimal.valueOf(t.getMinOutflow()));
           t.setMinOutflowAmount(minOutflowAmount);
 
+          //根据主散比规则计算主力和散户数据
           if(queryData.getQueryParam("mainSubRate") != null){
               if(MainSubRate.NIE_EIGHT_TWO_ONE.name().equals(queryData.getQueryParam("mainSubRate"))){
                 Double mainInflow =  t.getSuperInflow()*0.9 + t.getMaxInflow()*0.8 + t.getMiddleInflow()*0.2 + t.getMinInflow()*0.1;
