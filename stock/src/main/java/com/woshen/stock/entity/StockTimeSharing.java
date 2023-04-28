@@ -3,6 +3,8 @@ package com.woshen.stock.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import com.woshen.common.webcommon.db.entity.BaseEntity;
 import lombok.Data;
@@ -53,6 +55,25 @@ public class StockTimeSharing extends BaseEntity<Integer> {
      */
     @TableField(exist = false)
     private String name;
+
+    @TableField(exist = false)
+    private BigDecimal lastClose;
+
+    @TableField(exist = false)
+    private BigDecimal open;
+
+    @TableField(exist = false)
+    private BigDecimal close;
+
+    @TableField(exist = false)
+    private BigDecimal high;
+
+    @TableField(exist = false)
+    private BigDecimal low;
+
+    @TableField(exist = false)
+    private BigDecimal priceChange;
+
 
     @Override
     public Integer getPk() {

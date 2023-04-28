@@ -24,11 +24,11 @@ public class StockDayInformationServiceImpl extends BaseServiceImpl<Integer, Sto
         QueryWrapper<StockDayInformation> baseWrapper = super.getBaseWrapper(queryData);
         String createStartTime = (String)queryData.getQueryParam("createStartTime");
         if(StringUtils.isNotBlank(createStartTime)){
-            baseWrapper.gt("transaction_date",createStartTime);
+            baseWrapper.ge("transaction_date",createStartTime);
         }
         String createEndTime = (String)queryData.getQueryParam("createEndTime");
         if(StringUtils.isNotBlank(createEndTime)){
-            baseWrapper.gt("transaction_date",createEndTime);
+            baseWrapper.le("transaction_date",createEndTime);
         }
         String name = queryData.getName();
         if(StringUtils.isNotBlank(name)){

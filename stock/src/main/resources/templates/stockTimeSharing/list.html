@@ -68,6 +68,9 @@
         <th lay-data="{field:'id'}">id</th>
         <th lay-data="{field:'code'}">股票代码</th>
         <th lay-data="{field:'name'}">股票名称</th>
+        <th lay-data="{field:'open'}">开盘价</th>
+        <th lay-data="{field:'close'}">收盘价</th>
+        <th lay-data="{field:'priceChange'}">涨幅</th>
        <!-- <th lay-data="{field:'trendsTotal'}">总走势</th>-->
         <th lay-data="{field:'trends'}">走势详情</th>
         <th lay-data="{field:'date'}">日期</th>
@@ -80,9 +83,12 @@
         <td th:text="${item.id}"></td>
         <td th:text="${item.code}"></td>
         <td th:text="${item.name}"></td>
+        <td th:text="${item.open}"></td>
+        <td th:text="${item.close}"></td>
+        <td th:text="${item.priceChange}"></td>
        <!-- <td th:text="${item.trendsTotal}"></td>-->
         <td>
-            <span class="td-tends"  th:text="${item.trends}"></span>
+            <span class="td-tends" th:data-value="|{'open':${item.open},'high':${item.high},'lastClose':${item.lastClose},'low':${item.low}}|" th:text="${item.trends}"></span>
         </td>
         <td th:text="${#temporals.format(item.date,'yyyy-MM-dd')}"></td>
        <!-- <td></td>-->
@@ -118,11 +124,22 @@
                 type:'date'
             })
         renderList("列表","stockTimeSharing");
+
+        analysis();
     });
 
 
     function analysis() {
-        $(".td-tends").each(function (index,item) {
+        $(".td-tends").each(function (index,obj) {
+            let dataValue = $(this).attr("data-value");
+            dataValue = dataValue.replaceAll("'","\"");
+            let value = JSON.parse(dataValue);
+            if(!value.high){
+                return;
+            }
+            value['max'] = (value.high * 100) > (value.lastClose * 100)?value.high * 100:value.lastClose * 100;
+            value['min'] = (value.low * 100) < (value.lastClose * 100)?value.low * 100:value.lastClose * 100;
+            value['count'] = value.max - value.min + 1;
             let text = $(this).text();
             let trends =  JSON.parse(text);
             let datas = [];
@@ -138,13 +155,16 @@
                 data['turnover'] = arrays[6];
                 data['average'] = arrays[7];
                 datas.push(data);
-                setHtml(item,datas);
+                let html = getHtml(value,datas);
+                $(obj).html(html);
             }
         })
     }
 
-    function setHtml(obj,datas) {
-
+    function getHtml(value,datas) {
+     let html = '<div style="border-left:1px solid red;border-bottom:1px solid red;width: 400px;height: 200px;">\n' +
+         '</div>';
+     return html;
     }
     
     function tableToolEvent(table,obj) {

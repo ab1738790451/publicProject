@@ -23,11 +23,11 @@ public class StockTimeSharingServiceImpl extends BaseServiceImpl<Integer, StockT
         QueryWrapper<StockTimeSharing> baseWrapper = super.getBaseWrapper(queryData);
         String createStartTime = (String)queryData.getQueryParam("createStartTime");
         if(StringUtils.isNotBlank(createStartTime)){
-            baseWrapper.gt("date",createStartTime);
+            baseWrapper.ge("date",createStartTime);
         }
         String createEndTime = (String)queryData.getQueryParam("createEndTime");
         if(StringUtils.isNotBlank(createEndTime)){
-            baseWrapper.gt("date",createEndTime);
+            baseWrapper.le("date",createEndTime);
         }
         String name = queryData.getName();
         if(StringUtils.isNotBlank(name)){
