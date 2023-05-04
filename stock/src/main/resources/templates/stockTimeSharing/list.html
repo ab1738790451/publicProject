@@ -12,6 +12,14 @@
         .main-body{
             padding: 18px;
         }
+        .tends-item{
+            color: red;
+            position: absolute;
+            font-size: 42px;
+        }
+        .layui-table-cell{
+            height: auto;
+        }
     </style>
 </head>
 <body class="main-body">
@@ -88,7 +96,7 @@
         <td th:text="${item.priceChange}"></td>
        <!-- <td th:text="${item.trendsTotal}"></td>-->
         <td>
-            <span class="td-tends" th:data-value="|{'open':${item.open},'high':${item.high},'lastClose':${item.lastClose},'low':${item.low}}|" th:text="${item.trends}"></span>
+            <div class="td-tends" th:data-value="|{'open':${item.open},'high':${item.high},'lastClose':${item.lastClose},'low':${item.low}}|" th:text="${item.trends}"></div>
         </td>
         <td th:text="${#temporals.format(item.date,'yyyy-MM-dd')}"></td>
        <!-- <td></td>-->
@@ -124,8 +132,8 @@
                 type:'date'
             })
         renderList("列表","stockTimeSharing");
-
         analysis();
+        /*currTable.render();*/
     });
 
 
@@ -143,6 +151,12 @@
             let text = $(this).text();
             let trends =  JSON.parse(text);
             let datas = [];
+            let lastClose = {}
+            lastClose['end'] = value.lastClose;
+            datas.push(lastClose);
+            let open = {}
+            open['end'] = value.open;
+            datas.push(open);
             for(let item of trends){
                 let arrays = item.split(",");
                 let data = {}
@@ -155,15 +169,34 @@
                 data['turnover'] = arrays[6];
                 data['average'] = arrays[7];
                 datas.push(data);
-                let html = getHtml(value,datas);
-                $(obj).html(html);
             }
+            let html = getHtml(value,datas);
+            $(obj).parent().html(html);
         })
     }
 
     function getHtml(value,datas) {
-     let html = '<div style="border-left:1px solid red;border-bottom:1px solid red;width: 400px;height: 200px;">\n' +
-         '</div>';
+        let count = value.count;
+        let heightUnit = parseFloat((250/count).toFixed(1));
+        let min = value.min;
+        let max = value.max;
+        let html = '<div style="border-left:1px solid #9e9e9e3b;border-bottom:1px solid #9e9e9e3b;width: 500px;height: 300px;">';
+        let x1 = 0;
+        let y1 = 300;
+        html +='<svg style="width: 100%;height: 100%" xmlns="http://www.w3.org/2000/svg">';
+        for (let i=0;i<datas.length;i++){
+             let data = datas[i];
+             let height = ((data.end * 100 - min)*heightUnit).toFixed(1);
+             let y2 = ((max -(data.end * 100))*heightUnit).toFixed(1);
+             let width = (i + 2)*2;
+             html += ' <span class="tends-item" style="left: '+width+'px;bottom: '+height+'px">.</span>';
+             if(i != 0){
+                 html += '<line class="line" style="stroke:rgb(255,0,0);stroke-width:1" x1="'+x1+'px" y1="'+y1+'px" x2="'+width+'px" y2="'+y2+'px" />';
+             }
+             x1 = width;
+             y1 = y2;
+        }
+       html += ' </svg></d>';
      return html;
     }
     
