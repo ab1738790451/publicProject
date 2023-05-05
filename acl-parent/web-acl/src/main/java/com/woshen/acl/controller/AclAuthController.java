@@ -204,13 +204,13 @@ public class AclAuthController {
             }
         }
         if(!CollectionUtils.isEmpty(treeDatas)){
-            List<Menu> collect = treeDatas.stream().filter(t -> t.getParent() == -1).collect(Collectors.toList());
-            collect.sort((o1,o2)->{
+            treeDatas = treeDatas.stream().filter(t -> t.getParent() == -1).collect(Collectors.toList());
+            treeDatas.sort((o1,o2)->{
                 int  calibration =o1.getId() - o2.getId() > 0?1:-1;
                 int result = o1.getPriority()  - o2.getPriority();
                 return result == 0 ? calibration:(result > 0?1:-1);
             });
-            RedisUtil.stringExecutor().set(AclAuthKeyNs.ACL_USER_MENU,key,JSONObject.toJSONString(collect));
+            RedisUtil.stringExecutor().set(AclAuthKeyNs.ACL_USER_MENU,key,JSONObject.toJSONString(treeDatas));
         }
         return new ResponseResult(treeDatas);
     }
