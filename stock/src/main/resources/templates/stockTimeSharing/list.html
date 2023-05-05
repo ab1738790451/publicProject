@@ -13,7 +13,7 @@
             padding: 18px;
         }
         .tends-item{
-            color: red;
+            color: rebeccapurple;
             position: absolute;
             font-size: 42px;
         }
@@ -21,9 +21,17 @@
             height: auto !important;
         }
 
+       /* .line{
+            pointer-events: none;
+        }
         .line::before{
             content: ".";
             color: red;
+            pointer-events: all;
+        }*/
+        #box{
+            position: fixed;
+            z-index: 999;
         }
     </style>
 </head>
@@ -144,7 +152,19 @@
             })
         renderList("列表","stockTimeSharing");
         analysis();
-        /*currTable.render();*/
+        setTimeout(function () {
+            $(".line").mouseover(function(e) {
+                let x = e.pageX;
+                let y = e.pageY;
+                $(".main-body").prepend('<div id="box"></div>');
+                $("#box").append("<div id='trends_open' style='left: "+x+"px;top:"+y+"px;width: 200px;height: 300px;z-index: 999;position: absolute'>hahaha</div>");
+            });
+            $(".line").mouseout(function () {
+                $("#box").remove();
+            });
+        },500)
+
+
     });
 
 
@@ -164,6 +184,7 @@
             let datas = [];
             let lastClose = {}
             lastClose['end'] = value.lastClose;
+            lastClose['priceChange'] = 0.00;
             datas.push(lastClose);
             let open = {}
             open['end'] = value.open;
@@ -202,20 +223,21 @@
         for (let i=0;i<datas.length;i++){
              let data = datas[i];
              let height = ((data.end * 100 - min)*heightUnit).toFixed(1);
-             let y2 = ((max -(data.end * 100))*heightUnit).toFixed(1);
-             let width = (i + 1)*2;
-             //html += ' <span class="tends-item" style="left: '+width+'px;bottom: '+height+'px">.</span>';
+             let y2 = parseFloat(((max -(data.end * 100))*heightUnit).toFixed(1));
+             let width = i *2;
              if(i != 0){
                  if(i==1){
                      startY = y2;
                  }
                  html += '<line class="line" data-value="'+data.end+'" data-change="'+data.priceChange+'" style="stroke:rgb(255,0,0);stroke-width:1" x1="'+x1+'px" y1="'+y1+'px" x2="'+width+'px" y2="'+y2+'px" />';
              }else{
+                /* html += ' <span  style="left: '+width+'px;bottom: '+height+'px">.</span>';*/
                  lastY = y2;
+                 html += '<line class="line" data-value="'+data.end+'" data-change="'+data.priceChange+'" style="stroke:rgb(255,0,0);stroke-width:1" x1="0px" y1="'+y2+'px" x2="0px" y2="'+y2+'px" />';
              }
              if(i == datas.length -1){
                  html += '<line class="line" data-value="'+data.end+'" style="stroke:#1e9fff;stroke-width:1" x1="0px" y1="'+lastY+'px" x2="'+width+'px" y2="'+lastY+'px" />';
-                 html += '<line class="line" data-value="'+data.end+'" style="stroke:rgb(0 255 31);stroke-width:1" x1="0px" y1="'+startY+'px" x2="'+width+'px" y2="'+startY+'px" />';
+                 html += '<line class="line" data-value="'+data.end+'" style="stroke:#9e9e9e;stroke-width:1" x1="0px" y1="'+startY+'px" x2="'+width+'px" y2="'+startY+'px" />';
              }
              x1 = width;
              y1 = y2;
