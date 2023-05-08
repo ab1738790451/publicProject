@@ -153,13 +153,49 @@
         renderList("列表","stockTimeSharing");
         analysis();
         setTimeout(function () {
-            $(".line").mouseover(function(e) {
-                let x = e.pageX;
-                let y = e.pageY;
+            $(".trends_box").mousemove(function(e) {
+                $("#box").remove();
+                let startX = $(this).offset().left;
+                //let startY = $(this).offset().left;
+                let x = e['pageX'];
+                let y = e['pageY'];
+                console.log("startX:"+startX+",x:"+x);
+                let offset = x - startX - 2;
+                let data = $(".line_"+ (offset/2).toFixed(1).split(".")[0]).attr("data-value");
+                if(!data){
+                    return;
+                }
+                data = data.replaceAll("$",'"');
+                data = JSON.parse(data);
                 $(".main-body").prepend('<div id="box"></div>');
-                $("#box").append("<div id='trends_open' style='left: "+x+"px;top:"+y+"px;width: 200px;height: 300px;z-index: 999;position: absolute'>hahaha</div>");
+                let html = "<div id='trends_open' style='left: "+x+"px;top:"+y+"px;width: 200px;height: 300px;z-index: 999;position: absolute'>";
+                if(data.type == 1){
+                    html+= "<span>昨日收盘："+data.end+"</span>";
+                }else if(data.type == 2){
+                    html+= "<span>今日开盘："+data.end+"</span>";
+                }else{
+                    html+= "<span>时间："+data.time+"</span>";
+                    html+= "<br>";
+                    html+= "<span>涨幅："+data.priceChange+"</span>";
+                    html+= "<br>";
+                    html+= "<span>开始："+data.start+"</span>";
+                    html+= "<br>";
+                    html+= "<span>结束："+data.end+"</span>";
+                    html+= "<br>";
+                    html+= "<span>最低："+data.low+"</span>";
+                    html+= "<br>";
+                    html+= "<span>最高"+data.high+"</span>";
+                    html+= "<br>";
+                    html+= "<span>成交量："+data.volume+"</span>";
+                    html+= "<br>";
+                    html+= "<span>成交额："+data.turnover+"</span>";
+                    html+= "<br>";
+                    html+= "<span>今日总平均："+data.average+"</span>";
+                }
+                html+= "</div>";
+                $("#box").html(html);
             });
-            $(".line").mouseout(function () {
+            $(".trends_box").mouseout(function () {
                 $("#box").remove();
             });
         },500)
@@ -171,7 +207,7 @@
     function analysis() {
         $(".td-tends").each(function (index,obj) {
             let dataValue = $(this).attr("data-value");
-            dataValue = dataValue.replaceAll("'","\"");
+            dataValue = dataValue.replaceAll("'",'"');
             let value = JSON.parse(dataValue);
             if(!value.high){
                 return;
@@ -185,10 +221,12 @@
             let lastClose = {}
             lastClose['end'] = value.lastClose;
             lastClose['priceChange'] = 0.00;
+            lastClose['type'] = 1;
             datas.push(lastClose);
             let open = {}
             open['end'] = value.open;
             open['priceChange'] = 0.00;
+            open['type'] = 2;
             datas.push(open);
             for(let item of trends){
                 let arrays = item.split(",");
@@ -201,6 +239,7 @@
                 data['volume'] = arrays[5];
                 data['turnover'] = arrays[6];
                 data['average'] = arrays[7];
+                data['type'] = 3;
                 data['priceChange'] = ((data.end - value.open)/value.open).toFixed(2);
                 datas.push(data);
             }
@@ -214,7 +253,7 @@
         let heightUnit = parseFloat((290/count).toFixed(1));
         let min = value.min;
         let max = value.max;
-        let html = '<div style="border-left:1px solid #9e9e9e3b;border-bottom:1px solid #9e9e9e3b;width: 500px;height: 300px;display: inline-block">';
+        let html = '<div class="trends_box" style="border-left:1px solid #9e9e9e3b;border-bottom:1px solid #9e9e9e3b;width: 510px;height: 300px;display: inline-block">';
         let x1 = 0;
         let y1 = 0;
         let lastY = 0;
@@ -224,20 +263,29 @@
              let data = datas[i];
              let height = ((data.end * 100 - min)*heightUnit).toFixed(1);
              let y2 = parseFloat(((max -(data.end * 100))*heightUnit).toFixed(1));
-             let width = i *2;
+             let width = i *2 + 2;
              if(i != 0){
                  if(i==1){
                      startY = y2;
                  }
-                 html += '<line class="line" data-value="'+data.end+'" data-change="'+data.priceChange+'" style="stroke:rgb(255,0,0);stroke-width:1" x1="'+x1+'px" y1="'+y1+'px" x2="'+width+'px" y2="'+y2+'px" />';
+                 let str = "{";
+                 for (let item in data){
+                     str += "$"+item+"$:$"+data[item]+"$,";
+                 }
+                 str = str.substring(0,str.length -1) + "}";
+                 html += '<line class="line line_'+i+'" data-value="'+str+'"  style="stroke:rgb(255,0,0);stroke-width:1" x1="'+x1+'px" y1="'+y1+'px" x2="'+width+'px" y2="'+y2+'px" />';
              }else{
-                /* html += ' <span  style="left: '+width+'px;bottom: '+height+'px">.</span>';*/
+                 let str = "{";
+                 for (let item in data){
+                     str += "$"+item+"$:$"+data[item]+"$,";
+                 }
+                 str = str.substring(0,str.length -1) + "}"
                  lastY = y2;
-                 html += '<line class="line" data-value="'+data.end+'" data-change="'+data.priceChange+'" style="stroke:rgb(255,0,0);stroke-width:1" x1="0px" y1="'+y2+'px" x2="0px" y2="'+y2+'px" />';
+                 html += '<line class="line line_'+i+'" data-value="'+str+'" style="stroke:rgb(255,0,0);stroke-width:1" x1="0px" y1="'+y2+'px" x2="0px" y2="'+y2+'px" />';
              }
              if(i == datas.length -1){
-                 html += '<line class="line" data-value="'+data.end+'" style="stroke:#1e9fff;stroke-width:1" x1="0px" y1="'+lastY+'px" x2="'+width+'px" y2="'+lastY+'px" />';
-                 html += '<line class="line" data-value="'+data.end+'" style="stroke:#9e9e9e;stroke-width:1" x1="0px" y1="'+startY+'px" x2="'+width+'px" y2="'+startY+'px" />';
+                 html += '<line   style="stroke:#1e9fff;stroke-width:1" x1="0px" y1="'+lastY+'px" x2="'+width+'px" y2="'+lastY+'px" />';
+                 html += '<line   style="stroke:#9e9e9e;stroke-width:1" x1="0px" y1="'+startY+'px" x2="'+width+'px" y2="'+startY+'px" />';
              }
              x1 = width;
              y1 = y2;
