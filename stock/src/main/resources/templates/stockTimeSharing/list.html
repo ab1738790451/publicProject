@@ -159,7 +159,6 @@
                 //let startY = $(this).offset().left;
                 let x = e['pageX'];
                 let y = e['pageY'];
-                console.log("startX:"+startX+",x:"+x);
                 let offset = x - startX - 2;
                 let data = $(".line_"+ (offset/2).toFixed(1).split(".")[0]).attr("data-value");
                 if(!data){
