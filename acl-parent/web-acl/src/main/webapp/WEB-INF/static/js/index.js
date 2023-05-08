@@ -227,7 +227,7 @@ var menuUtils = new (function() {
         let layId = template.layId;
         let url = data[template.dataUrl]?data[template.dataUrl]:"";
         if(url.length > 0){
-           url = url.split(",")[0];
+            url = url.split(",")[0];
         }
         let html = '<li class="layui-nav-item">' ;
         if(data[template.children] && data[template.children].length > 0){
@@ -244,7 +244,7 @@ var menuUtils = new (function() {
         let html ='<dl class="layui-nav-child">';
         for(let item of data){
             let layId = template.layId;
-            let url = data[template.dataUrl]?data[template.dataUrl]:"";
+            let url = item[template.dataUrl]?item[template.dataUrl]:"";
             if(url.length > 0){
                 url = url.split(",")[0];
             }
