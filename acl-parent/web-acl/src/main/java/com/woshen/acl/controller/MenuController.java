@@ -63,13 +63,20 @@ public class MenuController extends AbstractController<Integer,Menu> {
             queryData.setParentId(-1);
         }
         queryData.setStatus(DataStatus.NORMAL);
+        queryData.setOrderBy("id.asc,priority.asc");
         Page<Menu> menuPage = super.loadList(queryData);
         List<Menu> records = menuPage.getRecords();
         if(!CollectionUtils.isEmpty(records)){
             List<Integer> ids = records.stream().map(Menu::getId).collect(Collectors.toList());
             iteratedSubitem(records,ids);
         }
-        return new ResponseResult(new TreeNodeUtil(records));
+        TreeNodeUtil<Menu> treeNodeUtil = new TreeNodeUtil(records);
+        treeNodeUtil.getTreeDatas().sort(((o1, o2) -> {
+            int  calibration =o1.getId() - o2.getId() > 0?1:-1;
+            int result = o1.getPriority()  - o2.getPriority();
+            return result == 0 ? calibration:(result > 0?1:-1);
+        }));
+        return new ResponseResult(treeNodeUtil);
     }
     /**
      * 迭代子项
@@ -78,6 +85,7 @@ public class MenuController extends AbstractController<Integer,Menu> {
      */
     private void iteratedSubitem(List<Menu> menus,List<Integer> parentIds){
         Menu menu = new Menu();
+        menu.setOrderBy("id.asc,priority.asc");
         menu.setStatus(DataStatus.NORMAL);
         QueryWrapper<Menu> baseWrapper = menuServiceImpl.getBaseWrapper(menu);
         baseWrapper.in("parent_id",parentIds);

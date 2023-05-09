@@ -13,9 +13,7 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author: liuhaibo
@@ -73,9 +71,12 @@ public class AclAuthUtils {
             if("SUPER_ADMIN".equals(userType) || "ADMIN".equals(userType)){
                 return true;
             }
-            List roleIds1 = (List)userMap.get("roleIds");
-            if(CollectionUtils.isEmpty(roleIds1)){
+            String roleIdsStr = (String)userMap.get("roleIds");
+            List<String> roleIdsList;
+            if(StringUtils.isBlank(roleIdsStr)){
                 return false;
+            }else{
+                roleIdsList = Arrays.asList(roleIdsStr.split(","));
             }
             String[] split = url.split("\\?");
             String uri = WebUtils.getUri(split[0]);
@@ -102,7 +103,7 @@ public class AclAuthUtils {
             String[] roleIds = roles.split(",");
             for (String role:roleIds
                  ) {
-                 if(roleIds1.contains(role)){
+                 if(roleIdsList.contains(role)){
                      return true;
                  }
             }

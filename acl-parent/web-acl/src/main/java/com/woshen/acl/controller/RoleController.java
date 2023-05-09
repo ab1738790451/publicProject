@@ -77,6 +77,7 @@ public class RoleController extends AbstractController<Integer, Role> {
         }
         menu.setAppId(appId);
         menu.setStatus(DataStatus.NORMAL);
+        menu.setOrderBy("id.asc,priority.asc");
         List<Menu> list = menuServiceImpl.list(menuServiceImpl.getBaseWrapper(menu));
         if(StringUtils.isNotBlank(menuIds)){
             String[] split = menuIds.split(",");
@@ -87,6 +88,12 @@ public class RoleController extends AbstractController<Integer, Role> {
                 }
             });
         }
-        return new ResponseResult(new TreeNodeUtil<>(list));
+        TreeNodeUtil<Menu> menuTreeNodeUtil = new TreeNodeUtil<>(list);
+        menuTreeNodeUtil.getTreeDatas().sort(((o1, o2) -> {
+            int  calibration =o1.getId() - o2.getId() > 0?1:-1;
+            int result = o1.getPriority()  - o2.getPriority();
+            return result == 0 ? calibration:(result > 0?1:-1);
+        }));
+        return new ResponseResult(menuTreeNodeUtil);
     }
 }

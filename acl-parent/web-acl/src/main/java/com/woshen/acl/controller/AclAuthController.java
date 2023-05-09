@@ -87,7 +87,7 @@ public class AclAuthController {
         role.setAppId(appId);
         role.setStatus(DataStatus.NORMAL);
         List<Role> roles = roleServiceImpl.selectList(role);
-        Map<String,String> menuRoleMapping = new HashMap<>();
+        Map<String,Set<String>> menuRoleMapping = new HashMap<>();
         //建立菜单于角色的映射关系
         for (Role item:roles
              ) {
@@ -98,25 +98,24 @@ public class AclAuthController {
             String[] split = menuIds.split(",");
             for (String menuId:split
                  ) {
-                String s = menuRoleMapping.get(menuId);
-                if(StringUtils.isBlank(s)){
-                    s = item.getId().toString();
-                }else {
-                    s += ","+item.getId().toString();
+                Set<String> sets = menuRoleMapping.get(menuId);
+                if(!CollectionUtils.isEmpty(sets)){
+                    sets = new HashSet<>();
                 }
-                menuRoleMapping.put(menuId,s);
+                sets.add(item.getId().toString());
+                menuRoleMapping.put(menuId,sets);
             }
         }
         Map<String,String> uriRoleMapping = new HashMap<>();
         menus.stream().forEach( t ->{
-            String roleIds = menuRoleMapping.get(t.getId().toString());
+            Set<String> roleIds = menuRoleMapping.get(t.getId().toString());
             String url = t.getUrl();
             if(StringUtils.isNotBlank(url)){
                 String[] urls = url.split(",");
                 for (String u:urls
                      ) {
-                    if(StringUtils.isNotBlank(roleIds)){
-                        uriRoleMapping.put(u,roleIds);
+                    if(!CollectionUtils.isEmpty(roleIds)){
+                        uriRoleMapping.put(u,String.join(",",roleIds));
                     }else{
                         uriRoleMapping.put(u,"0");
                     }
