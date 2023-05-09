@@ -19,6 +19,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         InterceptorRegistration registration = registry.addInterceptor(new AclAuthInterceptor());
         registration.addPathPatterns("/**");
-        registration.excludePathPatterns("/static/**","/test/**","/index","/loadAllMenu");
+        registration.excludePathPatterns("/static/**","/test/**","/index","/loadMenu");
     }
 }
