@@ -170,7 +170,7 @@ function renderTree(title,module,searchFilter,treeUrl){
                 html +=iteretor(item,headArray,0);
             }
             $("#tableList").find("tbody").html(html);
-
+            hideCol();
             //表格初始化
             renderList(title,module,searchFilter,function () {
                 let treeCol = $("#tableList").attr("treeCol");
@@ -191,10 +191,14 @@ function renderTree(title,module,searchFilter,treeUrl){
 
                     $(".tree-node").each(function (index,item) {
                         let level =  $(this).attr('node-level');
+                        let tr = $(".layui-table-body tr")[index];
                         if(level > 0){
-                            let tr = $(".layui-table-body tr")[index];
                             $(tr).addClass('node_close');
                         }
+                        let dataId =  $(this).attr('data-id');
+                        $(tr).attr("data-id",dataId);
+                        let dataParentId =  $(this).attr('data-parent-id');
+                        $(tr).addClass("parent_node_"+dataParentId);
                     })
                     $(".layui-table-body "+cellClass).each(function (index,item) {
                         let trIndex =  $(this).closest('tr').attr("data-index");
@@ -203,16 +207,17 @@ function renderTree(title,module,searchFilter,treeUrl){
                         let td = $(tr).find(".parent_node_colse");
                         if(td.length > 0){
                             let html  = $(this).html();
+                            let dataId =  $(tr).attr('data-id');
                             $(this).html(getmultipartBlank(level) + '<i class="layui-icon">&#xe623;</i>' + html)
                             $(this).on('click',function () {
                                 if($(this).hasClass('parent_node_colse') || !$(this).hasClass('parent_node_open')){
                                     $(this).removeClass('parent_node_colse');
                                     $(this).addClass('parent_node_open');
-                                    $($(this).closest('tr').next()).removeClass('node_close');
+                                    $(".parent_node_"+dataId).removeClass('node_close');
                                 }else{
                                     $(this).removeClass('parent_node_open');
                                     $(this).addClass('parent_node_colse');
-                                    $($(this).closest('tr').next()).addClass('node_close');
+                                    $(".parent_node_"+dataId).addClass('node_close');
                                 }
                             })
                         }else{
@@ -242,8 +247,8 @@ function iteretor(data,headArray,level) {
 }
 //组装表格行
 function tdHtml(headArray,data,level,hasIcon) {
-    let html = '<tr class="tree-node" node-level="'+level+'" ';
-    html += (level ==0) ?'>':'class="node_close" >'
+    let html = '<tr class="tree-node" node-level="'+level+'" data-id="'+data.id+'" data-parent-id="'+data.parentId+'" ';
+    html += '>';
     for (let item of headArray){
         let val = data[item.field];
         if(val == undefined || val == null || val.length == 0){
@@ -280,7 +285,7 @@ function defaultTableToolBarEvent(table,obj) {
     var data = table.checkStatus(obj.config.id).data;
     switch (obj.event) {
         case "add":
-            top.tabAdd(tabFilter,moduleName + "-add",moduleName+'新增',"/"+moduleName+"/toEdit?lastLayId="+currTabLayId);
+            top.tabChange(tabFilter,moduleName + "-add",moduleName+'新增',"/"+moduleName+"/toEdit?lastLayId="+currTabLayId);
             break;
         case "dels":
             if(data.length == 0){
