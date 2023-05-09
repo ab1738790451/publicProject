@@ -70,7 +70,7 @@ public class AclAuthController {
         return new ResponseResult(user);
     }
 
-    @PostMapping("getUrlAccessRoles")
+    @RequestMapping("getUrlAccessRoles")
     public ResponseResult getUrlAccessRoles( @RequestParam("appId")Integer appId){
         App app = appServiceImpl.getById(appId);
         if(app == null || !DataStatus.NORMAL.equals(app.getStatus())){
@@ -99,7 +99,7 @@ public class AclAuthController {
             for (String menuId:split
                  ) {
                 Set<String> sets = menuRoleMapping.get(menuId);
-                if(!CollectionUtils.isEmpty(sets)){
+                if(CollectionUtils.isEmpty(sets)){
                     sets = new HashSet<>();
                 }
                 sets.add(item.getId().toString());

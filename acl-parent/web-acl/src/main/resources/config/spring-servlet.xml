@@ -183,6 +183,8 @@
             <mvc:exclude-mapping path="/getPassword" />
             <mvc:exclude-mapping path="/error"/>
             <mvc:exclude-mapping path="/unAuth"/>
+            <mvc:exclude-mapping path="/loginOut"/>
+            <mvc:exclude-mapping path="/modifyPassword"/>
             <bean id="aclAuthInterceptor" class="com.woshen.acl.common.interceptors.AclAuthInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors>
