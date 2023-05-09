@@ -169,7 +169,7 @@
        let data = obj.data;
         switch (obj.event) {
            case "role":
-               top.tabAdd(tabFilter,"manage-role-0",'授权角色',"/user/managerRole??lastLayId="+currTabLayId+"&userId="+data.id);
+               top.tabChange(tabFilter,"manage-role-0",'授权角色',"/user/managerRole??lastLayId="+currTabLayId+"&userId="+data.id);
                break;
         }
     }

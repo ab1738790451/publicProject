@@ -177,7 +177,7 @@ public class AclAuthController {
                 role.setStatus(DataStatus.NORMAL);
                 role.setAppId(appId);
                 QueryWrapper<Role> baseWrapper = roleServiceImpl.getBaseWrapper(role);
-                baseWrapper.in("id",split);
+                baseWrapper.in("id",Arrays.asList(split).stream().map(t-> Integer.valueOf(t)).collect(Collectors.toList()));
                 List<Role> list = roleServiceImpl.list(baseWrapper);
                 Set<Integer> mIds = new HashSet<>();
                 list.stream().forEach(t->{

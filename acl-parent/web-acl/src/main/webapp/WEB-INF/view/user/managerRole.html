@@ -71,7 +71,7 @@
     });
 
     function beforeSubmit(data){
-        data.field.roleIds = roleIds.join(",");
+        data.field.roleIds = Array.from(roleIds).join(",");
         return true;
     }
 </script>
