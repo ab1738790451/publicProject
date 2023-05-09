@@ -21,6 +21,7 @@ function renderEdit(submitFilter,lastLayId){
 
 //表格初始化
 function renderList(title,module,searchFilter,done) {
+    hideCol();
     layui.use(['form','table','laypage'],function () {
         currTable = layui.table
         moduleName = module;
@@ -168,7 +169,7 @@ function renderTree(title,module,searchFilter,treeUrl){
                 html +=iteretor(item,headArray,0);
             }
             $("#tableList").find("tbody").html(html);
-
+            hideCol();
             //表格初始化
             renderList(title,module,searchFilter,function () {
                 let treeCol = $("#tableList").attr("treeCol");
@@ -301,6 +302,11 @@ function defaultTableToolBarEvent(table,obj) {
                 $("#dataForm").hide();
             }
             break;
+        case 'LAYTABLE_COLS':
+            $(":checkbox[title='hideFilterField']").parents("li").hide();
+            //监听工具栏筛选列操作，缓存隐藏列
+            toolbarFilter();
+            break;
     }
     if(typeof tableToolBarEvent == 'function'){
         tableToolBarEvent(table,obj);
@@ -333,4 +339,144 @@ $(function () {
     })
 })
 
+function toolbarFilter() {
+    let toolbarFilterJson = {};
+    let lis =  $(".layui-table-tool-panel li");
+    if(lis.length == 0){
+        return;
+    }
+    let url = location.host + location.pathname;
+    let jsonStr = sessionStorage.getItem(url);
+    if(jsonStr == null || jsonStr == undefined){
+        toolbarFilterJson = {};
+    }else{
+        toolbarFilterJson = JSON.parse(jsonStr);
+    }
 
+    lis.on('click',function () {
+        let input = $(this).find("input");
+        let name = $(input).attr('name');
+        if(!name){
+            name = $(input).attr('title');
+        }
+
+        let classS = $(this).find("div").attr("class");
+        if(classS.indexOf('layui-form-checked') == -1){
+            toolbarFilterJson[name] = "unChecked";
+        }else{
+            toolbarFilterJson[name] = "checked";
+        }
+        sessionStorage.setItem(url,JSON.stringify(toolbarFilterJson));
+    })
+}
+
+function hideCol() {
+    let toolbarFilterJson = {};
+    let url = location.host + location.pathname;
+    let jsonStr = sessionStorage.getItem(url);
+    if(jsonStr == null || jsonStr == undefined){
+        return;
+    }
+    toolbarFilterJson = JSON.parse(jsonStr);
+    let tables = $("table");
+    let currTable;
+    if(tables.length > 0){
+        for(let tb of tables){
+            if($(tb).attr("lay-filter") == 'tableList'){
+                currTable = tb;
+                continue;
+            }
+        }
+    }
+    if(currTable == null || currTable == undefined){
+        return;
+    }
+
+    let htrs = $(currTable).find("thead tr");
+    if(htrs.length == 0){
+        return;
+    }
+    for(let tr of htrs){
+        let ths = $(tr).find("th");
+        for(let th of ths){
+            let layData = $(th).attr("lay-data");
+            let fieldIndex = layData.indexOf("field");
+            if(fieldIndex == -1){
+                continue;
+            }
+            let s = layData.substring(fieldIndex).replace("}","");
+            s = s.substring(s.indexOf(":")+1);
+            let field = s.split(",")[0];
+            field = field.replace("'","").replace("'","");
+            if(field && toolbarFilterJson[field] ){
+                let hide;
+                if(toolbarFilterJson[field] == 'unChecked'){
+                    hide = true;
+                }else{
+                    hide = false;
+                }
+                if(layData.indexOf("hide") != -1){
+                    layData = layData.replace(/[h][i][d][e]\s*[:]\s*[a-z]{4,5}\s*/g,"hide:"+hide);
+                }else{
+                    layData = layData.replace("}","");
+                    if(layData.trim().endsWith(",")){
+                        layData += "hide:"+hide +"}";
+                    }else{
+                        layData += ",hide:"+hide +"}";
+                    }
+                }
+                $(th).attr("lay-data",layData);
+            }
+        }
+    }
+}
+
+function hideCol2(cols) {
+    let toolbarFilterJson = {};
+    let url = location.host + location.pathname;
+    let jsonStr = sessionStorage.getItem(url);
+    if(jsonStr == null || jsonStr == undefined){
+        return;
+    }
+    toolbarFilterJson = JSON.parse(jsonStr);
+    for(let col of cols){
+        for(let cl of col){
+            let field = cl['title'];
+            if(field == null || field == undefined){
+                continue;
+            }
+
+
+            if(field && toolbarFilterJson[field]){
+                if(toolbarFilterJson[field] == 'unChecked'){
+                    cl['hide'] = true;
+                }else{
+                    cl['hide'] = false;
+                }
+            }
+        }
+    }
+}
+
+function defaultToolBarListening() {
+    let toolBars  = $(".ew-tree-table-tool-item");
+    if(toolBars.length > 0){
+        for(let item of toolBars){
+            let layEvent = $(item).attr('lay-event');
+            if(layEvent && layEvent == 'LAYTABLE_COLS'){
+                $(item).on('click',function () {
+
+                    let index = setInterval(function () {
+                        let lis =  $(".layui-table-tool-panel li");
+                        if(lis.length > 0){
+                            toolbarFilter();
+                            clearInterval(index);
+                        }
+
+                    },50)
+
+                })
+            }
+        }
+    }
+}
