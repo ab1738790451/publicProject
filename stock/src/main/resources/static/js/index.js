@@ -208,12 +208,16 @@ var menuUtils = new (function() {
             if(!template.children){
                 template.children = "children";
             }
+            if(!template.urlPrefix){
+                template.urlPrefix = "";
+            }
         }else{
             template = {
                 title:"title",
                 dataUrl:"dataUrl",
                 layId:"layId",
-                children:"children"
+                children:"children",
+                urlPrefix:"",
             }
         }
         for(let item of data){
@@ -227,7 +231,7 @@ var menuUtils = new (function() {
         let layId = template.layId;
         let url = data[template.dataUrl]?data[template.dataUrl]:"";
         if(url.length > 0){
-            url = url.split(",")[0];
+            url = template.urlPrefix + url.split(",")[0];
         }
         let html = '<li class="layui-nav-item">' ;
         if(data[template.children] && data[template.children].length > 0){
@@ -246,7 +250,7 @@ var menuUtils = new (function() {
             let layId = template.layId;
             let url = item[template.dataUrl]?item[template.dataUrl]:"";
             if(url.length > 0){
-                url = url.split(",")[0];
+                url = template.urlPrefix + url.split(",")[0];
             }
             if(item[template.children] && item[template.children].length > 0){
                 html += '<dd><a href="javascript:;" isParent data-url="'+url+'" lay-id='+item[layId]+'>'+item[template.title]+'</a>';
@@ -329,6 +333,9 @@ var navUtil = new (function () {
             if(!template.layId){
                 template.layId = "layId";
             }
+            if(!template.urlPrefix){
+                template.urlPrefix = "";
+            }
         }else{
             template = {
                 title:"title",
@@ -338,6 +345,7 @@ var navUtil = new (function () {
                 hasImg:"hasImg",
                 img:"img",
                 layId:"layId",
+                urlPrefix:""
             }
         }
         return template;
@@ -382,7 +390,8 @@ var navUtil = new (function () {
         let target = data[template.target]?data[template.target]:"_blank";
         let title = data[template.hasImg] ? ('<img src="'+data[template.img]+'" class="layui-nav-img">'+data[template.title]):data[template.title];
         if(data[template.dataUrl]){
-            return  '<a class="layui-menu-body-title" href="'+data[template.dataUrl]+'"  target="'+target+'">'+title+'</a>' ;
+            let url = template.urlPrefix + data[template.dataUrl];
+            return  '<a class="layui-menu-body-title" href="'+url+'"  target="'+target+'">'+title+'</a>' ;
         }else{
             return  '<a class="layui-menu-body-title" href="javascript:;" >'+title+'</a>' ;
         }
