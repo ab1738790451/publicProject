@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <#assign strPrefix = "${" />
+    <#assign strSuffix = "}" />
     <meta charset="UTF-8">
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="/static/layui/layui.js"  type="text/javascript"></script>
-    <script src="/static/js/publicUtils.js" type="text/javascript"></script>
-    <script src="/static/js/common.js" type="text/javascript"></script>
-    <link href="/static/layui/css/layui.css" rel="stylesheet">
+    <script th:src="|${strPrefix!}ADMIN_URL_PREFIX${strSuffix!}/static/js/jquery-3.5.1.min.js|"></script>
+    <script th:src="|${strPrefix!}ADMIN_URL_PREFIX${strSuffix!}/static/layui/layui.js|"  type="text/javascript"></script>
+    <script th:src="|${strPrefix!}ADMIN_URL_PREFIX${strSuffix!}/static/js/publicUtils.js|" type="text/javascript"></script>
+    <script th:src="|${strPrefix!}ADMIN_URL_PREFIX${strSuffix!}/static/js/common.js|" type="text/javascript"></script>
+    <link th:href="|${strPrefix!}ADMIN_URL_PREFIX${strSuffix!}/static/layui/css/layui.css|" rel="stylesheet">
     <title >${(table.comment)!}</title>
     <style>
         .main-body{
@@ -15,8 +17,6 @@
     </style>
 </head>
 <body class="main-body">
-<#assign strPrefix = "${" />
-    <#assign strSuffix = "}" />
 <form class="layui-form" th:action="${strPrefix!}ADMIN_URL_PREFIX${strSuffix!} + '/${moduleName!}/list'" id="dataForm" >
     <input id="pageIndex" name="pageInfo.pageIndex" th:value="${strPrefix!}queryData?.pageInfo?.pageIndex${strSuffix!}" type="hidden">
     <input id="pageSize" name="pageInfo.pageSize" th:value="${strPrefix!}queryData?.pageInfo?.pageSize${strSuffix!}" type="hidden">
