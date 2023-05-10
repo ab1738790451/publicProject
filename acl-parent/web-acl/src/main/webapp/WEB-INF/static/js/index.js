@@ -6,6 +6,7 @@ var tabFilter = "headrTab";
 var navFilter = "headr-nav";
 var table;
 var currTabLayId;
+var urlPrefix;
 //注意：导航 依赖 element 模块，否则无法进行功能性操作
 layui.use(['element','table'], function(){
     element = layui.element;
@@ -208,14 +209,19 @@ var menuUtils = new (function() {
             if(!template.children){
                 template.children = "children";
             }
+            if(!template.urlPrefix){
+                template.urlPrefix = "";
+            }
         }else{
             template = {
                 title:"title",
                 dataUrl:"dataUrl",
                 layId:"layId",
-                children:"children"
+                children:"children",
+                urlPrefix:""
             }
         }
+        urlPrefix =  template.urlPrefix;
         for(let item of data){
             html += temp(item,template);
         }
