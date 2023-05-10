@@ -2,6 +2,7 @@ var currTable;
 var tabFilter = top.tabFilter;
 var moduleName;
 var currTabLayId = top.currTabLayId;
+var urlPrefix = top.urlPrefix;
 
 function renderEdit(submitFilter,lastLayId){
     layui.use(['form'],function () {
@@ -285,7 +286,7 @@ function defaultTableToolBarEvent(table,obj) {
     var data = table.checkStatus(obj.config.id).data;
     switch (obj.event) {
         case "add":
-            top.tabChange(tabFilter,moduleName + "-add",moduleName+'新增',"/"+moduleName+"/toEdit?lastLayId="+currTabLayId);
+            top.tabChange(tabFilter,moduleName + "-add",moduleName+'新增',urlPrefix+"/"+moduleName+"/toEdit?lastLayId="+currTabLayId);
             break;
         case "dels":
             if(data.length == 0){
@@ -296,7 +297,7 @@ function defaultTableToolBarEvent(table,obj) {
             for(let item of data){
                 pks.push(item.id);
             }
-            ajaxUtil.confirmRequest("/"+moduleName + "/del?pks="+pks,null,"批量删除","是否确定要删除选中数据",function () {
+            ajaxUtil.confirmRequest(urlPrefix+"/"+moduleName + "/del?pks="+pks,null,"批量删除","是否确定要删除选中数据",function () {
                 $("#search").click();
             });
             break;
@@ -325,10 +326,10 @@ function defaultTableToolEvent(table,obj) {
     var data = obj.data;
     switch (obj.event) {
         case "edit":
-            top.tabChange(tabFilter,moduleName + data.id,moduleName +'修改#'+ data.id,"/"+moduleName+"/toEdit?lastLayId="+currTabLayId+"&pk="+data.id);
+            top.tabChange(tabFilter,moduleName + data.id,moduleName +'修改#'+ data.id,urlPrefix +"/"+moduleName+"/toEdit?lastLayId="+currTabLayId+"&pk="+data.id);
             break;
         case "del":
-            ajaxUtil.confirmRequest("/"+moduleName + "/del",{pks:data.id},"批量删除","是否确定要删除选中数据",function () {
+            ajaxUtil.confirmRequest(urlPrefix+"/"+moduleName + "/del",{pks:data.id},"批量删除","是否确定要删除选中数据",function () {
                 $("#search").click();
             });
             break;
