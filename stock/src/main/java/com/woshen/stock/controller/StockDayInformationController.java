@@ -103,10 +103,10 @@ public class StockDayInformationController extends AbstractController<Integer, S
               }
 
           }else{
-              Long mainInflow =  t.getSuperInflow() + t.getMaxInflow() + t.getMiddleInflow() + t.getMinInflow();
+              Long mainInflow =  t.getSuperInflow() + t.getMaxInflow();
               t.setMainInflow(mainInflow);
               t.setMainInflowAmount(average.multiply(BigDecimal.valueOf(t.getMainInflow())));
-              Long mainOutflow =  t.getSuperOutflow() + t.getMaxOutflow() + t.getMiddleOutflow() + t.getMinOutflow();
+              Long mainOutflow =  t.getSuperOutflow() + t.getMaxOutflow();
               t.setMainOutflow(mainOutflow);
           }
           t.setMainOutflowAmount(average.multiply(BigDecimal.valueOf(t.getMainOutflow())));
