@@ -58,7 +58,9 @@ public class StockDayInformationController extends AbstractController<Integer, S
           Long inflow =  t.getSuperInflow() + t.getMaxInflow() + t.getMiddleInflow() + t.getMinInflow();
           Long outflow =  t.getSuperOutflow() + t.getMaxOutflow() + t.getMiddleOutflow() + t.getMinOutflow();
           long l = inflow - outflow;
-          //总流入
+          //日净买入（手）
+          t.setInflowBuy(l);
+          //日流入
           BigDecimal inflowTotal = BigDecimal.valueOf(l).multiply(average);
           t.setInflowTotal(inflowTotal);
 

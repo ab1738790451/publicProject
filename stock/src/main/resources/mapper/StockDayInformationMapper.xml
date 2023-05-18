@@ -45,4 +45,29 @@
         id, code, transaction_date, close, open, today_close, high, low, average, price_change, volume, turnover, turnover_rate, total_worth, circulation_worth, pb, spe, pe, super_inflow, super_outflow, max_inflow, max_outflow, middle_inflow, middle_outflow, min_inflow, min_outflow, total_capital_stock, total_revenue, circulation_capital_stock, interest_rate, net_interest_rate, debt_ratio, bonus, graphic
     </sql>
 
+    <!--连续涨停起始日和次数-->
+    <select id="selectLXZT">
+        SELECT mian_db.code,mian_db.transaction_date as start_date,t4.end_date,count(*)as total FROM stock_day_information mian_db
+        inner JOIN (
+        select t1.code,t1.transaction_date,min(t2.transaction_date)end_date from stock_day_information t1
+        inner JOIN  stock_day_information t2 on t2.price_change &lt;= 9.9 and  t1.code = t2.code and t2.transaction_date > t1.transaction_date
+        where t1.price_change > 9.9 GROUP BY t1.code,t1.transaction_date order by t1.transaction_date asc
+        )t4 on mian_db.code = t4.code and mian_db.transaction_date = t4.transaction_date
+        left JOIN stock_day_information t5 on mian_db.code = t5.code  and t5.transaction_date >= mian_db.transaction_date and t5.transaction_date &lt; t4.end_date
+        GROUP BY mian_db.code,mian_db.transaction_date,t4.end_date
+        ORDER BY mian_db.transaction_date asc
+    </select>
+
+    <!--连续跌停起始日和次数-->
+    <select id="selectLXDT">
+        SELECT mian_db.code,mian_db.transaction_date as start_date,t4.end_date,count(*)as total FROM stock_day_information mian_db
+        inner JOIN (
+        select t1.code,t1.transaction_date,min(t2.transaction_date)end_date from stock_day_information t1
+        inner JOIN  stock_day_information t2 on t2.price_change >= -9.9 and  t1.code = t2.code and t2.transaction_date > t1.transaction_date
+        where t1.price_change &lt; -9.9 GROUP BY t1.code,t1.transaction_date order by t1.transaction_date asc
+        )t4 on mian_db.code = t4.code and mian_db.transaction_date = t4.transaction_date
+        left JOIN stock_day_information t5 on mian_db.code = t5.code and t5.transaction_date >= mian_db.transaction_date and t5.transaction_date &lt; t4.end_date
+        GROUP BY mian_db.code,mian_db.transaction_date,t4.end_date
+        ORDER BY mian_db.transaction_date asc
+    </select>
 </mapper>

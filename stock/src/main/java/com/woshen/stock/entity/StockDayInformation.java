@@ -315,10 +315,18 @@ public class StockDayInformation extends BaseEntity<Integer> {
     private BigDecimal subOutflowAmount;
 
     /**
-     * 日总流入
+     * 日净流入
      */
     @TableField(exist = false)
     private BigDecimal inflowTotal;
+
+    /**
+     * 日净买入（手）
+     */
+    @TableField(exist = false)
+    private Long inflowBuy;
+
+
 
     @Override
     public Integer getPk() {
