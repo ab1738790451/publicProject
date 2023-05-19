@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import com.woshen.common.webcommon.db.entity.BaseEntity;
+import com.woshen.stock.constant.PriceChangeType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -259,7 +260,7 @@ public class StockDayInformation extends BaseEntity<Integer> {
     /**
      * 图解
      */
-    private String graphic;
+    private PriceChangeType priceChangeType;
 
     /**
      * 股票名称

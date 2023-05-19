@@ -37,12 +37,12 @@
         <result column="net_interest_rate" property="netInterestRate" />
         <result column="debt_ratio" property="debtRatio" />
         <result column="bonus" property="bonus" />
-        <result column="graphic" property="graphic" />
+        <result column="price_change_type" property="priceChangeType" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, code, transaction_date, close, open, today_close, high, low, average, price_change, volume, turnover, turnover_rate, total_worth, circulation_worth, pb, spe, pe, super_inflow, super_outflow, max_inflow, max_outflow, middle_inflow, middle_outflow, min_inflow, min_outflow, total_capital_stock, total_revenue, circulation_capital_stock, interest_rate, net_interest_rate, debt_ratio, bonus, graphic
+        id, code, transaction_date, close, open, today_close, high, low, average, price_change, volume, turnover, turnover_rate, total_worth, circulation_worth, pb, spe, pe, super_inflow, super_outflow, max_inflow, max_outflow, middle_inflow, middle_outflow, min_inflow, min_outflow, total_capital_stock, total_revenue, circulation_capital_stock, interest_rate, net_interest_rate, debt_ratio, bonus, price_change_type
     </sql>
 
     <!--连续涨停起始日和次数-->
@@ -50,10 +50,43 @@
         SELECT mian_db.code,mian_db.transaction_date as start_date,t4.end_date,count(*)as total FROM stock_day_information mian_db
         inner JOIN (
         select t1.code,t1.transaction_date,min(t2.transaction_date)end_date from stock_day_information t1
-        inner JOIN  stock_day_information t2 on t2.price_change &lt;= 9.9 and  t1.code = t2.code and t2.transaction_date > t1.transaction_date
-        where t1.price_change > 9.9 GROUP BY t1.code,t1.transaction_date order by t1.transaction_date asc
+        inner JOIN  stock_day_information t2  on
+        <if test="param.priceChange != null">
+            t2.price_change &lt;= #{param.priceChange} and
+        </if>
+        <if test="param.changeType != null">
+            t2.price_change_type != #{param.changeType} and
+        </if>
+         t1.code = t2.code and t2.transaction_date > t1.transaction_date
+        <where>
+        <trim prefixOverrides="and">
+            <if test="param.priceChange != null">
+                and t1.price_change > #{param.priceChange}
+            </if>
+            <if test="param.changeType != null">
+                and t1.price_change_type = #{param.changeType}
+            </if>
+        </trim>
+        </where>
+        GROUP BY t1.code,t1.transaction_date order by t1.transaction_date asc
         )t4 on mian_db.code = t4.code and mian_db.transaction_date = t4.transaction_date
         left JOIN stock_day_information t5 on mian_db.code = t5.code  and t5.transaction_date >= mian_db.transaction_date and t5.transaction_date &lt; t4.end_date
+        <where>
+            <trim prefixOverrides="and">
+                <if test="param.code != null">
+                    and mian_db.code = #{param.code}
+                </if>
+                <if test="param.total != null">
+                    and total &gt;= #{param.total}
+                </if>
+                <if test="param.startDate != null">
+                    and start_date &gt;= #{param.startDate}
+                </if>
+                <if test="param.endDate != null">
+                    and t4.end_date &lt;= #{param.endDate}
+                </if>
+            </trim>
+        </where>
         GROUP BY mian_db.code,mian_db.transaction_date,t4.end_date
         ORDER BY mian_db.transaction_date asc
     </select>
@@ -63,10 +96,43 @@
         SELECT mian_db.code,mian_db.transaction_date as start_date,t4.end_date,count(*)as total FROM stock_day_information mian_db
         inner JOIN (
         select t1.code,t1.transaction_date,min(t2.transaction_date)end_date from stock_day_information t1
-        inner JOIN  stock_day_information t2 on t2.price_change >= -9.9 and  t1.code = t2.code and t2.transaction_date > t1.transaction_date
-        where t1.price_change &lt; -9.9 GROUP BY t1.code,t1.transaction_date order by t1.transaction_date asc
+        inner JOIN  stock_day_information t2 on
+        <if test="param.priceChange != null">
+            t2.price_change &gt;= #{param.priceChange} and
+        </if>
+        <if test="param.changeType != null">
+            t2.price_change_type != #{param.changeType} and
+        </if>
+        t1.code = t2.code and t2.transaction_date > t1.transaction_date
+        <where>
+            <trim prefixOverrides="and">
+                <if test="param.priceChange != null">
+                    and t1.price_change &lt; #{param.priceChange}
+                </if>
+                <if test="param.changeType != null">
+                    and t1.price_change_type = #{param.changeType}
+                </if>
+            </trim>
+        </where>
+         GROUP BY t1.code,t1.transaction_date order by t1.transaction_date asc
         )t4 on mian_db.code = t4.code and mian_db.transaction_date = t4.transaction_date
         left JOIN stock_day_information t5 on mian_db.code = t5.code and t5.transaction_date >= mian_db.transaction_date and t5.transaction_date &lt; t4.end_date
+        <where>
+            <trim prefixOverrides="and">
+                <if test="param.code != null">
+                    and mian_db.code = #{param.code}
+                </if>
+                <if test="param.total != null">
+                    and total &gt;= #{param.total}
+                </if>
+                <if test="param.startDate != null">
+                    and start_date &gt;= #{param.startDate}
+                </if>
+                <if test="param.endDate != null">
+                    and t4.end_date &lt;= #{param.endDate}
+                </if>
+            </trim>
+        </where>
         GROUP BY mian_db.code,mian_db.transaction_date,t4.end_date
         ORDER BY mian_db.transaction_date asc
     </select>

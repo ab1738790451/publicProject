@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.launchdarkly.eventsource.MessageEvent;
 import com.woshen.common.webcommon.utils.SpringUtils;
+import com.woshen.stock.constant.PriceChangeType;
 import com.woshen.stock.core.EventSourceEextension;
 import com.woshen.stock.core.DfcfStockModel;
 import com.woshen.stock.entity.StockDayInformation;
@@ -12,6 +13,9 @@ import com.woshen.stock.server.impl.StockDayInformationServiceImpl;
 import com.woshen.stock.server.impl.StockTimeSharingServiceImpl;
 import com.woshen.stock.utils.DongFangCaiFuUtils;
 import okhttp3.HttpUrl;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * @Author: liuhaibo
@@ -95,6 +99,27 @@ public class StockDetailsHandler implements EventSourceEextension {
           stockDayInformation.setNetInterestRate(dfcfStockModel.getF187());
           stockDayInformation.setDebtRatio(dfcfStockModel.getF188());
           stockDayInformation.setBonus(dfcfStockModel.getF190());
+          if(stockDayInformation.getPriceChange() != null && stockDayInformation.getTodayClose() != null){
+              double priceChange = stockDayInformation.getPriceChange().doubleValue();
+              double todayClose = stockDayInformation.getTodayClose().doubleValue();
+              if(priceChange == 0){
+                   stockDayInformation.setPriceChangeType(PriceChangeType.FLAT);
+              }else if(priceChange > 0 && stockDayInformation.getClose() != null){
+                  BigDecimal zt = stockDayInformation.getClose().multiply(BigDecimal.valueOf(1.1)).setScale(2,RoundingMode.HALF_UP);
+                  if(todayClose >= zt.doubleValue()){
+                      stockDayInformation.setPriceChangeType(PriceChangeType.LIMIT_UP);
+                  }else{
+                      stockDayInformation.setPriceChangeType(PriceChangeType.RISE);
+                  }
+              }else if(priceChange < 0 && stockDayInformation.getClose() != null){
+                  BigDecimal dt = stockDayInformation.getClose().multiply(BigDecimal.valueOf(0.9)).setScale(2, RoundingMode.HALF_UP);
+                  if(todayClose <= dt.doubleValue()){
+                      stockDayInformation.setPriceChangeType(PriceChangeType.LIMIT_DOWN);
+                  }else{
+                      stockDayInformation.setPriceChangeType(PriceChangeType.FALL);
+                  }
+              }
+          }
           bean.save(stockDayInformation);
     }
 
