@@ -90,7 +90,7 @@
         <th lay-data="{field:'totalWorth',width:230}">市值/股本</th>
         <th lay-data="{field:'pb',width:160}">市盈率</th>
         <th lay-data="{field:'totalRevenue',width:200}">营收/利率</th>
-        <th lay-data="{field:'graphic'}">图解</th>
+        <th lay-data="{field:'priceChangeType'}">涨跌</th>
        <!-- <th lay-data="{fixed:'right',title:'操作', width:150, align:'center',toolbar: '#tool'}"></th>-->
     </tr>
     </thead>
@@ -213,7 +213,7 @@
             <br>
             静态市盈率：[[${item.spe}]]
         </td>
-        <td th:text="${item.graphic}"></td>
+        <td th:text="${item?.priceChangeType?.desc}"></td>
        <!-- <td></td>-->
     </tr>
     </tbody>

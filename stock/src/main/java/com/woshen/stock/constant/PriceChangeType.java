@@ -19,4 +19,12 @@ public enum PriceChangeType {
     private String desc;
 
     private String value;
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public String getValue() {
+        return value;
+    }
 }
