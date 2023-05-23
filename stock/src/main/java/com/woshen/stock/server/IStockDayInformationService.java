@@ -1,8 +1,10 @@
 package com.woshen.stock.server;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.woshen.common.webcommon.db.service.BaseService;
 import com.woshen.stock.entity.StockDayInformation;
+import com.woshen.stock.vo.StockDayInformationVO;
 
 /**
  * <p>
@@ -14,4 +16,7 @@ import com.woshen.stock.entity.StockDayInformation;
  */
 public interface IStockDayInformationService extends BaseService<Integer, StockDayInformation> {
 
+    Page<StockDayInformationVO> selectLXZT(StockDayInformationVO stockDayInformationVO);
+
+    Page<StockDayInformationVO> selectLXDT(StockDayInformationVO stockDayInformationVO);
 }

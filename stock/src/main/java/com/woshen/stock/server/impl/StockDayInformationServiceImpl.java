@@ -1,11 +1,13 @@
 package com.woshen.stock.server.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.woshen.common.base.utils.StringUtils;
 import com.woshen.common.webcommon.db.service.impl.BaseServiceImpl;
 import com.woshen.stock.entity.StockDayInformation;
 import com.woshen.stock.mapper.StockDayInformationMapper;
 import com.woshen.stock.server.IStockDayInformationService;
+import com.woshen.stock.vo.StockDayInformationVO;
 import org.springframework.stereotype.Service;
 
 /**
@@ -35,5 +37,16 @@ public class StockDayInformationServiceImpl extends BaseServiceImpl<Integer, Sto
             baseWrapper.apply("code in(select code from stock where name like concat('%','"+name+"','%'))");
         }
         return baseWrapper;
+    }
+
+
+    @Override
+    public Page<StockDayInformationVO> selectLXZT(StockDayInformationVO stockDayInformationVO){
+       return this.getBaseMapper().selectLXZT(stockDayInformationVO);
+    }
+
+    @Override
+    public Page<StockDayInformationVO> selectLXDT(StockDayInformationVO stockDayInformationVO){
+        return this.getBaseMapper().selectLXDT(stockDayInformationVO);
     }
 }

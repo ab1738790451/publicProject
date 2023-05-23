@@ -46,7 +46,7 @@
     </sql>
 
     <!--连续涨停起始日和次数-->
-    <select id="selectLXZT">
+    <select id="selectLXZT" parameterType="com.woshen.stock.vo.StockDayInformationVO" resultType="com.woshen.stock.vo.StockDayInformationVO">
         SELECT mian_db.code,mian_db.transaction_date as start_date,t4.end_date,count(*)as total FROM stock_day_information mian_db
         inner JOIN (
         select t1.code,t1.transaction_date,min(t2.transaction_date)end_date from stock_day_information t1
@@ -61,7 +61,7 @@
         <where>
         <trim prefixOverrides="and">
             <if test="param.priceChange != null">
-                and t1.price_change > #{param.priceChange}
+                and t1.price_change > #{param.priceChange,jdbcType = DECIMAL}
             </if>
             <if test="param.changeType != null">
                 and t1.price_change_type = #{param.changeType}
@@ -92,7 +92,7 @@
     </select>
 
     <!--连续跌停起始日和次数-->
-    <select id="selectLXDT">
+    <select id="selectLXDT" parameterType="com.woshen.stock.vo.StockDayInformationVO" resultType="com.woshen.stock.vo.StockDayInformationVO" >
         SELECT mian_db.code,mian_db.transaction_date as start_date,t4.end_date,count(*)as total FROM stock_day_information mian_db
         inner JOIN (
         select t1.code,t1.transaction_date,min(t2.transaction_date)end_date from stock_day_information t1
@@ -107,7 +107,7 @@
         <where>
             <trim prefixOverrides="and">
                 <if test="param.priceChange != null">
-                    and t1.price_change &lt; #{param.priceChange}
+                    and t1.price_change &lt; #{param.priceChange,jdbcType = DECIMAL}
                 </if>
                 <if test="param.changeType != null">
                     and t1.price_change_type = #{param.changeType}
