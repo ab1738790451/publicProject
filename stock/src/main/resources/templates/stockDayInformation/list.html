@@ -38,11 +38,11 @@
         </div>
 
         <div class="layui-inline">
-            <label class="layui-form-label">主散权重算法</label>
+            <label class="layui-form-label" style="width: 100px">主散权重算法</label>
             <div class="layui-input-inline">
                 <select name="queryParam['mainSubRate']">
                     <option value="">请选择</option>
-                    <option th:each="item:${mainSubRates}"  th:value="${item.value}" th:text="${item.desc}"></option>
+                    <option th:each="item:${mainSubRates}"  th:value="${item.value}" th:text="${item.desc}" th:selected="${item.value == queryData?.queryParam?.mainSubRate}"></option>
                 </select>
             </div>
         </div>

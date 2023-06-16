@@ -115,7 +115,7 @@
         <td th:text="${item.priceChange}"></td>
        <!-- <td th:text="${item.trendsTotal}"></td>-->
         <td>
-            <div class="td-tends" th:data-value="|{'open':${item.open},'high':${item.high},'lastClose':${item.lastClose},'low':${item.low}}|" th:text="${item.trends}"></div>
+            <div class="td-tends" th:data-value="|{'open':${item.open},'high':${item.high},'lastClose':${item.lastClose},'low':${item.low}}|" th:data-text="${item.trends}"></div>
         </td>
         <td th:text="${#temporals.format(item.date,'yyyy-MM-dd')}"></td>
        <!-- <td></td>-->
@@ -157,10 +157,10 @@
                 $("#box").remove();
                 let startX = $(this).offset().left;
                 //let startY = $(this).offset().left;
-                let x = e['pageX'];
-                let y = e['pageY'];
+                let x = e['clientX'];
+                let y = e['clientY'];
                 let offset = x - startX - 2;
-                let data = $(".line_"+ (offset/2).toFixed(1).split(".")[0]).attr("data-value");
+                let data = $(this).find(".line_"+ (offset/2).toFixed(1).split(".")[0]).attr("data-value");
                 if(!data){
                     return;
                 }
@@ -214,7 +214,7 @@
             value['max'] = (value.high * 100) > (value.lastClose * 100)?value.high * 100:value.lastClose * 100;
             value['min'] = (value.low * 100) < (value.lastClose * 100)?value.low * 100:value.lastClose * 100;
             value['count'] = value.max - value.min + 1;
-            let text = $(this).text();
+            let text = $(this).attr("data-text");
             let trends =  JSON.parse(text);
             let datas = [];
             let lastClose = {}

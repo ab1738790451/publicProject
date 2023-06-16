@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -120,6 +121,8 @@ public class StockDayInformationController extends AbstractController<Integer, S
           t.setSubOutflowAmount(average.multiply(BigDecimal.valueOf(subOutflow)));
       });
      }
-     return super.afterList(request, response, queryData, pageData);
+     Map<String,Object> results = new HashMap<>();
+     results.put("mainSubRates",MainSubRate.values());
+     return results;
     }
 }
