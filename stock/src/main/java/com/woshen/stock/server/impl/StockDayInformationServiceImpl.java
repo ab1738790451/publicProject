@@ -41,12 +41,12 @@ public class StockDayInformationServiceImpl extends BaseServiceImpl<Integer, Sto
 
 
     @Override
-    public Page<StockDayInformationVO> selectLXZT(StockDayInformationVO stockDayInformationVO){
-       return this.getBaseMapper().selectLXZT(stockDayInformationVO);
+    public Page<StockDayInformationVO> selectLXZT(StockDayInformationVO stockDayInformationVO,Page<StockDayInformationVO> page){
+       return this.getBaseMapper().selectLXZT(stockDayInformationVO,page);
     }
 
     @Override
-    public Page<StockDayInformationVO> selectLXDT(StockDayInformationVO stockDayInformationVO){
-        return this.getBaseMapper().selectLXDT(stockDayInformationVO);
+    public Page<StockDayInformationVO> selectLXDT(StockDayInformationVO stockDayInformationVO,Page<StockDayInformationVO> page){
+        return this.getBaseMapper().selectLXDT(stockDayInformationVO,page);
     }
 }

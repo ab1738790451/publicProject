@@ -38,7 +38,7 @@
         </div>
 
         <div class="layui-inline">
-            <label class="layui-form-label" style="width: 100px">主散权重算法</label>
+            <label class="layui-form-label" style="width: 100px">连续涨跌</label>
             <div class="layui-input-inline">
                 <select name="queryParam['mainSubRate']">
                     <option value="">请选择</option>
@@ -50,11 +50,11 @@
         <div class="layui-inline">
             <label class="layui-form-label">交易日期</label>
             <div class="layui-input-inline">
-                <input type="text" name="queryParam['createStartTime']" id="createStartTime"  autocomplete="off"   th:value="${queryData?.queryParam['createStartTime']}" class="layui-input" >
+                <input type="text" name="startDate" id="createStartTime"  autocomplete="off"   th:value="${queryData?.startDate}" class="layui-input" >
             </div>
             <div class="layui-form-mid">-</div>
             <div class="layui-input-inline">
-                <input type="text" name="queryParam['createEndTime']" id="createEndTime" th:value="${queryData?.queryParam['createEndTime']}"  autocomplete="off" class="layui-input" >
+                <input type="text" name="endDate" id="createEndTime" th:value="${queryData?.endDate}"  autocomplete="off" class="layui-input" >
             </div>
         </div>
         <div class="layui-inline">

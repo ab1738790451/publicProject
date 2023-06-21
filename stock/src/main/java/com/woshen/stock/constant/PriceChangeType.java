@@ -9,9 +9,11 @@ package com.woshen.stock.constant;
 public enum PriceChangeType {
     LIMIT_UP("涨停"),
     LIMIT_DOWN("跌停"),
-    RISE("涨"),
-    FALL("跌"),
-    FLAT("平");
+    RISE("上涨(不含涨停)"),
+    FALL("跌(不含跌停)"),
+    FLAT("平"),
+    RISE_ALL("上涨含涨停"),
+    FALL_ALL("下跌含跌停");
     PriceChangeType(String desc){
         this.desc = desc;
         this.value = this.name();

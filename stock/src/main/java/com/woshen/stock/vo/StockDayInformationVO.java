@@ -1,5 +1,6 @@
 package com.woshen.stock.vo;
 
+import com.woshen.common.webcommon.db.entity.BaseEntity;
 import com.woshen.stock.constant.PriceChangeType;
 import lombok.Data;
 
@@ -13,7 +14,7 @@ import java.time.LocalDate;
  * @Description: 描述
  */
 @Data
-public class StockDayInformationVO {
+public class StockDayInformationVO extends BaseEntity<String> {
 
     private String code;
 
@@ -26,4 +27,9 @@ public class StockDayInformationVO {
     private BigDecimal priceChange;
 
     private PriceChangeType priceChangeType;
+
+    @Override
+    public String getPk() {
+        return null;
+    }
 }

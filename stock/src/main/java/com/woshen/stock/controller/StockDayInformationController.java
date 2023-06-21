@@ -4,18 +4,24 @@ package com.woshen.stock.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.woshen.common.webcommon.db.action.AbstractController;
+import com.woshen.common.webcommon.model.PageInfo;
 import com.woshen.stock.constant.MainSubRate;
+import com.woshen.stock.constant.PriceChangeType;
 import com.woshen.stock.entity.Stock;
 import com.woshen.stock.entity.StockDayInformation;
 import com.woshen.stock.server.IStockDayInformationService;
 import com.woshen.stock.server.IStockService;
+import com.woshen.stock.vo.StockDayInformationVO;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.servlet.ModelAndView;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -124,5 +130,51 @@ public class StockDayInformationController extends AbstractController<Integer, S
      Map<String,Object> results = new HashMap<>();
      results.put("mainSubRates",MainSubRate.values());
      return results;
+    }
+
+
+    @RequestMapping("analysisList")
+    public ModelAndView analysisList(StockDayInformationVO queryData){
+        ModelAndView mav = new ModelAndView(this.getModule() + "/analysisList");
+        if(queryData.getStartDate() == null && queryData.getEndDate() == null){
+            queryData.setStartDate(LocalDate.now().plusDays(-6));
+        }
+        PageInfo pageInfo = queryData.getPageInfo();
+        if(pageInfo.getPageSize() > 100){
+            pageInfo.setPageSize(10);
+        }
+        Page<StockDayInformationVO> page = new Page<>(pageInfo.getPageIndex(),pageInfo.getPageSize());
+        Page<StockDayInformationVO> pageData;
+        BigDecimal priceChange = queryData.getPriceChange();
+        PriceChangeType priceChangeType = queryData.getPriceChangeType();
+        if(priceChange != null && priceChange.doubleValue() != 0){
+            queryData.setPriceChangeType(null);
+            if(priceChange.doubleValue() > 0){
+                pageData = stockDayInformationServiceImpl.selectLXZT(queryData, page);
+            }else{
+                pageData = stockDayInformationServiceImpl.selectLXDT(queryData, page);
+            }
+        }else{
+            if(priceChange != null && priceChange.doubleValue() == 0){
+                priceChangeType = PriceChangeType.FLAT;
+            }
+            if(priceChangeType == null){
+                priceChangeType = PriceChangeType.LIMIT_UP;
+            }
+            if(priceChangeType.equals(PriceChangeType.RISE_ALL) || priceChangeType.equals(PriceChangeType.RISE) || priceChangeType.equals(PriceChangeType.LIMIT_UP)){
+                if(priceChangeType.equals(PriceChangeType.RISE_ALL)){
+                    queryData.setPriceChange(BigDecimal.ZERO);
+                    queryData.setPriceChangeType(null);
+                }
+                pageData = stockDayInformationServiceImpl.selectLXZT(queryData, page);
+            }else{
+                pageData = stockDayInformationServiceImpl.selectLXDT(queryData, page);
+            }
+        }
+
+        mav.addObject("pageData", pageData);
+        mav.addObject("queryData", queryData);
+        mav.addObject("PriceChangeTypes",PriceChangeType.values());
+        return mav;
     }
 }

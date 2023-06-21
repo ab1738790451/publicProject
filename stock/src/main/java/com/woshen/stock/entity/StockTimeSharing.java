@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import com.woshen.common.webcommon.db.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * <p>
@@ -48,6 +49,7 @@ public class StockTimeSharing extends BaseEntity<Integer> {
     /**
      * 日期
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd" )
     private LocalDate date;
 
     /**

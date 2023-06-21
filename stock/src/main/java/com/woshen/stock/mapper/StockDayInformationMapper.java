@@ -19,8 +19,8 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface StockDayInformationMapper extends BaseMapper<StockDayInformation> {
 
-    Page<StockDayInformationVO> selectLXZT(@Param("param")StockDayInformationVO stockDayInformationVO);
+    Page<StockDayInformationVO> selectLXZT(@Param("param")StockDayInformationVO stockDayInformationVO,Page<StockDayInformationVO> page);
 
-    Page<StockDayInformationVO> selectLXDT(@Param("param")StockDayInformationVO stockDayInformationVO);
+    Page<StockDayInformationVO> selectLXDT(@Param("param")StockDayInformationVO stockDayInformationVO,Page<StockDayInformationVO> page);
 
 }

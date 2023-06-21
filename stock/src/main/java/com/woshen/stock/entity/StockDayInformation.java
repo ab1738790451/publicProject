@@ -258,7 +258,7 @@ public class StockDayInformation extends BaseEntity<Integer> {
     private BigDecimal bonus;
 
     /**
-     * 图解
+     * 涨跌
      */
     private PriceChangeType priceChangeType;
 
