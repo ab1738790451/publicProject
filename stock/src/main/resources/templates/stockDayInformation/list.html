@@ -101,9 +101,9 @@
         <td th:text="${item.id}"></td>
         <td th:text="${item.code}"></td>
         <td>
-            股票名称：[[${item.code}]]
+            股票名称：[[${item.name}]]
             <br>
-            股票代码：[[${item.name}]]
+            股票代码：[[${item.code}]]
         </td>
         <td th:text="${#temporals.format(item.transactionDate,'yyyy-MM-dd')}"></td>
         <td>

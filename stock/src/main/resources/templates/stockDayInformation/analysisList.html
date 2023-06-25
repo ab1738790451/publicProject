@@ -19,7 +19,7 @@
     </style>
 </head>
 <body class="main-body">
-<form class="layui-form" th:action="${ADMIN_URL_PREFIX + '/stockDayInformation/list'}" id="dataForm" >
+<form class="layui-form" th:action="${ADMIN_URL_PREFIX + '/stockDayInformation/analysisList'}" id="dataForm" >
     <input id="pageIndex" name="pageInfo.pageIndex" th:value="${queryData?.pageInfo?.pageIndex}" type="hidden">
     <input id="pageSize" name="pageInfo.pageSize" th:value="${queryData?.pageInfo?.pageSize}" type="hidden">
     <input id="pageTotal"  th:value="${pageData.total}" type="hidden">
@@ -33,16 +33,63 @@
         <div class="layui-inline">
             <label class="layui-form-label">股票名称</label>
             <div class="layui-input-inline">
-                <input type="text" name="name"   th:value="${queryData.name}" autocomplete="off" class="layui-input" >
+                <input type="text" name="name"   th:value="${queryData?.name}" autocomplete="off" class="layui-input" >
             </div>
         </div>
 
         <div class="layui-inline">
-            <label class="layui-form-label" style="width: 100px">连续涨跌</label>
+            <label class="layui-form-label" style="width: 100px">涨跌</label>
             <div class="layui-input-inline">
-                <select name="queryParam['mainSubRate']">
+                <select name="changeType">
                     <option value="">请选择</option>
-                    <option th:each="item:${mainSubRates}"  th:value="${item.value}" th:text="${item.desc}" th:selected="${item?.value == queryData?.queryParam?.get('mainSubRate')}"></option>
+                    <option th:each="item:${changeTypes}"  th:value="${item.value}" th:text="${item.desc}" th:selected="${item?.value == queryData?.changeType}"></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label" style="width: 100px">涨跌(百分率)</label>
+            <div class="layui-input-inline">
+                <select name="priceChange">
+                    <option value="">请选择</option>
+                    <option value="9.5"  th:selected="${priceChange == 9.5}">9.5</option>
+                    <option value="9"  th:selected="${priceChange == 9}">9</option>
+                    <option value="8.5"  th:selected="${priceChange == 8.5}">8.5</option>
+                    <option value="8"  th:selected="${priceChange == 8}">8</option>
+                    <option value="7.5"  th:selected="${priceChange == 7.5}">7.5</option>
+                    <option value="7"  th:selected="${priceChange == 7}">7</option>
+                    <option value="6.5"  th:selected="${priceChange == 6.5}">6.5</option>
+                    <option value="6"  th:selected="${priceChange == 6}">6</option>
+                    <option value="5.5"  th:selected="${priceChange == 5.5}">5.5</option>
+                    <option value="5"  th:selected="${priceChange == 5}">5</option>
+                    <option value="4.5"  th:selected="${priceChange == 4.5}">4.5</option>
+                    <option value="4"  th:selected="${priceChange == 4}">4</option>
+                    <option value="3.5"  th:selected="${priceChange == 3.5}">3.5</option>
+                    <option value="3"  th:selected="${priceChange == 3}">3</option>
+                    <option value="2.5"  th:selected="${priceChange == 2.5}">2.5</option>
+                    <option value="2"  th:selected="${priceChange == 2}">2</option>
+                    <option value="1.5"  th:selected="${priceChange == 1.5}">1.5</option>
+                    <option value="1"  th:selected="${priceChange == 1}">1</option>
+                    <option value="0.5"  th:selected="${priceChange == 0.5}">0.5</option>
+                    <option value="-0.5"  th:selected="${priceChange == -0.5}">-0.5</option>
+                    <option value="-1"  th:selected="${priceChange == -1}">-1</option>
+                    <option value="-1.5"  th:selected="${priceChange == -1.5}">-1.5</option>
+                    <option value="-2"  th:selected="${priceChange == -2}">-2</option>
+                    <option value="-2.5"  th:selected="${priceChange == -2.5}">-2.5</option>
+                    <option value="-3"  th:selected="${priceChange == -3}">-3</option>
+                    <option value="-3.5"  th:selected="${priceChange == -3.5}">-3.5</option>
+                    <option value="-4"  th:selected="${priceChange == -4}">-4</option>
+                    <option value="-4.5"  th:selected="${priceChange == -4.5}">-4.5</option>
+                    <option value="-5"  th:selected="${priceChange == -5}">-5</option>
+                    <option value="-5.5"  th:selected="${priceChange == -5.5}">-5.5</option>
+                    <option value="-6"  th:selected="${priceChange == -6}">-6</option>
+                    <option value="-6.5"  th:selected="${priceChange == -6.5}">-6.5</option>
+                    <option value="-7"  th:selected="${priceChange == -7}">-7</option>
+                    <option value="-7.5"  th:selected="${priceChange == -7.5}">-7.5</option>
+                    <option value="-8"  th:selected="${priceChange == -8}">-8</option>
+                    <option value="-8.5"  th:selected="${priceChange == -8.5}">-8.5</option>
+                    <option value="-9"  th:selected="${priceChange == -9}">-9</option>
+                    <option value="-9.5"  th:selected="${priceChange == -9.5}">-9.5</option>
                 </select>
             </div>
         </div>
@@ -74,148 +121,22 @@
     <thead>
     <tr>
         <th lay-data="{field:'left',type:'checkbox',algin:'center'}"></th>
-        <th lay-data="{field:'id',width:70}">id</th>
-        <th lay-data="{field:'code',hide:true}">股票代码</th>
-        <th lay-data="{field:'codeDesc',width:170}">股票信息</th>
-        <th lay-data="{field:'transactionDate',width:130}">交易日期</th>
-        <th lay-data="{field:'close',width:150}">开收盘</th>
-        <th lay-data="{field:'high',width:140}">价格</th>
-        <th lay-data="{field:'priceChange',width:130}">涨幅/换手</th>
-        <th lay-data="{field:'volume',width:200}">成交</th>
-        <th lay-data="{field:'mainInflow',width:200}">主力</th>
-        <th lay-data="{field:'subInflow',width:200}">散户</th>
-        <th lay-data="{field:'superInflow',width:200}">超大单</th>
-        <th lay-data="{field:'maxInflow',width:200}">大单</th>
-        <th lay-data="{field:'middleInflow',width:200}">中单</th>
-        <th lay-data="{field:'minInflow',width:200}">小单</th>
-        <th lay-data="{field:'totalWorth',width:230}">市值/股本</th>
-        <th lay-data="{field:'pb',width:160}">市盈率</th>
-        <th lay-data="{field:'totalRevenue',width:200}">营收/利率</th>
-        <th lay-data="{field:'priceChangeType'}">涨跌</th>
+        <th lay-data="{field:'code'}">股票代码</th>
+        <th lay-data="{field:'name'}">股票信息</th>
+        <th lay-data="{field:'startDate'}">开始日期</th>
+        <th lay-data="{field:'endDate'}">结束日期</th>
+        <th lay-data="{field:'total'}">连续天数</th>
         <th lay-data="{title:'操作', width:150, align:'center',toolbar: '#tool'}"></th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="item:${pageData.records}">
         <td></td>
-        <td th:text="${item.id}"></td>
         <td th:text="${item.code}"></td>
-        <td>
-            股票名称：[[${item.code}]]
-            <br>
-            股票代码：[[${item.name}]]
-        </td>
-        <td th:text="${#temporals.format(item.transactionDate,'yyyy-MM-dd')}"></td>
-        <td>
-            昨日收盘：[[${item.close}]]
-            <br>
-            今日开盘：[[${item.open}]]
-            <br>
-            今日收盘：[[${item.todayClose}]]
-        </td>
-        <td >
-            最高价：[[${item.high}]]
-            <br>
-            最低价：[[${item.low}]]
-            <br>
-            平均价：[[${item.average}]]
-        </td>
-        <td >
-            涨跌幅：[[${item.priceChange}]]
-            <br>
-            换手率：[[${item.turnoverRate}]]
-        </td>
-        <td >
-            成交量：[[${item.volume}]]
-            <br>
-            成交额：[[${item.turnover}]]
-            <br>
-            股净买入(手)：[[${item.inflowBuy}]]
-            <br>
-            金额净流入：[[${item.inflowTotal}]]
-        </td>
-        <td >
-            主力流入：[[${item.mainInflow}]]
-            <br>
-            主力流出：[[${item.mainOutflow}]]
-            <br>
-            流入金额：[[${item.mainInflowAmount}]]
-            <br>
-            流出金额：[[${item.mainOutflowAmount}]]
-        </td>
-        <td >
-            散户流入：[[${item.subInflow}]]
-            <br>
-            散户流出：[[${item.subOutflow}]]
-            <br>
-            流入金额：[[${item.subInflowAmount}]]
-            <br>
-            流出金额：[[${item.subOutflowAmount}]]
-        </td>
-        <td >
-            超大单流入：[[${item.superInflow}]]
-            <br>
-            超大单流出：[[${item.superOutflow}]]
-            <br>
-            流入金额：[[${item.superInflowAmount}]]
-            <br>
-            流出金额：[[${item.superOutflowAmount}]]
-        </td>
-        <td >
-            大单流入：[[${item.maxInflow}]]
-            <br>
-            大单流出：[[${item.maxOutflow}]]
-            <br>
-            流入金额：[[${item.maxInflowAmount}]]
-            <br>
-            流出金额：[[${item.maxOutflowAmount}]]
-        </td>
-        <td >
-            中单流入：[[${item.middleInflow}]]
-            <br>
-            中单流出：[[${item.middleOutflow}]]
-            <br>
-            流入金额：[[${item.middleInflowAmount}]]
-            <br>
-            流出金额：[[${item.middleOutflowAmount}]]
-        </td>
-        <td >
-            小单流入：[[${item.minInflow}]]
-            <br>
-            小单流出：[[${item.minOutflow}]]
-            <br>
-            流入金额：[[${item.minInflowAmount}]]
-            <br>
-            流出金额：[[${item.minOutflowAmount}]]
-        </td>
-        <td >
-            总营收：[[${item.totalRevenue}]]
-            <br>
-            毛利率：[[${item.interestRate}]]
-            <br>
-            净利率：[[${item.netInterestRate}]]
-            <br>
-            负债率：[[${item.debtRatio}]]
-            <br>
-            每股利润:[[${item.bonus}]]
-        </td>
-        <td >
-            总市值：[[${item.totalWorth}]]
-            <br>
-            流通市值：[[${item.circulationWorth}]]
-            <br>
-            总股本：[[${item.totalCapitalStock}]]
-            <br>
-            流通股：[[${item.circulationCapitalStock}]]
-        </td>
-        <td >
-            市净率：[[${item.pb}]]
-            <br>
-            市盈率：[[${item.pe}]]
-            <br>
-            静态市盈率：[[${item.spe}]]
-        </td>
-        <td th:text="${item?.priceChangeType?.desc}"></td>
+        <td th:text="${item.name}"></td>
+        <td th:text="${#temporals.format(item.startDate,'yyyy-MM-dd')}"></td>
+        <td th:text="${#temporals.format(item.endDate,'yyyy-MM-dd')}"></td>
+        <td th:text="${item.total}"></td>
         <td></td>
     </tr>
     </tbody>
@@ -229,7 +150,7 @@
 <script type="text/html" id="tool">
    <!-- <a class="layui-btn layui-btn-xs " lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs " lay-event="del">删除</a>-->
-    <a class="layui-btn layui-btn-xs " lay-event="trends">趋势详情</a>
+    <a class="layui-btn layui-btn-xs " lay-event="details">详情</a>
 </script>
 
 
@@ -258,7 +179,7 @@
         var data = obj.data;
         switch (obj.event) {
            case 'trends':
-               top.tabChange(tabFilter,35,"股票趋势列表",urlPrefix+"/stockTimeSharing/list?code="+data.code+"&date="+data.transactionDate);
+               top.tabChange(tabFilter,35,"股票详情列表",urlPrefix+"/stockTimeSharing/list?code="+data.code+"&date="+data.transactionDate);
                break;
         }
     }

@@ -16,7 +16,7 @@ import com.woshen.stock.vo.StockDayInformationVO;
  */
 public interface IStockDayInformationService extends BaseService<Integer, StockDayInformation> {
 
-    Page<StockDayInformationVO> selectLXZT(StockDayInformationVO stockDayInformationVO,Page<StockDayInformationVO> page);
+    Page<StockDayInformationVO> selectLXZT(StockDayInformationVO stockDayInformationVO);
 
-    Page<StockDayInformationVO> selectLXDT(StockDayInformationVO stockDayInformationVO,Page<StockDayInformationVO> page);
+    Page<StockDayInformationVO> selectLXDT(StockDayInformationVO stockDayInformationVO);
 }

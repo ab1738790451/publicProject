@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.woshen.common.base.utils.StringUtils;
 import com.woshen.common.webcommon.db.service.impl.BaseServiceImpl;
+import com.woshen.common.webcommon.model.PageInfo;
 import com.woshen.stock.entity.StockDayInformation;
 import com.woshen.stock.mapper.StockDayInformationMapper;
 import com.woshen.stock.server.IStockDayInformationService;
@@ -41,12 +42,22 @@ public class StockDayInformationServiceImpl extends BaseServiceImpl<Integer, Sto
 
 
     @Override
-    public Page<StockDayInformationVO> selectLXZT(StockDayInformationVO stockDayInformationVO,Page<StockDayInformationVO> page){
-       return this.getBaseMapper().selectLXZT(stockDayInformationVO,page);
+    public Page<StockDayInformationVO> selectLXZT(StockDayInformationVO stockDayInformationVO){
+        PageInfo pageInfo = stockDayInformationVO.getPageInfo();
+        if(pageInfo.getPageSize() > 100){
+            pageInfo.setPageSize(10);
+        }
+        Page<StockDayInformationVO> page = new Page<>(pageInfo.getPageIndex(),pageInfo.getPageSize());
+       return this.getBaseMapper().selectLXZT(page,stockDayInformationVO);
     }
 
     @Override
-    public Page<StockDayInformationVO> selectLXDT(StockDayInformationVO stockDayInformationVO,Page<StockDayInformationVO> page){
-        return this.getBaseMapper().selectLXDT(stockDayInformationVO,page);
+    public Page<StockDayInformationVO> selectLXDT(StockDayInformationVO stockDayInformationVO){
+        PageInfo pageInfo = stockDayInformationVO.getPageInfo();
+        if(pageInfo.getPageSize() > 100){
+            pageInfo.setPageSize(10);
+        }
+        Page<StockDayInformationVO> page = new Page<>(pageInfo.getPageIndex(),pageInfo.getPageSize());
+        return this.getBaseMapper().selectLXDT(page,stockDayInformationVO);
     }
 }

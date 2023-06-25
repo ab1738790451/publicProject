@@ -139,20 +139,15 @@ public class StockDayInformationController extends AbstractController<Integer, S
         if(queryData.getStartDate() == null && queryData.getEndDate() == null){
             queryData.setStartDate(LocalDate.now().plusDays(-6));
         }
-        PageInfo pageInfo = queryData.getPageInfo();
-        if(pageInfo.getPageSize() > 100){
-            pageInfo.setPageSize(10);
-        }
-        Page<StockDayInformationVO> page = new Page<>(pageInfo.getPageIndex(),pageInfo.getPageSize());
         Page<StockDayInformationVO> pageData;
         BigDecimal priceChange = queryData.getPriceChange();
-        PriceChangeType priceChangeType = queryData.getPriceChangeType();
+        PriceChangeType priceChangeType = queryData.getChangeType();
         if(priceChange != null && priceChange.doubleValue() != 0){
-            queryData.setPriceChangeType(null);
+            queryData.setChangeType(null);
             if(priceChange.doubleValue() > 0){
-                pageData = stockDayInformationServiceImpl.selectLXZT(queryData, page);
+                pageData = stockDayInformationServiceImpl.selectLXZT(queryData);
             }else{
-                pageData = stockDayInformationServiceImpl.selectLXDT(queryData, page);
+                pageData = stockDayInformationServiceImpl.selectLXDT(queryData);
             }
         }else{
             if(priceChange != null && priceChange.doubleValue() == 0){
@@ -164,17 +159,17 @@ public class StockDayInformationController extends AbstractController<Integer, S
             if(priceChangeType.equals(PriceChangeType.RISE_ALL) || priceChangeType.equals(PriceChangeType.RISE) || priceChangeType.equals(PriceChangeType.LIMIT_UP)){
                 if(priceChangeType.equals(PriceChangeType.RISE_ALL)){
                     queryData.setPriceChange(BigDecimal.ZERO);
-                    queryData.setPriceChangeType(null);
+                    queryData.setChangeType(null);
                 }
-                pageData = stockDayInformationServiceImpl.selectLXZT(queryData, page);
+                pageData = stockDayInformationServiceImpl.selectLXZT( queryData);
             }else{
-                pageData = stockDayInformationServiceImpl.selectLXDT(queryData, page);
+                pageData = stockDayInformationServiceImpl.selectLXDT(queryData);
             }
         }
 
         mav.addObject("pageData", pageData);
         mav.addObject("queryData", queryData);
-        mav.addObject("PriceChangeTypes",PriceChangeType.values());
+        mav.addObject("changeTypes",PriceChangeType.values());
         return mav;
     }
 }

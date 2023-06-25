@@ -18,6 +18,8 @@ public class StockDayInformationVO extends BaseEntity<String> {
 
     private String code;
 
+    private String name;
+
     private LocalDate startDate;
 
     private LocalDate endDate;
@@ -26,7 +28,7 @@ public class StockDayInformationVO extends BaseEntity<String> {
 
     private BigDecimal priceChange;
 
-    private PriceChangeType priceChangeType;
+    private PriceChangeType changeType;
 
     @Override
     public String getPk() {

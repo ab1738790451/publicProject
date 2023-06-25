@@ -46,7 +46,7 @@
     </sql>
 
     <!--连续涨停起始日和次数-->
-    <select id="selectLXZT" parameterType="com.woshen.stock.vo.StockDayInformationVO" resultType="com.woshen.stock.vo.StockDayInformationVO">
+    <select id="selectLXZT"  resultType="com.woshen.stock.vo.StockDayInformationVO">
         SELECT mian_db.code,mian_db.transaction_date as start_date,t4.end_date,count(*)as total FROM stock_day_information mian_db
         inner JOIN (
         select t1.code,t1.transaction_date,min(t2.transaction_date)end_date from stock_day_information t1
@@ -80,7 +80,7 @@
                     and total &gt;= #{param.total}
                 </if>
                 <if test="param.startDate != null">
-                    and start_date &gt;= #{param.startDate}
+                    and mian_db.transaction_date &gt;= #{param.startDate}
                 </if>
                 <if test="param.endDate != null">
                     and t4.end_date &lt;= #{param.endDate}
@@ -92,7 +92,7 @@
     </select>
 
     <!--连续跌停起始日和次数-->
-    <select id="selectLXDT" parameterType="com.woshen.stock.vo.StockDayInformationVO" resultType="com.woshen.stock.vo.StockDayInformationVO" >
+    <select id="selectLXDT"  resultType="com.woshen.stock.vo.StockDayInformationVO" >
         SELECT mian_db.code,mian_db.transaction_date as start_date,t4.end_date,count(*)as total FROM stock_day_information mian_db
         inner JOIN (
         select t1.code,t1.transaction_date,min(t2.transaction_date)end_date from stock_day_information t1
@@ -126,7 +126,7 @@
                     and total &gt;= #{param.total}
                 </if>
                 <if test="param.startDate != null">
-                    and start_date &gt;= #{param.startDate}
+                    and mian_db.transaction_date &gt;= #{param.startDate}
                 </if>
                 <if test="param.endDate != null">
                     and t4.end_date &lt;= #{param.endDate}
