@@ -3,6 +3,7 @@ package com.woshen.stock.vo;
 import com.woshen.common.webcommon.db.entity.BaseEntity;
 import com.woshen.stock.constant.PriceChangeType;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -20,8 +21,10 @@ public class StockDayInformationVO extends BaseEntity<String> {
 
     private String name;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd" )
     private LocalDate startDate;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd" )
     private LocalDate endDate;
 
     private Integer total;
