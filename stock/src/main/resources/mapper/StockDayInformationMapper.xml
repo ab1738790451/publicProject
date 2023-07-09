@@ -112,26 +112,17 @@
         ORDER BY mian_db.transaction_date asc
     </select>-->
 
-
-  <!--  SELECT m_db.code,sdb.start_date,sdb.end_date,count(*) as total FROM stock_day_information m_db
-    INNER JOIN  (SELECT db.code,min(db.transaction_date)start_date,db.end_date
-    from (select t1.code,t1.transaction_date,ifnull(min(t2.transaction_date),date_add(CURDATE(),INTERVAL 1 DAY))end_date from stock_day_information t1
-    left JOIN  stock_day_information t2  on  t1.code = t2.code
-    and t2.price_change <= 0
-    and t2.transaction_date > t1.transaction_date
-    where  t1.price_change > 0
-    GROUP BY t1.code,t1.transaction_date)db
-    where db.transaction_date >'2023-06-01' and db.end_date <= '2023-07-06' GROUP BY db.end_date)sdb on m_db.code = sdb.code and m_db.transaction_date >= sdb.start_date and m_db.transaction_date < sdb.end_date
-     GROUP BY sdb.code,sdb.start_date,sdb.end_date-->
-
     <select id="selectLXZT"  resultType="com.woshen.stock.vo.StockDayInformationVO">
-        SELECT m_db.code,sdb.start_date,sdb.end_date,count(*) as total FROM stock_day_information m_db
+        SELECT m_db.code,sdb.start_date,date_add(sdb.end_date,INTERVAL -1 DAY)as end_date,count(*) as total FROM stock_day_information m_db
         INNER JOIN  (SELECT db.code,min(db.transaction_date)start_date,db.end_date
         from (select t1.code,t1.transaction_date,ifnull(min(t2.transaction_date),date_add(CURDATE(),INTERVAL 1 DAY))end_date from stock_day_information t1
         left JOIN  stock_day_information t2  on  t1.code = t2.code and t2.transaction_date > t1.transaction_date
         <choose>
-            <when test="param.priceChange != null">
+            <when test="param.priceChange != null and param.priceChange gt 0 ">
                 and t2.price_change &lt;= #{param.priceChange,jdbcType = DECIMAL}
+            </when>
+            <when test="param.priceChange != null and param.priceChange lt 0 ">
+                and t2.price_change &gt;= #{param.priceChange,jdbcType = DECIMAL}
             </when>
             <when test="param.changeType != null">
                 and t2.price_change_type != #{param.changeType}
@@ -146,8 +137,11 @@
             </if>
             <trim prefixOverrides="and" suffixOverrides="and">
                 <choose>
-                    <when test="param.priceChange != null">
+                    <when test="param.priceChange != null and param.priceChange gt 0 ">
                         and t1.price_change > #{param.priceChange,jdbcType = DECIMAL}
+                    </when>
+                    <when test="param.priceChange != null and param.priceChange lt 0 ">
+                        and t1.price_change &lt; #{param.priceChange,jdbcType = DECIMAL}
                     </when>
                     <when test="param.changeType != null">
                         and t1.price_change_type = #{param.changeType}
@@ -169,8 +163,8 @@
                 </if>
             </trim>
         </where>
-        GROUP BY db.end_date)sdb  on m_db.code = sdb.code and m_db.transaction_date >= sdb.start_date and m_db.transaction_date &lt; sdb.end_date
-        GROUP BY sdb.start_date
+        GROUP BY  db.code,db.end_date)sdb  on m_db.code = sdb.code and m_db.transaction_date >= sdb.start_date and m_db.transaction_date &lt; sdb.end_date
+        GROUP BY sdb.code,sdb.start_date
         <if test="param.queryParam != null">
             <if test='param.queryParam.symbol != null and param.queryParam.total != null and param.queryParam.total != "" '>
                 <choose>
@@ -197,7 +191,7 @@
 
 
     <!--连续跌停起始日和次数-->
-    <select id="selectLXDT"  resultType="com.woshen.stock.vo.StockDayInformationVO" >
+<!--    <select id="selectLXDT"  resultType="com.woshen.stock.vo.StockDayInformationVO" >
         SELECT mian_db.code,mian_db.transaction_date as start_date,t4.end_date,count(*)as total FROM stock_day_information mian_db
         inner JOIN (
         select t1.code,t1.transaction_date,min(t2.transaction_date)end_date from stock_day_information t1
@@ -240,5 +234,77 @@
         </where>
         GROUP BY mian_db.code,mian_db.transaction_date,t4.end_date
         ORDER BY mian_db.transaction_date asc
+    </select>-->
+
+    <!--连续跌停起始日和次数-->
+    <select id="selectLXDT"  resultType="com.woshen.stock.vo.StockDayInformationVO" >
+        SELECT m_db.code,sdb.start_date,date_add(sdb.end_date,INTERVAL -1 DAY)as end_date,count(*) as total FROM stock_day_information m_db
+        INNER JOIN  (SELECT db.code,min(db.transaction_date)start_date,db.end_date
+        from (select t1.code,t1.transaction_date,ifnull(min(t2.transaction_date),date_add(CURDATE(),INTERVAL 1 DAY))end_date from stock_day_information t1
+        left JOIN  stock_day_information t2  on  t1.code = t2.code and t2.transaction_date > t1.transaction_date
+        <choose>
+            <when test="param.priceChange != null">
+                and t2.price_change &gt;= #{param.priceChange,jdbcType = DECIMAL}
+            </when>
+            <when test="param.changeType != null">
+                and t2.price_change_type != #{param.changeType}
+            </when>
+            <otherwise>
+                and t2.price_change &gt;= 0
+            </otherwise>
+        </choose>
+        <where>
+            <if test='param.code !=null and param.code != "" '>
+                t1.code = #{param.code,jdbcType = VARCHAR}
+            </if>
+            <trim prefixOverrides="and" suffixOverrides="and">
+                <choose>
+                    <when test="param.priceChange != null">
+                        and t1.price_change &lt; #{param.priceChange,jdbcType = DECIMAL}
+                    </when>
+                    <when test="param.changeType != null">
+                        and t1.price_change_type = #{param.changeType}
+                    </when>
+                    <otherwise>
+                        and t1.price_change &lt; 0
+                    </otherwise>
+                </choose>
+            </trim>
+        </where>
+        GROUP BY t1.code,t1.transaction_date)db
+        <where>
+            <trim prefixOverrides="and">
+                <if test="param.startDate != null">
+                    and db.transaction_date &gt;= #{param.startDate}
+                </if>
+                <if test="param.endDate != null">
+                    and db.end_date &lt;= #{param.endDate}
+                </if>
+            </trim>
+        </where>
+        GROUP BY  db.code,db.end_date)sdb  on m_db.code = sdb.code and m_db.transaction_date >= sdb.start_date and m_db.transaction_date &lt; sdb.end_date
+        GROUP BY sdb.code,sdb.start_date
+        <if test="param.queryParam != null">
+            <if test='param.queryParam.symbol != null and param.queryParam.total != null and param.queryParam.total != "" '>
+                <choose>
+                    <when test='param.queryParam.symbol == "eq"'>
+                        having  total = #{param.queryParam.total,jdbcType = INTEGER}
+                    </when>
+                    <when test='param.queryParam.symbol == "gt"'>
+                        having total > #{param.queryParam.total,jdbcType = INTEGER}
+                    </when>
+                    <when test='param.queryParam.symbol == "lt"'>
+                        having total &lt; #{param.queryParam.total,jdbcType = INTEGER}
+                    </when>
+                    <when test='param.queryParam.symbol == "ge"'>
+                        having total >= #{param.queryParam.total,jdbcType = INTEGER}
+                    </when>
+                    <when test='param.queryParam.symbol == "le"'>
+                        having total &lt;= #{param.queryParam.total,jdbcType = INTEGER}
+                    </when>
+                </choose>
+            </if>
+        </if>
+        ORDER BY sdb.code,sdb.start_date desc
     </select>
 </mapper>
