@@ -139,34 +139,10 @@ public class StockDayInformationController extends AbstractController<Integer, S
         if(queryData.getStartDate() == null && queryData.getEndDate() == null){
             queryData.setStartDate(LocalDate.now().plusDays(-6));
         }
-        Page<StockDayInformationVO> pageData;
-        BigDecimal priceChange = queryData.getPriceChange();
-        PriceChangeType priceChangeType = queryData.getChangeType();
-        if(priceChange != null && priceChange.doubleValue() != 0){
+        if(queryData.getPriceChange() != null){
             queryData.setChangeType(null);
-            if(priceChange.doubleValue() > 0){
-                pageData = stockDayInformationServiceImpl.selectLXZT(queryData);
-            }else{
-                pageData = stockDayInformationServiceImpl.selectLXDT(queryData);
-            }
-        }else{
-            if(priceChange != null && priceChange.doubleValue() == 0){
-                priceChangeType = PriceChangeType.FLAT;
-            }
-            if(priceChangeType == null){
-                priceChangeType = PriceChangeType.LIMIT_UP;
-            }
-            if(priceChangeType.equals(PriceChangeType.RISE_ALL) || priceChangeType.equals(PriceChangeType.RISE) || priceChangeType.equals(PriceChangeType.LIMIT_UP)){
-                if(priceChangeType.equals(PriceChangeType.RISE_ALL)){
-                    queryData.setPriceChange(BigDecimal.ZERO);
-                    queryData.setChangeType(null);
-                }
-                pageData = stockDayInformationServiceImpl.selectLXZT( queryData);
-            }else{
-                pageData = stockDayInformationServiceImpl.selectLXDT(queryData);
-            }
         }
-
+        Page<StockDayInformationVO>  pageData = stockDayInformationServiceImpl.selectLXZT( queryData);
         mav.addObject("pageData", pageData);
         mav.addObject("queryData", queryData);
         mav.addObject("changeTypes",PriceChangeType.values());

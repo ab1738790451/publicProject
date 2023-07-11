@@ -175,6 +175,7 @@ function tabChange(filter,layId,title,url){
 
 //打开新的子页面
 function tabAdd(filter,layId,title,url){
+    tabDelete(filter,layId,);
     element.tabAdd(filter, {
         title: title,//标题
         content: '<iframe id="iframe-'+layId+'" src="'+url+'" class="iframe-class"></iframe>', //支持传入html

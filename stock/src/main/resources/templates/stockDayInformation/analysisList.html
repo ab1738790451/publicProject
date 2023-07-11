@@ -42,7 +42,7 @@
             <div class="layui-input-inline">
                 <select name="changeType">
                     <option value="">请选择</option>
-                    <option th:each="item:${changeTypes}"  th:value="${item.value}" th:text="${item.desc}" th:selected="${item?.value == queryData?.changeType}"></option>
+                    <option th:each="item:${changeTypes}"  th:value="${item.value}" th:text="${item.desc}" th:selected="${item == queryData?.changeType}"></option>
                 </select>
             </div>
         </div>
@@ -52,44 +52,44 @@
             <div class="layui-input-inline">
                 <select name="priceChange">
                     <option value="">请选择</option>
-                    <option value="9.5"  th:selected="${priceChange == 9.5}">9.5</option>
-                    <option value="9"  th:selected="${priceChange == 9}">9</option>
-                    <option value="8.5"  th:selected="${priceChange == 8.5}">8.5</option>
-                    <option value="8"  th:selected="${priceChange == 8}">8</option>
-                    <option value="7.5"  th:selected="${priceChange == 7.5}">7.5</option>
-                    <option value="7"  th:selected="${priceChange == 7}">7</option>
-                    <option value="6.5"  th:selected="${priceChange == 6.5}">6.5</option>
-                    <option value="6"  th:selected="${priceChange == 6}">6</option>
-                    <option value="5.5"  th:selected="${priceChange == 5.5}">5.5</option>
-                    <option value="5"  th:selected="${priceChange == 5}">5</option>
-                    <option value="4.5"  th:selected="${priceChange == 4.5}">4.5</option>
-                    <option value="4"  th:selected="${priceChange == 4}">4</option>
-                    <option value="3.5"  th:selected="${priceChange == 3.5}">3.5</option>
-                    <option value="3"  th:selected="${priceChange == 3}">3</option>
-                    <option value="2.5"  th:selected="${priceChange == 2.5}">2.5</option>
-                    <option value="2"  th:selected="${priceChange == 2}">2</option>
-                    <option value="1.5"  th:selected="${priceChange == 1.5}">1.5</option>
-                    <option value="1"  th:selected="${priceChange == 1}">1</option>
-                    <option value="0.5"  th:selected="${priceChange == 0.5}">0.5</option>
-                    <option value="-0.5"  th:selected="${priceChange == -0.5}">-0.5</option>
-                    <option value="-1"  th:selected="${priceChange == -1}">-1</option>
-                    <option value="-1.5"  th:selected="${priceChange == -1.5}">-1.5</option>
-                    <option value="-2"  th:selected="${priceChange == -2}">-2</option>
-                    <option value="-2.5"  th:selected="${priceChange == -2.5}">-2.5</option>
-                    <option value="-3"  th:selected="${priceChange == -3}">-3</option>
-                    <option value="-3.5"  th:selected="${priceChange == -3.5}">-3.5</option>
-                    <option value="-4"  th:selected="${priceChange == -4}">-4</option>
-                    <option value="-4.5"  th:selected="${priceChange == -4.5}">-4.5</option>
-                    <option value="-5"  th:selected="${priceChange == -5}">-5</option>
-                    <option value="-5.5"  th:selected="${priceChange == -5.5}">-5.5</option>
-                    <option value="-6"  th:selected="${priceChange == -6}">-6</option>
-                    <option value="-6.5"  th:selected="${priceChange == -6.5}">-6.5</option>
-                    <option value="-7"  th:selected="${priceChange == -7}">-7</option>
-                    <option value="-7.5"  th:selected="${priceChange == -7.5}">-7.5</option>
-                    <option value="-8"  th:selected="${priceChange == -8}">-8</option>
-                    <option value="-8.5"  th:selected="${priceChange == -8.5}">-8.5</option>
-                    <option value="-9"  th:selected="${priceChange == -9}">-9</option>
-                    <option value="-9.5"  th:selected="${priceChange == -9.5}">-9.5</option>
+                    <option value="9.5"  th:selected="${queryData?.priceChange == 9.5}">9.5</option>
+                    <option value="9"  th:selected="${queryData?.priceChange == 9}">9</option>
+                    <option value="8.5"  th:selected="${queryData?.priceChange == 8.5}">8.5</option>
+                    <option value="8"  th:selected="${queryData?.priceChange == 8}">8</option>
+                    <option value="7.5"  th:selected="${queryData?.priceChange == 7.5}">7.5</option>
+                    <option value="7"  th:selected="${queryData?.priceChange == 7}">7</option>
+                    <option value="6.5"  th:selected="${queryData?.priceChange == 6.5}">6.5</option>
+                    <option value="6"  th:selected="${queryData?.priceChange == 6}">6</option>
+                    <option value="5.5"  th:selected="${queryData?.priceChange == 5.5}">5.5</option>
+                    <option value="5"  th:selected="${queryData?.priceChange == 5}">5</option>
+                    <option value="4.5"  th:selected="${queryData?.priceChange == 4.5}">4.5</option>
+                    <option value="4"  th:selected="${queryData?.priceChange == 4}">4</option>
+                    <option value="3.5"  th:selected="${queryData?.priceChange == 3.5}">3.5</option>
+                    <option value="3"  th:selected="${queryData?.priceChange == 3}">3</option>
+                    <option value="2.5"  th:selected="${queryData?.priceChange == 2.5}">2.5</option>
+                    <option value="2"  th:selected="${queryData?.priceChange == 2}">2</option>
+                    <option value="1.5"  th:selected="${queryData?.priceChange == 1.5}">1.5</option>
+                    <option value="1"  th:selected="${queryData?.priceChange == 1}">1</option>
+                    <option value="0.5"  th:selected="${queryData?.priceChange == 0.5}">0.5</option>
+                    <option value="-0.5"  th:selected="${queryData?.priceChange == -0.5}">-0.5</option>
+                    <option value="-1"  th:selected="${queryData?.priceChange == -1}">-1</option>
+                    <option value="-1.5"  th:selected="${queryData?.priceChange == -1.5}">-1.5</option>
+                    <option value="-2"  th:selected="${queryData?.priceChange == -2}">-2</option>
+                    <option value="-2.5"  th:selected="${queryData?.priceChange == -2.5}">-2.5</option>
+                    <option value="-3"  th:selected="${queryData?.priceChange == -3}">-3</option>
+                    <option value="-3.5"  th:selected="${queryData?.priceChange == -3.5}">-3.5</option>
+                    <option value="-4"  th:selected="${queryData?.priceChange == -4}">-4</option>
+                    <option value="-4.5"  th:selected="${queryData?.priceChange == -4.5}">-4.5</option>
+                    <option value="-5"  th:selected="${queryData?.priceChange == -5}">-5</option>
+                    <option value="-5.5"  th:selected="${queryData?.priceChange == -5.5}">-5.5</option>
+                    <option value="-6"  th:selected="${queryData?.priceChange == -6}">-6</option>
+                    <option value="-6.5"  th:selected="${queryData?.priceChange == -6.5}">-6.5</option>
+                    <option value="-7"  th:selected="${queryData?.priceChange == -7}">-7</option>
+                    <option value="-7.5"  th:selected="${queryData?.priceChange == -7.5}">-7.5</option>
+                    <option value="-8"  th:selected="${queryData?.priceChange == -8}">-8</option>
+                    <option value="-8.5"  th:selected="${queryData?.priceChange == -8.5}">-8.5</option>
+                    <option value="-9"  th:selected="${queryData?.priceChange == -9}">-9</option>
+                    <option value="-9.5"  th:selected="${queryData?.priceChange == -9.5}">-9.5</option>
                 </select>
             </div>
         </div>
@@ -196,8 +196,8 @@
     function tableToolEvent(table,obj) {
         var data = obj.data;
         switch (obj.event) {
-           case 'trends':
-               top.tabChange(tabFilter,35,"股票详情列表",urlPrefix+"/stockTimeSharing/list?code="+data.code+"&date="+data.transactionDate);
+           case 'details':
+               top.tabAdd(tabFilter,33,"股票数据列表",urlPrefix+"/stockDayInformation/list?code="+data.code+"&queryParam['createStartTime']="+data.startDate+"&queryParam['createEndTime']="+data.endDate);
                break;
         }
     }
