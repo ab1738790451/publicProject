@@ -24,10 +24,10 @@ layui.use(['element','table'], function(){
 
     //选项卡删除
     element.on('tabDelete('+tabFilter+')', function(data){
-        if(manualDeleted){
-            manualDeleted = true;
+        /*if(manualDeleted){
+            manualDeleted = false;
             return false;
-        }
+        }*/
         let index = data.index;
         let tab = data.elem;
         let lis = $(tab).find("li");
@@ -142,7 +142,7 @@ function menuChange() {
 
 //子页面删除
 function tabDelete(filter,layId,lastLayId,refresh){
-    manualDeleted = true;
+    //manualDeleted = true;
     element.tabDelete(filter, layId);
     if(lastLayId && refresh == true){
         //切换选项卡后再刷新页面
@@ -181,9 +181,8 @@ function tabAdd(filter,layId,title,url){
         content: '<iframe id="iframe-'+layId+'" src="'+url+'" class="iframe-class"></iframe>', //支持传入html
         id: layId ,//选项卡layId
     });
-
-    //使tab变成选中状态
     tabIsAdd = true;
+    //使tab变成选中状态
     element.tabChange(filter, layId);
     currTabLayId = layId;
 }
