@@ -285,7 +285,7 @@ function defaultTableToolBarEvent(table,obj) {
     var data = table.checkStatus(obj.config.id).data;
     switch (obj.event) {
         case "add":
-            top.tabChange(tabFilter,moduleName + "-add",moduleName+'新增',urlPrefix+"/"+moduleName+"/toEdit?lastLayId="+currTabLayId);
+            top.tabAdd(tabFilter,moduleName + "-add",moduleName+'新增',urlPrefix+"/"+moduleName+"/toEdit?lastLayId="+currTabLayId);
             break;
         case "dels":
             if(data.length == 0){
@@ -325,7 +325,7 @@ function defaultTableToolEvent(table,obj) {
     var data = obj.data;
     switch (obj.event) {
         case "edit":
-            top.tabChange(tabFilter,moduleName + data.id,moduleName +'修改#'+ data.id,urlPrefix+"/"+moduleName+"/toEdit?lastLayId="+currTabLayId+"&pk="+data.id);
+            top.tabAdd(tabFilter,moduleName + "-edit",moduleName +'修改#'+ data.id,urlPrefix+"/"+moduleName+"/toEdit?lastLayId="+currTabLayId+"&pk="+data.id);
             break;
         case "del":
             ajaxUtil.confirmRequest(urlPrefix+"/"+moduleName + "/del",{pks:data.id},"批量删除","是否确定要删除选中数据",function () {
