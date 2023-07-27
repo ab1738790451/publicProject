@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<configuration scan="false">
+
+     <property name="baseDir" value="./appLogs" />
+     <property name="logName" value="web-acl"/>
+
+     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+          <!--输出流对象 默认 System.out 改为 System.err-->
+          <target>System.out</target>
+          <encoder>
+               <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度
+                   %msg：日志消息，%n是换行符-->
+               <pattern>%d{yyyy-MM-dd HH:mm:ss} [%-5level]  %c  : %msg%n</pattern>
+          </encoder>
+     </appender>
+
+     <appender name="sys_log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+          <encoder>
+               <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
+               <charset>utf-8</charset>
+          </encoder>
+          <!--日志输出路径-->
+          <!--<file>${baseDir}</file>-->
+          <!--指定日志文件拆分和压缩规则-->
+          <rollingPolicy
+                  class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+               <!--通过指定压缩文件名称，来确定分割文件方式-->
+               <fileNamePattern>${baseDir}/${logName}_%d{yyyy-MMdd}.log</fileNamePattern>
+          </rollingPolicy>
+     </appender>
+
+
+     <!--根据大小拆分-->
+     <!--<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+          <encoder>
+               <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+               <charset>utf-8</charset>
+          </encoder>
+          &lt;!&ndash;日志输出路径&ndash;&gt;
+          <file>D:/Code/JavaCode/OneProject/LogLearn/log/log-data.log</file>
+          &lt;!&ndash;指定日志文件拆分和压缩规则&ndash;&gt;
+          <rollingPolicy
+                  class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+               &lt;!&ndash;通过指定压缩文件名称，来确定分割文件方式&ndash;&gt;
+               <fileNamePattern>C:/code/itheima-data2-%d{yyyy-MMdd}.log%i.gz</fileNamePattern>
+               &lt;!&ndash;文件拆分大小&ndash;&gt;
+               <maxFileSize>1MB</maxFileSize>
+          </rollingPolicy>
+     </appender>-->
+
+     <logger name="sysLog" level="info" additivity="false">
+          <appender-ref ref="sys_log" />
+     </logger>
+
+     <root level="INFO">
+          <appender-ref ref="CONSOLE"/>
+          <appender-ref ref="sys_log"/>
+     </root>
+
+</configuration>

@@ -1,5 +1,6 @@
 package com.woshen.acl.controller;
 
+import com.woshen.acl.utils.LogUtils;
 import com.woshen.common.base.utils.ByteUtil;
 import com.woshen.common.base.utils.RandomUtils;
 import com.woshen.common.base.utils.StringUtils;
@@ -12,6 +13,8 @@ import com.woshen.common.webcommon.utils.LocalCahceUtil;
 import com.woshen.common.webcommon.utils.ThreadWebLocalUtil;
 import com.woshen.acl.entity.User;
 import com.woshen.acl.service.IUserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +47,11 @@ public class LoginController {
     public ModelAndView login(){
         ModelAndView modelAndView = new ModelAndView("login");
         try{
+            LogUtils.trace("tracetracetracetracetracetrace");
+            LogUtils.debug("debugdebugdebugdebugdebugdebugdebug");
+            LogUtils.info("infoinfoinfoinfoinfoinfoinfoinfoinfoinfo");
+            LogUtils.warn("warnwarnwarnwarnwarnwarnwarnwarnwarnwarn");
+            LogUtils.error(new RuntimeException("测试日志"),"%s,%s,%s,%s,%s","error","error","error","error","error");
             String code = RandomUtils.getRandomByLowerCaseAndNum((byte) 5);
             ByteArrayOutputStream img = VerifyCodeUtil.createImg(code);
             modelAndView.addObject("codeImg",Base64.getEncoder().encodeToString(img.toByteArray()));
