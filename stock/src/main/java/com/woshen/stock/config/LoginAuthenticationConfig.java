@@ -52,7 +52,7 @@ public class LoginAuthenticationConfig {
     public ThymeleafViewResolver thymeleafViewResolver(SpringTemplateEngine springTemplateEngine){
         ThymeleafViewResolver thymeleafViewResolver = new ThymeleafViewResolver();
         Map<String,String> params = new HashMap<>();
-        params.put("ADMIN_DOMAIN",BaseConfigUtils.getProperty("web.acl.domain","http://www-test.ac.woshen.com"));
+        params.put("ADMIN_DOMAIN",BaseConfigUtils.getProperty("web.acl.domain","http://www-test.acl.woshen.com"));
         params.put("ADMIN_URL_PREFIX",BaseConfigUtils.getProperty("acl.url.prefix",""));
         thymeleafViewResolver.setStaticVariables(params);
         thymeleafViewResolver.setTemplateEngine(springTemplateEngine);

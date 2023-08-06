@@ -44,6 +44,7 @@ public class StockTrendsJob {
         Page<Stock> stockPage = new Page<>(pageIndex,pageSize);
         QueryWrapper<Stock> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("type","GP");
+        queryWrapper.eq("status","GPU");
         IPage<Stock> page = stockServiceImpl.getBaseMapper().selectPage(stockPage, queryWrapper);
         List<Stock> records = page.getRecords();
         if(CollectionUtils.isEmpty(records)){

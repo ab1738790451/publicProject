@@ -92,6 +92,7 @@
         <th lay-data="{field:'shDate'}">上市日期</th>
         <th lay-data="{field:'industry'}">行业</th>
         <th lay-data="{field:'plate'}">板块</th>
+        <th lay-data="{field:'status'}">股票状态</th>
         <th lay-data="{fixed:'right',title:'操作', width:150, align:'center',toolbar: '#tool'}"></th>
     </tr>
     </thead>
@@ -107,6 +108,8 @@
         <td th:text="${#temporals.format(item.shDate,'yyyy-MM-dd')}"></td>
         <td th:text="${item.industry}"></td>
         <td th:text="${item.plate}"></td>
+        <td th:text="上市" th:if="${item.status eq 'GPU'}"></td>
+        <td th:text="退市" th:if="${item.status eq 'GPV'}" ></td>
         <td></td>
     </tr>
     </tbody>

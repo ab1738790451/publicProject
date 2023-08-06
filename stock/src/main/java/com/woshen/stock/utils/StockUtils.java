@@ -1,5 +1,6 @@
 package com.woshen.stock.utils;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -9,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -150,6 +152,21 @@ public class StockUtils {
         return restTemplate.getForObject(STCOK_DOMAIN + "/v1/stock/all?keyWord={keyWord}",Map.class, params);
     }
 
+    /**
+     * 判断股票是否退市
+     * @param code
+     * @return
+     */
+    public static boolean isTuishi(String code){
+        Map<String, Object> stockMessage = getStockMessage("002417");
+        List<Map> data = (List<Map>)stockMessage.get("data");
+        String name = (String) data.get(0).get("name");
+        if(name.endsWith("退")){
+            return true;
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
       /*  Map<String, Object> industryRank = getIndustryRank();
         System.err.println(JSONObject.toJSONString(industryRank));*/
@@ -157,7 +174,7 @@ public class StockUtils {
       /*  Map<String, Object> sw_yysw = getStockRank("sw_yysw", 1, 20);
         System.err.println(JSONObject.toJSONString(sw_yysw));*/
 
-        Map<String, Object> stockMessage = getStockMessage("000716");
-        System.err.println(JSONObject.toJSONString(stockMessage));
+        //Map<String, Object> stockMessage = getStockMessage("002417");
+        System.err.println(isTuishi("002417"));
     }
 }

@@ -71,6 +71,11 @@ public class Stock extends BaseEntity<Integer> {
      */
     private String plate;
 
+    /**
+     * 股票状态
+     */
+    private String status;
+
     @Override
     public Integer getPk() {
     return this.id;

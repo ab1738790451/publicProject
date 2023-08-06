@@ -55,14 +55,4 @@ public class StockDayInformationServiceImpl extends BaseServiceImpl<Integer, Sto
         Page<StockDayInformationVO> page = new Page<>(pageInfo.getPageIndex(),pageInfo.getPageSize());
        return this.getBaseMapper().selectLXZT(page,stockDayInformationVO);
     }
-
-    @Override
-    public Page<StockDayInformationVO> selectLXDT(StockDayInformationVO stockDayInformationVO){
-        PageInfo pageInfo = stockDayInformationVO.getPageInfo();
-        if(pageInfo.getPageSize() > 100){
-            pageInfo.setPageSize(10);
-        }
-        Page<StockDayInformationVO> page = new Page<>(pageInfo.getPageIndex(),pageInfo.getPageSize());
-        return this.getBaseMapper().selectLXDT(page,stockDayInformationVO);
-    }
 }

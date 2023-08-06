@@ -2,20 +2,27 @@ package com.woshen.stock.handler;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.launchdarkly.eventsource.MessageEvent;
+import com.woshen.common.webcommon.exception.BaseRuntimeException;
+import com.woshen.common.webcommon.utils.LogUtils;
 import com.woshen.common.webcommon.utils.SpringUtils;
 import com.woshen.stock.constant.PriceChangeType;
 import com.woshen.stock.core.EventSourceEextension;
 import com.woshen.stock.core.DfcfStockModel;
+import com.woshen.stock.entity.Stock;
 import com.woshen.stock.entity.StockDayInformation;
 import com.woshen.stock.entity.StockTimeSharing;
 import com.woshen.stock.server.impl.StockDayInformationServiceImpl;
+import com.woshen.stock.server.impl.StockServiceImpl;
 import com.woshen.stock.server.impl.StockTimeSharingServiceImpl;
 import com.woshen.stock.utils.DongFangCaiFuUtils;
+import com.woshen.stock.utils.StockUtils;
 import okhttp3.HttpUrl;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Map;
 
 /**
  * @Author: liuhaibo
@@ -42,13 +49,28 @@ public class StockDetailsHandler implements EventSourceEextension {
     public void onMessage(String s, MessageEvent messageEvent) throws Exception {
         System.err.println("message-s:"+s);
         System.err.println("data:"+messageEvent.getData());
-        JSONObject message = JSONObject.parseObject(messageEvent.getData());
-        JSONObject data = (JSONObject) message.get("data");
-        DfcfStockModel dfcfStockModel = data.toJavaObject(DfcfStockModel.class);
         if(index > 0){
             return;
         }
         index ++;
+        JSONObject message = JSONObject.parseObject(messageEvent.getData());
+        JSONObject data = (JSONObject) message.get("data");
+        DfcfStockModel dfcfStockModel = null;
+        try {
+            dfcfStockModel = data.toJavaObject(DfcfStockModel.class);
+        }catch (Exception e){
+            LogUtils.error(e,"股票日数据解析失败",message);
+            String code = (String)data.get("f57");
+            boolean tuishi = StockUtils.isTuishi(code);
+            if(tuishi){
+                StockServiceImpl stockService = SpringUtils.getBean(StockServiceImpl.class);
+                UpdateWrapper<Stock> updateWrapper = new UpdateWrapper<>();
+                updateWrapper.set("status","GPV");
+                updateWrapper.eq("code",code);
+                stockService.update(updateWrapper);
+            }
+            return;
+        }
         StockDayInformationServiceImpl bean = SpringUtils.getBean(StockDayInformationServiceImpl.class);
         QueryWrapper<StockTimeSharing> sharingQueryWrapper  = new QueryWrapper<>();
         sharingQueryWrapper.eq("code",dfcfStockModel.getF57());
